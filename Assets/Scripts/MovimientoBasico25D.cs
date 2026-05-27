@@ -27,6 +27,8 @@ public class MovimientoBasico25D : MonoBehaviour
                          RigidbodyConstraints.FreezeRotationY |
                          RigidbodyConstraints.FreezeRotationZ |
                          RigidbodyConstraints.FreezePositionZ;
+
+        Physics.IgnoreLayerCollision(LayerMask.NameToLayer("Player"), LayerMask.NameToLayer("Player"), true);
     }
 
     void Update()
@@ -58,7 +60,7 @@ public class MovimientoBasico25D : MonoBehaviour
     {
         return Physics.Raycast(transform.position, Vector3.down, distanciaRaycast, capaSuelo);
     }
-
+    
     void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
