@@ -1,59 +1,53 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
+using System.Collections;
 
 public class spawner : MonoBehaviour
 {
-    [Header("Punto de control donde revive este jugador")]
-    public Transform respawn;
-
     [Header("Límite de caída en el vacío")]
-    public int posicionEjeY = -20;
+    public int posicionEjeY = -50;
 
-    private Rigidbody rb;
+    private bool puedeMorir = false;
 
     void Start()
     {
-        // Guardamos el Rigidbody al arrancar para no sobrecargar el Update
-        rb = GetComponent<Rigidbody>();
+        Debug.Log("La posición inicial en Y de " + gameObject.name + " es: " + transform.position.y);
+        StartCoroutine(ActivarProteccionInicial());
+    }
+
+    IEnumerator ActivarProteccionInicial()
+    {
+        yield return new WaitForSeconds(0.25f);
+        puedeMorir = true;
     }
 
     void Update()
     {
-        // 1. Si el jugador cae por debajo del límite de la Y
+        if (!puedeMorir) return;
+
+        // 1. Si cae al vacío
         if (transform.position.y < posicionEjeY)
         {
-            EjecutarRespawn();
+            MuerteDefinitiva();
         }
 
-        // 2. Si el jugador aprieta la B para volver manualmente (Testing)
-        if (Input.GetKeyUp(KeyCode.B))
+        // 2. Tecla de suicidio para testear
+        if (Input.GetKeyDown(KeyCode.B))
         {
-            EjecutarRespawn();
+            MuerteDefinitiva();
         }
     }
 
-    void EjecutarRespawn()
+    // ¡Acá está el truco! Ahora el trigger externo de la pared tampoco puede matarte si no pasó el tiempo
+    public void MuerteDefinitiva()
     {
-        // Si hay un punto de respawn asignado, lo movemos ahí
-        if (respawn != null)
-        {
-            transform.position = respawn.position;
-        }
-        else
-        {
-            Debug.LogWarning("¡Ojo! No le asignaste un objeto Respawn al script de: " + gameObject.name);
-        }
+        if (!puedeMorir) return; // <--- ESCUDO DE FUERZA ACTIVADO
 
-        // Frenamos las físicas por completo para que no aparezca con impulso de la caída
-        if (rb != null)
-        {
-            rb.linearVelocity = Vector3.zero;
-            rb.angularVelocity = Vector3.zero;
-        }
+        Debug.Log("¡" + gameObject.name + " murió! Activando pantalla de derrota...");
 
-        // --- LÓGICA DE VIDAS ---
-        // Descomentá la línea de abajo SOLO si tenés el script 'control' con 'vidasJugador' creado:
-        // if (GetComponent<control>() != null) GetComponent<control>().vidasJugador -= 1;
+        if (GameManager.instancia != null)
+        {
+            GameManager.instancia.PerderPartida();
+            puedeMorir = false;
+        }
     }
 }
