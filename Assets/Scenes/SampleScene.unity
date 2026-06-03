@@ -128,7 +128,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 186846308}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Centro_Visual
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -766,7 +766,7 @@ GameObject:
   - component: {fileID: 618048922}
   - component: {fileID: 618048921}
   - component: {fileID: 618048920}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Cube (4)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -888,7 +888,7 @@ GameObject:
   - component: {fileID: 649273982}
   - component: {fileID: 649273981}
   - component: {fileID: 649273980}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Cube (5)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1359,7 +1359,7 @@ GameObject:
   - component: {fileID: 1384207935}
   - component: {fileID: 1384207934}
   - component: {fileID: 1384207933}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Cube (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1602,7 +1602,7 @@ GameObject:
   - component: {fileID: 1629248633}
   - component: {fileID: 1629248632}
   - component: {fileID: 1629248636}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Cube (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1616,7 +1616,7 @@ BoxCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1629248631}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: 65e9f76d810684943adea9a8a12e6b15, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -1726,7 +1726,7 @@ GameObject:
   - component: {fileID: 1800846180}
   - component: {fileID: 1800846185}
   - component: {fileID: 1800846184}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Personaje
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -1742,7 +1742,7 @@ Transform:
   m_GameObject: {fileID: 1800846178}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -40.74137, y: 0.519, z: 0.09360881}
+  m_LocalPosition: {x: -40.74137, y: 2.269, z: 0.09360881}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1769,9 +1769,9 @@ CapsuleCollider:
   m_Enabled: 1
   serializedVersion: 2
   m_Radius: 0.49933144
-  m_Height: 4.131665
+  m_Height: 3.6865153
   m_Direction: 1
-  m_Center: {x: 0.0006685555, y: 1.5658326, z: 0}
+  m_Center: {x: 0.0006685555, y: 0.054912806, z: 0}
 --- !u!114 &1800846181
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1794,7 +1794,7 @@ MonoBehaviour:
   capaSuelo:
     serializedVersion: 2
     m_Bits: 8
-  distanciaRaycast: 1.1
+  distanciaRaycast: 1.83
 --- !u!54 &1800846182
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1933,7 +1933,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 059314d212e2e5641a75c3660f75cbba, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.777
+      value: 0.04
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 059314d212e2e5641a75c3660f75cbba, type: 3}
       propertyPath: m_LocalPosition.z
@@ -2845,7 +2845,7 @@ GameObject:
   - component: {fileID: 2100526846}
   - component: {fileID: 2100526845}
   - component: {fileID: 2100526844}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
