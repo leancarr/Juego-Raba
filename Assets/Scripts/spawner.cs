@@ -37,17 +37,32 @@ public class spawner : MonoBehaviour
         }
     }
 
-    // ¡Acá está el truco! Ahora el trigger externo de la pared tampoco puede matarte si no pasó el tiempo
     public void MuerteDefinitiva()
     {
-        if (!puedeMorir) return; // <--- ESCUDO DE FUERZA ACTIVADO
+        if (!puedeMorir) return;
 
-        Debug.Log("¡" + gameObject.name + " murió! Activando pantalla de derrota...");
+        Debug.Log("¡" + gameObject.name + " murio! Haciendo ganar al rival...");
 
         if (GameManager.instancia != null)
         {
-            GameManager.instancia.PerderPartida();
             puedeMorir = false;
+
+            // Buscamos al rival en la escena.
+            // Si este objeto se llama "Personaje", el rival podria llamarse "Personaje2" (o el nombre que tenga el tuyo)
+            string nombreRival = (gameObject.name == "Personaje") ? "Player2" : "Personaje";
+            GameObject rival = GameObject.Find(nombreRival);
+
+            if (rival != null)
+            {
+                // Le avisamos al GameManager que gane el rival que quedo vivo
+                GameManager.instancia.GanarPartida(rival);
+            }
+            else
+            {
+                // Plan B: Si por alguna razon no encuentra al rival con ese nombre, 
+                // ejecuta la victoria comun sobre el que este para que no se trabe el juego
+                GameManager.instancia.GanarPartida(rival);
+            }
         }
     }
 }

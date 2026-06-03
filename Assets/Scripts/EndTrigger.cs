@@ -13,7 +13,7 @@ public class EndTrigger : MonoBehaviour
             // Le avisamos al GameManager que ejecute la lógica de victoria
             if (GameManager.instancia != null)
             {
-                GameManager.instancia.GanarPartida();
+                GameManager.instancia.GanarPartida(other.gameObject);
             }
             else
             {
