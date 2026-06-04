@@ -1,5 +1,6 @@
 using UnityEngine;
 using TMPro; // Obligatorio para manejar el TextMeshPro de la UI
+using UnityEngine.SceneManagement; // <-- IMPORTANTE: Añadimos esto para poder cambiar de pantalla
 
 public class PodioPersonaje : MonoBehaviour
 {
@@ -75,6 +76,7 @@ public class PodioPersonaje : MonoBehaviour
     }
 
     // FUNCIÓN DEL BOTÓN PRINCIPAL (Preseleccionar / Cancelar)
+    // Vinculá esta función al OnClick() de tu botón "Preseleccionar"
     public void PresionarBotonPrincipal()
     {
         if (estaConfirmado) return; // Seguridad: si ya confirmó, bloqueamos interacciones
@@ -111,6 +113,7 @@ public class PodioPersonaje : MonoBehaviour
     }
 
     // FUNCIÓN PARA EL BOTÓN CONFIRMAR
+    // Vinculá esta función al OnClick() de tu botón "Confirmar"
     public void ConfirmarEleccion()
     {
         estaConfirmado = true;
@@ -121,6 +124,10 @@ public class PodioPersonaje : MonoBehaviour
 
         if (textoListoUI != null) textoListoUI.SetActive(true);          // Muestra el "¡LISTO!" verde en pantalla
         if (botonPreseleccionUI != null) botonPreseleccionUI.SetActive(false); // Apaga por completo el botón de Preseleccionar/Cancelar
+
+        // --- EL CAMBIO CLAVE: Mandamos al juego a la pantalla de carga ---
+        Debug.Log("Personaje confirmado, cargando juego...");
+        SceneManager.LoadScene("PantallaCarga");
     }
 
     // Función auxiliar para cambiar el texto del botón principal sin renegar con la asignación
