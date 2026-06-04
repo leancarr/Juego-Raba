@@ -274,7 +274,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3346391e3e306ae4a8a76bf87b08428c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  escenaA_Cargar: SampleScene
+  escenaA_Cargar: Escena_tooni_Test
   barraDeProgreso: {fileID: 356265324}
 --- !u!1 &356265322
 GameObject:
