@@ -12,7 +12,7 @@ public class SeleccionRondasManager : MonoBehaviour
 
         Debug.Log("Rondas guardadas en memoria: " + cantidad);
 
-        // Ahora sí, pasamos a la pantalla de carga asincrónica que armamos antes
-        SceneManager.LoadScene("PantallaCarga");
+        // Cambiamos "PantallaCarga" por el nombre EXACTO de tu escena de personajes:
+        SceneManager.LoadScene("SelecciondePersonajes"); // u el nombre exacto que le hayas puesto a tu escena
     }
 }
