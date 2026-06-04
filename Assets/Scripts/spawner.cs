@@ -41,27 +41,24 @@ public class spawner : MonoBehaviour
     {
         if (!puedeMorir) return;
 
-        Debug.Log("¡" + gameObject.name + " murio! Haciendo ganar al rival...");
-
         if (GameManager.instancia != null)
         {
             puedeMorir = false;
 
-            // Buscamos al rival en la escena.
-            // Si este objeto se llama "Personaje", el rival podria llamarse "Personaje2" (o el nombre que tenga el tuyo)
-            string nombreRival = (gameObject.name == "Personaje") ? "Player2" : "Personaje";
+            // 🎯 NOMBRES EXACTOS: Si muere "Player 1", el rival es "Player 2". Si no, es "Player 1".
+            string nombreRival = (gameObject.name == "Player 1") ? "Player 2" : "Player 1";
+
             GameObject rival = GameObject.Find(nombreRival);
 
             if (rival != null)
             {
-                // Le avisamos al GameManager que gane el rival que quedo vivo
                 GameManager.instancia.GanarPartida(rival);
             }
             else
             {
-                // Plan B: Si por alguna razon no encuentra al rival con ese nombre, 
-                // ejecuta la victoria comun sobre el que este para que no se trabe el juego
-                GameManager.instancia.GanarPartida(rival);
+                // Plan B por seguridad
+                Debug.LogError("No se encontró en la escena al rival: " + nombreRival);
+                GameManager.instancia.GanarPartida(gameObject);
             }
         }
     }
