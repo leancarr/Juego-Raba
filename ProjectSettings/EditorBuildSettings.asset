@@ -15,6 +15,9 @@ EditorBuildSettings:
     path: Assets/Scenes/PantallaCarga.unity
     guid: c0f0c16f66802f44781688a107b20352
   - enabled: 1
+    path: Assets/Scenes/Nivel_1_prueba.unity
+    guid: ba7089dfb7936b54892e2d6659880c4b
+  - enabled: 0
     path: Assets/Scenes/Escena_tooni_Test.unity
     guid: 1c9976163b7c64e49a570a431ffd4f7c
   - enabled: 0

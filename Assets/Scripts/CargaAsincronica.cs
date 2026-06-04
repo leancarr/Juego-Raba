@@ -6,7 +6,7 @@ using UnityEngine.UI; // Obligatorio si usan el Slider
 public class CargaAsincronica : MonoBehaviour
 {
     [Header("Nombre de la escena del juego")]
-    public string escenaA_Cargar = "Escena_tooni_Test"; // Poné acá el nombre exacto de tu mapa
+    public string escenaA_Cargar = "Nivel_1_prueba"; // Poné acá el nombre exacto de tu mapa
 
     [Header("UI Componentes (Opcional)")]
     public Slider barraDeProgreso;

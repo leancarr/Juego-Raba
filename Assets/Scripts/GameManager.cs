@@ -198,7 +198,6 @@ public class GameManager : MonoBehaviour
         }
 
         // 2. Cargamos la escena del Menú Principal 
-        // CAMBIÁ "Escena_Menu" por el nombre EXACTO que tenga tu escena de menú
         SceneManager.LoadScene("MenuPrincipal");
     }
 }
