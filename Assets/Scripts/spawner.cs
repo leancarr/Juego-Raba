@@ -3,6 +3,9 @@ using System.Collections;
 
 public class spawner : MonoBehaviour
 {
+    [Header("Inicio / Respawn")]
+    public Transform puntoRespawn; // <--- ¡ESTO CREA EL HUECO EN EL INSPECTOR!
+
     [Header("Límite de caída en el vacío")]
     public int posicionEjeY = -50;
 
@@ -10,6 +13,12 @@ public class spawner : MonoBehaviour
 
     void Start()
     {
+        // 1. Teletransportar al jugador al Punto de Inicio apenas carga la escena
+        if (puntoRespawn != null)
+        {
+            transform.position = puntoRespawn.position;
+        }
+
         Debug.Log("La posición inicial en Y de " + gameObject.name + " es: " + transform.position.y);
         StartCoroutine(ActivarProteccionInicial());
     }
