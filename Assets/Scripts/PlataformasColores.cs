@@ -5,18 +5,20 @@ public class PlataformasColores : MonoBehaviour
     // Elegimos el color de ESTA plataforma desde el inspector del Unity
     public ColorDeFondo.ColorEstado colorDeEstaPlataforma;
 
-    private Collider miCollider;
+    // CAMBIO 1: Cambiamos de una sola variable a un Array (lista) para manejar varios Colliders
+    private Collider[] misColliders;
     private MeshRenderer miRenderer;
     private Color colorOriginal;
     private bool yaEstabaApagada = false;
 
     void Start()
     {
-        miCollider = GetComponent<Collider>();
+        // CAMBIO 2: Usamos GetComponents (en plural) para atrapar al sólido y al Trigger
+        misColliders = GetComponents<Collider>();
         miRenderer = GetComponent<MeshRenderer>();
 
-        // Test de diagnóstico para el grupo:
-        if (miCollider == null)
+        // Test de diagnóstico actualizado:
+        if (misColliders.Length == 0) // Verificamos si la lista está vacía
         {
             Debug.LogError("¡ALERTA! El script en " + gameObject.name + " NO encontró ningún Collider. Revisá dónde está pegado el script.");
         }
@@ -61,7 +63,14 @@ public class PlataformasColores : MonoBehaviour
         yaEstabaApagada = true;
         Debug.Log("APAGANDO: " + gameObject.name);
 
-        if (miCollider != null) miCollider.enabled = false;
+        // Le decimos a la plataforma que suelte a cualquier jugador que tenga "pegado" como hijo
+        transform.DetachChildren();
+
+        // CAMBIO 3: Un bucle que apaga todos los colisionadores de la lista al mismo tiempo
+        foreach (Collider col in misColliders)
+        {
+            col.enabled = false;
+        }
 
         // APAGAMOS por completo el componente visual. El cubo se vuelve 100% invisible.
         if (miRenderer != null) miRenderer.enabled = false;
@@ -72,7 +81,11 @@ public class PlataformasColores : MonoBehaviour
         yaEstabaApagada = false;
         Debug.Log("PRENDIENDO: " + gameObject.name);
 
-        if (miCollider != null) miCollider.enabled = true;
+        // CAMBIO 4: Un bucle que vuelve a prender todos los colisionadores
+        foreach (Collider col in misColliders)
+        {
+            col.enabled = true;
+        }
 
         // PRENDEMOS el componente visual para que vuelva a renderizarse con su color original.
         if (miRenderer != null) miRenderer.enabled = true;
