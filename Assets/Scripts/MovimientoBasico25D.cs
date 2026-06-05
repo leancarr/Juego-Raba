@@ -24,6 +24,7 @@ public class MovimientoBasico25D : MonoBehaviour
     public LayerMask capaSuelo;
     public float distanciaRaycast = 1.1f;
     public float distanciaRaycastPared = 0.6f;
+    public float offsetRaycastSuelo = 0.4f;
 
     void Start()
     {
@@ -112,10 +113,20 @@ public class MovimientoBasico25D : MonoBehaviour
             rb.linearVelocity = new Vector3(inputHorizontal * velocidad, rb.linearVelocity.y, 0);
         }
     }
-
     bool EsSuelo()
     {
-        return Physics.Raycast(transform.position, Vector3.down, distanciaRaycast, capaSuelo);
+        // Calculamos las posiciones de los pies (Izquierda y Derecha) usando el offset
+        Vector3 puntoCentro = transform.position;
+        Vector3 puntoIzquierda = transform.position + (Vector3.left * offsetRaycastSuelo);
+        Vector3 puntoDerecha = transform.position + (Vector3.right * offsetRaycastSuelo);
+
+        // Lanzamos los tres rayos hacia abajo
+        bool tocaCentro = Physics.Raycast(puntoCentro, Vector3.down, distanciaRaycast, capaSuelo);
+        bool tocaIzquierda = Physics.Raycast(puntoIzquierda, Vector3.down, distanciaRaycast, capaSuelo);
+        bool tocaDerecha = Physics.Raycast(puntoDerecha, Vector3.down, distanciaRaycast, capaSuelo);
+
+        // Si CUALQUIERA de los tres rayos toca el suelo, devolvemos true
+        return tocaCentro || tocaIzquierda || tocaDerecha;
     }
 
     bool EsPared()
@@ -132,14 +143,20 @@ public class MovimientoBasico25D : MonoBehaviour
     }
     void OnDrawGizmos()
     {
-        // Gizmo del suelo (Rojo)
+        // Calculamos los tres puntos del suelo para dibujarlos
+        Vector3 puntoCentro = transform.position;
+        Vector3 puntoIzquierda = transform.position + (Vector3.left * offsetRaycastSuelo);
+        Vector3 puntoDerecha = transform.position + (Vector3.right * offsetRaycastSuelo);
+
+        // Dibujamos los 3 rayos del suelo en color Rojo
         Gizmos.color = Color.red;
-        Gizmos.DrawLine(transform.position, transform.position + Vector3.down * distanciaRaycast);
+        Gizmos.DrawLine(puntoCentro, puntoCentro + Vector3.down * distanciaRaycast);
+        Gizmos.DrawLine(puntoIzquierda, puntoIzquierda + Vector3.down * distanciaRaycast);
+        Gizmos.DrawLine(puntoDerecha, puntoDerecha + Vector3.down * distanciaRaycast);
 
         // Gizmo de la pared (Azul) - Se dibuja a la altura de la cintura
         Gizmos.color = Color.blue;
-        Vector3 origenPared = transform.position + (Vector3.down * 0.2f);
-        // Por defecto en el editor mirará a la derecha para dibujarlo
+        Vector3 origenPared = transform.position + (Vector3.down * 0.8f);
         Gizmos.DrawLine(origenPared, origenPared + Vector3.right * 0.6f);
     }
 }

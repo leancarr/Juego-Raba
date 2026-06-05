@@ -25,7 +25,7 @@ public class GameManager : MonoBehaviour
         if (instancia == null) instancia = this;
     }
 
-    //AHORA RECIBE AL JUGADOR QUE GANÓ POR PARÁMETRO
+    // AHORA RECIBE AL JUGADOR QUE GANÓ POR PARÁMETRO
     public void GanarPartida(GameObject ganador)
     {
         if (juegoTerminado) return;
@@ -40,12 +40,10 @@ public class GameManager : MonoBehaviour
             if (ganador.name == "Player 1")
             {
                 DatosTorneo.instancia.victoriasP1++;
-           
             }
             else if (ganador.name == "Player 2")
             {
                 DatosTorneo.instancia.victoriasP2++;
-                
             }
         }
 
@@ -55,14 +53,14 @@ public class GameManager : MonoBehaviour
             Animator anim = personajeGanador.GetComponentInChildren<Animator>();
             if (anim != null) anim.SetFloat("Velocidad", 0f);
 
-            // 2. APAGAR SCRIPTS DE MOVIMIENTO
+            // 2. APAGAR SCRIPTS DE MOVIMIENTO DEL GANADOR
             MonoBehaviour[] scripts = personajeGanador.GetComponents<MonoBehaviour>();
             foreach (MonoBehaviour script in scripts)
             {
                 if (script != this) script.enabled = false;
             }
 
-            // 3. FRENAR FISICAS
+            // 3. FRENAR FISICAS DEL GANADOR
             Rigidbody rb = personajeGanador.GetComponent<Rigidbody>();
             if (rb != null)
             {
@@ -75,6 +73,47 @@ public class GameManager : MonoBehaviour
             float gradosDeRotacionY = 90f;
             personajeGanador.transform.rotation = Quaternion.Euler(0f, gradosDeRotacionY, 0f);
         }
+
+        // --- NUEVO: CORTE DEL DIRECTOR (Cámara y Perdedores) ---
+
+        // Enfocar la cámara solo en el ganador
+        if (Camera.main != null)
+        {
+            CamaraScroll25D scriptCamara = Camera.main.GetComponent<CamaraScroll25D>();
+            if (scriptCamara != null)
+            {
+                scriptCamara.EnfocarGanador(personajeGanador);
+            }
+        }
+
+        // Desactivar a todos los demas jugadores (los perdedores)
+        GameObject[] todosLosJugadores = GameObject.FindGameObjectsWithTag("Player");
+        foreach (GameObject jugador in todosLosJugadores)
+        {
+            if (jugador != personajeGanador) // Solo actuamos sobre los que NO ganaron
+            {
+                // Apagamos sus scripts (MovimientoBasico25D, etc.)
+                MonoBehaviour[] scriptsPerdedor = jugador.GetComponents<MonoBehaviour>();
+                foreach (MonoBehaviour script in scriptsPerdedor)
+                {
+                    script.enabled = false;
+                }
+
+                // Congelamos sus físicas en el aire
+                Rigidbody rbPerdedor = jugador.GetComponent<Rigidbody>();
+                if (rbPerdedor != null)
+                {
+                    rbPerdedor.linearVelocity = Vector3.zero;
+                    rbPerdedor.angularVelocity = Vector3.zero;
+                    rbPerdedor.isKinematic = true;
+                }
+
+                // Opcional: Frenar la animación de los perdedores
+                Animator animPerdedor = jugador.GetComponentInChildren<Animator>();
+                if (animPerdedor != null) animPerdedor.SetFloat("Velocidad", 0f);
+            }
+        }
+        // --- FIN DEL CORTE DEL DIRECTOR ---
 
         if (panelTextoVictoria != null) panelTextoVictoria.SetActive(true);
 
@@ -150,6 +189,7 @@ public class GameManager : MonoBehaviour
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         }
     }
+
     private void TerminarTorneoCompleto()
     {
         // Opción elegida: Activamos el panel de estadisticas aqui mismo en la escena
@@ -194,7 +234,7 @@ public class GameManager : MonoBehaviour
         // desde el menú, se cree de cero con la nueva cantidad de rondas elegidas.
         if (DatosTorneo.instancia != null)
         {
-            Destroy(DatosTorneo.instancia.gameObject);  
+            Destroy(DatosTorneo.instancia.gameObject);
         }
 
         // 2. Cargamos la escena del Menú Principal 

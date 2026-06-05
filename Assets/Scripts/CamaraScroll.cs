@@ -14,6 +14,9 @@ public class CamaraScroll25D : MonoBehaviour
     private float alturaFijaY;
     private float profundidadFijaZ;
 
+    // Variable para congelar por completo la posición de la cámara
+    private bool partidaTerminada = false;
+
     void Start()
     {
         // Guardamos la posición inicial de la cámara en Y y Z para mantenerlas fijas congeladas
@@ -23,10 +26,15 @@ public class CamaraScroll25D : MonoBehaviour
 
     void LateUpdate()
     {
+        // --- EL CAMBIO CLAVE ---
+        // Si la partida terminó, la cámara se queda COMPLETAMENTE CONGELADA donde está.
+        // No se mueve ni un milímetro, ignorando a todos los jugadores.
+        if (partidaTerminada) return;
+
         // 1. Buscar a todos los objetos con el Tag "Player" en la escena
         GameObject[] jugadores = GameObject.FindGameObjectsWithTag("Player");
 
-        // Si no hay jugadores en la escena (por ejemplo, todavía no spawnearon), no hace nada
+        // Si no hay jugadores en la escena, no hace nada
         if (jugadores.Length == 0) return;
 
         // 2. Encontrar cuál es el jugador que va ganando (el que tiene el X más alto)
@@ -54,7 +62,13 @@ public class CamaraScroll25D : MonoBehaviour
         // 4. Crear el vector de posición final respetando la altura y profundidad inicial de la cámara
         Vector3 posicionObjetivo = new Vector3(destinoX, alturaFijaY, profundidadFijaZ);
 
-        // 5. Mover la cámara de forma fluida usando Lerp (evita tirones de imagen)
+        // 5. Mover la cámara de forma fluida usando Lerp
         transform.position = Vector3.Lerp(transform.position, posicionObjetivo, suavizado * Time.deltaTime);
+    }
+
+    // El GameManager seguirá llamando a esta función, pero ahora solo congelará el movimiento
+    public void EnfocarGanador(GameObject ganador)
+    {
+        partidaTerminada = true;
     }
 }
