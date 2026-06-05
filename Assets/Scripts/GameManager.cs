@@ -194,7 +194,7 @@ public class GameManager : MonoBehaviour
         // desde el menú, se cree de cero con la nueva cantidad de rondas elegidas.
         if (DatosTorneo.instancia != null)
         {
-            Destroy(DatosTorneo.instancia.gameObject);
+            Destroy(DatosTorneo.instancia.gameObject);  
         }
 
         // 2. Cargamos la escena del Menú Principal 

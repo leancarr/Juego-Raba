@@ -23,6 +23,7 @@ public class MovimientoBasico25D : MonoBehaviour
     [Header("Físicas de Salto (Raycast Obligatorio)")]
     public LayerMask capaSuelo;
     public float distanciaRaycast = 1.1f;
+    public float distanciaRaycastPared = 0.6f;
 
     void Start()
     {
@@ -99,7 +100,17 @@ public class MovimientoBasico25D : MonoBehaviour
 
     void FixedUpdate()
     {
-        rb.linearVelocity = new Vector3(inputHorizontal * velocidad, rb.linearVelocity.y, 0);
+        // Si estamos tocando una tecla de movimiento Y además tenemos una pared enfrente
+        if (inputHorizontal != 0f && EsPared())
+        {
+            // Frenamos en seco el empuje horizontal para no trepar la pared
+            rb.linearVelocity = new Vector3(0, rb.linearVelocity.y, 0);
+        }
+        else
+        {
+            // Movimiento normal
+            rb.linearVelocity = new Vector3(inputHorizontal * velocidad, rb.linearVelocity.y, 0);
+        }
     }
 
     bool EsSuelo()
@@ -107,9 +118,28 @@ public class MovimientoBasico25D : MonoBehaviour
         return Physics.Raycast(transform.position, Vector3.down, distanciaRaycast, capaSuelo);
     }
 
+    bool EsPared()
+    {
+        // Calculamos hacia dónde estamos yendo (1 para derecha, -1 para izquierda)
+        float direccionX = Mathf.Sign(inputHorizontal);
+        Vector3 direccion = new Vector3(direccionX, 0, 0);
+
+        // Levantamos el origen del rayo un poco desde los pies hacia la cintura
+        // para que no choque contra el piso por accidente
+        Vector3 origen = transform.position + (Vector3.down * 0.8f);
+
+        return Physics.Raycast(origen, direccion, distanciaRaycastPared, capaSuelo);
+    }
     void OnDrawGizmos()
     {
+        // Gizmo del suelo (Rojo)
         Gizmos.color = Color.red;
         Gizmos.DrawLine(transform.position, transform.position + Vector3.down * distanciaRaycast);
+
+        // Gizmo de la pared (Azul) - Se dibuja a la altura de la cintura
+        Gizmos.color = Color.blue;
+        Vector3 origenPared = transform.position + (Vector3.down * 0.2f);
+        // Por defecto en el editor mirará a la derecha para dibujarlo
+        Gizmos.DrawLine(origenPared, origenPared + Vector3.right * 0.6f);
     }
 }
