@@ -563,8 +563,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   teclaEmpuje: 32
-  fuerzaEmpujeBase: 10
-  factorVelocidadEmpuje: 2
+  fuerzaEmpujeBase: 15
+  factorVelocidadEmpuje: 4
   radioDeGolpe: 1.5
   cooldownEmpuje: 3
 --- !u!65 &229182542
@@ -661,7 +661,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  - {fileID: 2100000, guid: e7024ec5659d2ed4c8b779ad0c6b1c6f, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -700,7 +700,7 @@ Transform:
   m_GameObject: {fileID: 229182538}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 84.17, y: 1.9, z: -0.11}
+  m_LocalPosition: {x: -30.29, y: 1.9, z: -0.11}
   m_LocalScale: {x: 0.79, y: 0.78751, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -7789,8 +7789,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   teclaEmpuje: 101
-  fuerzaEmpujeBase: 10
-  factorVelocidadEmpuje: 2
+  fuerzaEmpujeBase: 15
+  factorVelocidadEmpuje: 4
   radioDeGolpe: 1.5
   cooldownEmpuje: 3
 --- !u!65 &2039438362
@@ -7887,7 +7887,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  - {fileID: 2100000, guid: 4debfe30cb2ce934fb897dafd25e0f3c, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -7926,7 +7926,7 @@ Transform:
   m_GameObject: {fileID: 2039438358}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 81.81, y: 1.9, z: -0.11}
+  m_LocalPosition: {x: -32.65, y: 1.9, z: -0.11}
   m_LocalScale: {x: 0.79, y: 0.78751, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
