@@ -3,34 +3,38 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody))]
 public class MovimientoBasico25D : MonoBehaviour
 {
-    [Header("ConfiguraciÛn de Teclas (Custom)")]
+    [Header("Configuraci√≥n de Teclas (Custom)")]
     public KeyCode teclaIzquierda = KeyCode.A;
     public KeyCode teclaDerecha = KeyCode.D;
     public KeyCode teclaSalto = KeyCode.W;
     public KeyCode teclaCaida = KeyCode.S;
 
-    [Header("ConfiguraciÛn de Movimiento")]
+    [Header("Configuraci√≥n de Movimiento")]
     public float velocidad = 7f;
     public float fuerzaSalto = 10f;
     public float fuerzaCaidaRapida = 8f;
     private float inputHorizontal;
     private Rigidbody rb;
 
-    // VARIABLES PARA ANIMACI”N Y CONTENEDOR INTERMEDIO
+    // VARIABLES PARA ANIMACI√ìN Y CONTENEDOR INTERMEDIO
     private Animator anim;
-    private Transform centroVisual; // Apunta al objeto vacÌo intermedio centrado
+    private Transform centroVisual; // Apunta al objeto vac√≠o intermedio centrado
 
-    [Header("FÌsicas de Salto (Raycast Obligatorio)")]
+    [Header("F√≠sicas de Salto (Raycast Obligatorio)")]
     public LayerMask capaSuelo;
     public float distanciaRaycast = 1.1f;
     public float distanciaRaycastPared = 0.6f;
     public float offsetRaycastSuelo = 0.4f;
 
+    // --- SISTEMA DE STUN (Para soporte de habilidades) ---
+    private bool estaAturdido = false;
+    private float tiempoFinStun = 0f;
+
     void Start()
     {
         rb = GetComponent<Rigidbody>();
 
-        // Buscamos el Animator autom·ticamente en los hijos
+        // Buscamos el Animator autom√°ticamente en los hijos
         anim = GetComponentInChildren<Animator>();
 
         // Guardamos el primer hijo directo, que ahora es el contenedor 'Centro_Visual'
@@ -49,19 +53,33 @@ public class MovimientoBasico25D : MonoBehaviour
 
     void Update()
     {
-        // 1. Procesar el input horizontal seg˙n las teclas asignadas
+        // CONTROL DE SEGURIDAD PARA EL STUN
+        if (estaAturdido)
+        {
+            if (Time.time >= tiempoFinStun)
+            {
+                estaAturdido = false;
+            }
+            else
+            {
+                inputHorizontal = 0f; // Anula cualquier fuerza acumulada anterior
+                return; // Bloquea los inputs de movimiento, salto y ca√≠da r√°pida
+            }
+        }
+
+        // 1. Procesar el input horizontal seg√∫n las teclas asignadas
         inputHorizontal = 0f;
         if (Input.GetKey(teclaIzquierda)) inputHorizontal = -1f;
         if (Input.GetKey(teclaDerecha)) inputHorizontal = 1f;
 
-        // CONTROL DE ORIENTACI”N DIN¡MICA (Rotamos el contenedor intermedio centrado)
+        // CONTROL DE ORIENTACI√ìN DIN√ÅMICA (Rotamos el contenedor intermedio centrado)
         if (centroVisual != null)
         {
             Vector3 rotacionLocal = centroVisual.localEulerAngles;
 
             if (inputHorizontal == 0f)
             {
-                // IDLE: Mira de frente a la c·mara
+                // IDLE: Mira de frente a la c√°mara
                 rotacionLocal.y = 90f;
             }
             else if (inputHorizontal > 0f)
@@ -92,7 +110,7 @@ public class MovimientoBasico25D : MonoBehaviour
             if (anim != null) anim.SetTrigger("SaltoTrigger");
         }
 
-        // 3. CaÌda r·pida (solo en el aire)
+        // 3. Ca√≠da r√°pida (solo en el aire)
         if (Input.GetKeyDown(teclaCaida) && !EsSuelo())
         {
             rb.AddForce(Vector3.down * fuerzaCaidaRapida, ForceMode.Impulse);
@@ -101,7 +119,10 @@ public class MovimientoBasico25D : MonoBehaviour
 
     void FixedUpdate()
     {
-        // Si estamos tocando una tecla de movimiento Y adem·s tenemos una pared enfrente
+        // Si el jugador est√° aturdido, dejamos actuar libremente al AddForce del empuje
+        if (estaAturdido) return;
+
+        // Si estamos tocando una tecla de movimiento Y adem√°s tenemos una pared enfrente
         if (inputHorizontal != 0f && EsPared())
         {
             // Frenamos en seco el empuje horizontal para no trepar la pared
@@ -113,6 +134,18 @@ public class MovimientoBasico25D : MonoBehaviour
             rb.linearVelocity = new Vector3(inputHorizontal * velocidad, rb.linearVelocity.y, 0);
         }
     }
+
+    // Funci√≥n p√∫blica para que el Rapero pueda llamar e impactar a este jugador
+    public void AplicarEmpujeYStun(Vector3 fuerzaEmpuje, float duracionStun)
+    {
+        estaAturdido = true;
+        tiempoFinStun = Time.time + duracionStun;
+        
+        // Reseteamos velocidad actual y aplicamos el impacto f√≠sico puro de la onda
+        rb.linearVelocity = Vector3.zero;
+        rb.AddForce(fuerzaEmpuje, ForceMode.Impulse);
+    }
+
     bool EsSuelo()
     {
         // Calculamos las posiciones de los pies (Izquierda y Derecha) usando el offset
@@ -131,7 +164,7 @@ public class MovimientoBasico25D : MonoBehaviour
 
     bool EsPared()
     {
-        // Calculamos hacia dÛnde estamos yendo (1 para derecha, -1 para izquierda)
+        // Calculamos hacia d√≥nde estamos yendo (1 para derecha, -1 para izquierda)
         float direccionX = Mathf.Sign(inputHorizontal);
         Vector3 direccion = new Vector3(direccionX, 0, 0);
 
@@ -141,6 +174,7 @@ public class MovimientoBasico25D : MonoBehaviour
 
         return Physics.Raycast(origen, direccion, distanciaRaycastPared, capaSuelo);
     }
+
     void OnDrawGizmos()
     {
         // Calculamos los tres puntos del suelo para dibujarlos
