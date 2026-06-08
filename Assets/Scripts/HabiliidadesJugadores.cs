@@ -1,115 +1,175 @@
 using UnityEngine;
 
-public enum ClasePersonaje { Mecanico, Profesor, Rapero }
-
 public class HabilidadesJugador : MonoBehaviour
 {
+    public enum TipoClase { Profesor, Mecanico, Rapero }
+
+    [Header("Identificación del Jugador")]
+    public int numeroJugador = 1;
+
     [Header("Configuración de Clase")]
-    public ClasePersonaje clase;
+    public TipoClase clase;
     public KeyCode teclaHabilidad = KeyCode.E;
     public float cooldown = 4f;
-    private float tiempoSiguienteHabilidad = 0f;
+    private float tiempoSiguienteUso = 0f;
 
     [Header("Habilidad Mecánico")]
     public GameObject prefabBloqueMecanico;
 
-    [Header("Habilidad Profesor")]
-    public GameObject prefabPulsoProfesor;
+    [Header("Habilidad Profesor (Raycast Inteligente)")]
+    public float radioMaximoEscaneo = 7f;
+    public LayerMask capaObstaculosYPlataformas;
+    public LineRenderer efectoVisualLaser;
 
-    [Header("Habilidad Rapero (Configurable)")]
+    [Header("Habilidad Rapero")]
     public float radioEmpuje = 5f;
     public float fuerzaEmpuje = 12f;
-    public float duracionStunRival = 0.5f; // Modificable desde el Inspector
-    public GameObject visualOndaRapero; // Efecto visual (ej: una esfera que spawnea y se agranda)
+    public float duracionStunRival = 0.5f;
+    public GameObject visualOndaRapero;
 
     void Update()
     {
-        if (Input.GetKeyDown(teclaHabilidad) && Time.time >= tiempoSiguienteHabilidad)
+        if (Input.GetKeyDown(teclaHabilidad))
         {
-            UsarHabilidad();
+            // FIX: Saqué la variable que no existía. Esto va a avisar limpio en consola.
+            Debug.Log($"[RASTREO] Tecla {teclaHabilidad} apretada por Player {numeroJugador}. Clase: {clase}");
+
+            if (Time.time >= tiempoSiguienteUso)
+            {
+                UsarHabilidad();
+                tiempoSiguienteUso = Time.time + cooldown;
+            }
+            else
+            {
+                Debug.Log($"Jugador {numeroJugador}: Habilidad en Cooldown. Faltan {tiempoSiguienteUso - Time.time:F1}s");
+            }
         }
     }
 
     void UsarHabilidad()
     {
-        tiempoSiguienteHabilidad = Time.time + cooldown;
-
         switch (clase)
         {
-            case ClasePersonaje.Mecanico:
-                // Spawnea el bloque gris justo adelante del jugador
-                Vector3 posBloque = transform.position + (transform.childCount > 0 ? transform.GetChild(0).forward * 1.2f : Vector3.right);
-                Instantiate(prefabBloqueMecanico, posBloque, Quaternion.identity);
+            case TipoClase.Mecanico:
+                HabilidadMecanico();
                 break;
-
-            case ClasePersonaje.Profesor:
-                // Spawnea el proyectil que viaja en el eje X
-                GameObject pulso = Instantiate(prefabPulsoProfesor, transform.position + Vector3.up * 0.5f, Quaternion.identity);
-                PulsoProfesor scriptPulso = pulso.GetComponent<PulsoProfesor>();
-                
-                // Detectamos hacia dónde está mirando el Centro_Visual para darle dirección al disparo
-                if (transform.childCount > 0)
-                {
-                    // Si la rotación Y local es 0 está mirando a la derecha, si es -180 o 180 a la izquierda
-                    float rotY = transform.GetChild(0).localEulerAngles.y;
-                    scriptPulso.direccionX = (rotY > 45s && rotY < 135f) ? 0f : (rotY == 0f ? 1f : -1f); 
-                    // Nota simplificada: Si tu script rota en base a 90f (frente), 0f (der), -180f (izq):
-                    if (Mathf.Approximately(rotY, 0f)) scriptPulso.direccionX = 1f;
-                    else if (Mathf.Approximately(rotY, 180f) || Mathf.Approximately(rotY, -180f)) scriptPulso.direccionX = -1f;
-                }
+            case TipoClase.Profesor:
+                HabilidadProfesor();
                 break;
-
-            case ClasePersonaje.Rapero:
-                CantarOndaExpansiva();
+            case TipoClase.Rapero:
+                HabilidadRapero();
                 break;
         }
     }
 
-    void CantarOndaExpansiva()
+    void HabilidadMecanico()
     {
-        Debug.Log("¡El Rapero cantó tirando onda expansiva!");
-        
-        // Instanciamos el efecto visual si existe
-        if (visualOndaRapero != null)
+        if (prefabBloqueMecanico != null)
         {
-            GameObject onda = Instantiate(visualOndaRapero, transform.position, Quaternion.identity);
-            Destroy(onda, 0.4f); // Se destruye rápido
+            Vector3 direccionSpawn = Vector3.right;
+            if (transform.childCount > 0)
+            {
+                Transform centroVisual = transform.GetChild(0);
+                if (centroVisual.localEulerAngles.y > 100f || centroVisual.localEulerAngles.y < -100f)
+                {
+                    direccionSpawn = Vector3.left;
+                }
+            }
+            Vector3 posicionSpawn = transform.position + direccionSpawn * 1.5f;
+            Instantiate(prefabBloqueMecanico, posicionSpawn, Quaternion.identity);
+        }
+    }
+
+    void HabilidadProfesor()
+    {
+        float direccionX = 1f;
+        if (transform.childCount > 0)
+        {
+            Transform centroVisual = transform.GetChild(0);
+            if (centroVisual.localEulerAngles.y > 100f || centroVisual.localEulerAngles.y < -100f)
+            {
+                direccionX = -1f;
+            }
         }
 
-        // Buscamos todos los colisionadores en el radio de explosión 360°
+        Vector3 direccionDisparo = new Vector3(direccionX, 0, 0);
+        // Forzamos el carril Z a 0 para que impacte de lleno en las plataformas
+        Vector3 origenLaser = new Vector3(transform.position.x, transform.position.y + 1f, 0f);
+        Vector3 puntoFinalLaser = origenLaser + direccionDisparo * radioMaximoEscaneo;
+
+        Debug.DrawRay(origenLaser, direccionDisparo * radioMaximoEscaneo, Color.green, 2f);
+
+        RaycastHit hit;
+        if (Physics.Raycast(origenLaser, direccionDisparo, out hit, radioMaximoEscaneo))
+        {
+            if (hit.collider != null)
+            {
+                puntoFinalLaser = hit.point;
+                puntoFinalLaser.z = 0f; // Mantener el láser visual en el plano 2.5D
+
+                // 1. Intentamos obtener tu script específico de la plataforma
+                PlataformasColores scriptPlataforma = hit.collider.GetComponent<PlataformasColores>();
+
+                // 2. Si el objeto tiene el script y no es un jugador, ejecutamos tu función lógica
+                if (scriptPlataforma != null && hit.collider.GetComponent<MovimientoBasico25D>() == null)
+                {
+                    // EJECUTAMOS TU FUNCIÓN OFICIAL: cambia el enum y el material al mismo tiempo
+                    scriptPlataforma.SabotearBando();
+
+                    Debug.LogWarning($"[PROFESOR] ¡Láser interactuó con {hit.collider.name} y ejecutó SabotearBando()!");
+                }
+            }
+        }
+
+        if (efectoVisualLaser != null)
+        {
+            StartCoroutine(MostrarLaserVisual(origenLaser, puntoFinalLaser));
+        }
+    }
+    void HabilidadRapero()
+    {
+        Debug.Log($"Jugador {numeroJugador} ejecutando habilidad de Rapero.");
+
+        // 1. RESPUESTA VISUAL
+        if (visualOndaRapero != null)
+        {
+            Vector3 posicionOnda = new Vector3(transform.position.x, transform.position.y, 0f);
+            GameObject onda = Instantiate(visualOndaRapero, posicionOnda, Quaternion.identity);
+            Destroy(onda, 0.5f);
+        }
+
+        // 2. DETECCIÓN EN ÁREA
         Collider[] objetosCercanos = Physics.OverlapSphere(transform.position, radioEmpuje);
 
         foreach (Collider col in objetosCercanos)
         {
-            // Evitamos empujarnos a nosotros mismos
             if (col.gameObject == this.gameObject) continue;
 
-            // Si encuentra otra cápsula de jugador con el script de movimiento
-            MovimientoBasico25D rivalMov = col.gameObject.GetComponent<MovimientoBasico25D>();
-            if (rivalMov != null)
+            // 3. EFECTO SOBRE EL RIVAL
+            MovimientoBasico25D scriptRival = col.GetComponent<MovimientoBasico25D>();
+            if (scriptRival != null)
             {
-                // Calculamos la dirección exacta en 360 grados desde el Rapero hacia el rival
-                Vector3 direccionEmpuje = (col.transform.position - transform.position).normalized;
-                
-                // Forzamos que se mantenga en el plano 2.5D (Eje Z en cero, empuje en X e Y de salto)
-                direccionEmpuje.z = 0f;
-                // Le damos un pequeño ángulo hacia arriba para que los despegue del suelo al empujarlos
-                direccionEmpuje.y += 0.3f; 
-                direccionEmpuje = direccionEmpuje.normalized;
+                Vector3 direccionEmpuje = col.transform.position - transform.position;
 
-                // Aplicamos el impacto y el stun configurable
-                rivalMov.AplicarEmpujeYStun(direccionEmpuje * fuerzaEmpuje, duracionStunRival);
+                // --- FIX: Declaramos direccionX como float ---
+                float direccionX = Mathf.Sign(direccionEmpuje.x);
+
+                // Armamos el vector de fuerza final
+                Vector3 fuerzaFinal = new Vector3(direccionX * fuerzaEmpuje, fuerzaEmpuje * 0.4f, 0f);
+
+                // Aplicamos el empuje y congelamos al rival
+                scriptRival.AplicarEmpujeYStun(fuerzaFinal, duracionStunRival);
+
+                Debug.LogWarning($"[RAPERO] ¡Onda expansiva golpeó a {col.name}! Mandado a volar.");
             }
         }
     }
-
-    // Para dibujar el rango de la onda en el editor de Unity
-    void OnDrawGizmosSelected()
+    System.Collections.IEnumerator MostrarLaserVisual(Vector3 inicio, Vector3 fin)
     {
-        if (clase == ClasePersonaje.Rapero)
-        {
-            Gizmos.color = Color.magenta;
-            Gizmos.DrawWireSphere(transform.position, radioEmpuje);
-        }
+        efectoVisualLaser.enabled = true;
+        efectoVisualLaser.SetPosition(0, inicio);
+        efectoVisualLaser.SetPosition(1, fin);
+        yield return new WaitForSeconds(0.15f);
+        efectoVisualLaser.enabled = false;
     }
 }

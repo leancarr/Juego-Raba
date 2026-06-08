@@ -5,7 +5,7 @@ public class PlataformasColores : MonoBehaviour
     // Elegimos el color de ESTA plataforma desde el inspector del Unity
     public ColorDeFondo.ColorEstado colorDeEstaPlataforma;
 
-    // CAMBIO 1: Cambiamos de una sola variable a un Array (lista) para manejar varios Colliders
+    // Manejo de Colliders y renderers originales
     private Collider[] misColliders;
     private MeshRenderer miRenderer;
     private Color colorOriginal;
@@ -13,12 +13,10 @@ public class PlataformasColores : MonoBehaviour
 
     void Start()
     {
-        // CAMBIO 2: Usamos GetComponents (en plural) para atrapar al sólido y al Trigger
         misColliders = GetComponents<Collider>();
         miRenderer = GetComponent<MeshRenderer>();
 
-        // Test de diagnóstico actualizado:
-        if (misColliders.Length == 0) // Verificamos si la lista está vacía
+        if (misColliders.Length == 0)
         {
             Debug.LogError("¡ALERTA! El script en " + gameObject.name + " NO encontró ningún Collider. Revisá dónde está pegado el script.");
         }
@@ -40,9 +38,9 @@ public class PlataformasColores : MonoBehaviour
 
         ColorDeFondo.ColorEstado colorFondoActual = ColorDeFondo.Instancia.colorActual;
 
+        // REGLA INVERSA ACTUAL: Si el fondo es de su mismo color -> SE APAGA
         if (colorDeEstaPlataforma == colorFondoActual)
         {
-            // Solo ejecuta si la plataforma NO estaba apagada todavía
             if (!yaEstabaApagada)
             {
                 DesactivarPlataforma();
@@ -50,7 +48,6 @@ public class PlataformasColores : MonoBehaviour
         }
         else
         {
-            // Solo ejecuta si la plataforma estaba apagada y ahora debe volver
             if (yaEstabaApagada)
             {
                 ActivarPlataforma();
@@ -63,16 +60,13 @@ public class PlataformasColores : MonoBehaviour
         yaEstabaApagada = true;
         Debug.Log("APAGANDO: " + gameObject.name);
 
-        // Le decimos a la plataforma que suelte a cualquier jugador que tenga "pegado" como hijo
         transform.DetachChildren();
 
-        // CAMBIO 3: Un bucle que apaga todos los colisionadores de la lista al mismo tiempo
         foreach (Collider col in misColliders)
         {
             col.enabled = false;
         }
 
-        // APAGAMOS por completo el componente visual. El cubo se vuelve 100% invisible.
         if (miRenderer != null) miRenderer.enabled = false;
     }
 
@@ -81,13 +75,34 @@ public class PlataformasColores : MonoBehaviour
         yaEstabaApagada = false;
         Debug.Log("PRENDIENDO: " + gameObject.name);
 
-        // CAMBIO 4: Un bucle que vuelve a prender todos los colisionadores
         foreach (Collider col in misColliders)
         {
             col.enabled = true;
         }
 
-        // PRENDEMOS el componente visual para que vuelva a renderizarse con su color original.
         if (miRenderer != null) miRenderer.enabled = true;
+    }
+
+    // --- FUNCIÓN CORREGIDA CON TUS COLORES OFICIALES ---
+    public void SabotearBando()
+    {
+        // Rotación cíclica entre tus 3 colores oficiales
+        if (colorDeEstaPlataforma == ColorDeFondo.ColorEstado.Azul)
+        {
+            colorDeEstaPlataforma = ColorDeFondo.ColorEstado.Amarillo;
+            if (miRenderer != null) miRenderer.material.color = Color.yellow; // Amarillo
+        }
+        else if (colorDeEstaPlataforma == ColorDeFondo.ColorEstado.Amarillo)
+        {
+            colorDeEstaPlataforma = ColorDeFondo.ColorEstado.Rojo;
+            if (miRenderer != null) miRenderer.material.color = Color.red; // Rojo
+        }
+        else if (colorDeEstaPlataforma == ColorDeFondo.ColorEstado.Rojo)
+        {
+            colorDeEstaPlataforma = ColorDeFondo.ColorEstado.Azul;
+            if (miRenderer != null) miRenderer.material.color = Color.blue; // Azul
+        }
+
+        Debug.Log("¡Plataforma " + gameObject.name + " saboteada! Nuevo color: " + colorDeEstaPlataforma);
     }
 }
