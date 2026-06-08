@@ -3,42 +3,45 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody))]
 public class MovimientoBasico25D : MonoBehaviour
 {
-    [Header("Configuración de Teclas (Custom)")]
+    [Header("ConfiguraciÃ³n de Teclas (Custom)")]
     public KeyCode teclaIzquierda = KeyCode.A;
     public KeyCode teclaDerecha = KeyCode.D;
     public KeyCode teclaSalto = KeyCode.W;
     public KeyCode teclaCaida = KeyCode.S;
 
-    [Header("Configuración de Movimiento")]
+    [Header("ConfiguraciÃ³n de Movimiento")]
     public float velocidad = 7f;
     public float fuerzaSalto = 10f;
     public float fuerzaCaidaRapida = 8f;
     private float inputHorizontal;
     private Rigidbody rb;
 
-    // VARIABLES PARA ANIMACIÓN Y CONTENEDOR INTERMEDIO
     private Animator anim;
-    private Transform centroVisual; // Apunta al objeto vacío intermedio centrado
+    private Transform centroVisual;
 
-    [Header("Físicas de Salto (Raycast Obligatorio)")]
+    [Header("FÃ­sicas de Salto (Raycast Obligatorio)")]
     public LayerMask capaSuelo;
     public float distanciaRaycast = 1.1f;
     public float distanciaRaycastPared = 0.6f;
     public float offsetRaycastSuelo = 0.4f;
 
+    private bool estaAturdido = false;
+    private float tiempoFinStun = 0f;
+
+    // --- NUEVA VARIABLE PARA EMPUJE COMÃšN (SIN STUN) ---
+    private float tiempoFinInerciaEmpuje = 0f;
+
     void Start()
     {
         rb = GetComponent<Rigidbody>();
-
-        // Buscamos el Animator automáticamente en los hijos
         anim = GetComponentInChildren<Animator>();
 
-        // Guardamos el primer hijo directo, que ahora es el contenedor 'Centro_Visual'
         if (transform.childCount > 0)
         {
             centroVisual = transform.GetChild(0);
         }
 
+        // --- CONGELAR LA POSICIÃ“N EN Z (Plano 2.5D) ---
         rb.constraints = RigidbodyConstraints.FreezeRotationX |
                          RigidbodyConstraints.FreezeRotationY |
                          RigidbodyConstraints.FreezeRotationZ |
@@ -49,51 +52,49 @@ public class MovimientoBasico25D : MonoBehaviour
 
     void Update()
     {
-        // 1. Procesar el input horizontal según las teclas asignadas
-        inputHorizontal = 0f;
-        if (Input.GetKey(teclaIzquierda)) inputHorizontal = -1f;
-        if (Input.GetKey(teclaDerecha)) inputHorizontal = 1f;
+        // --- CONTROL DEL TIEMPO DE STUN (Habilidades Fuertes) ---
+        if (estaAturdido)
+        {
+            if (Time.time >= tiempoFinStun)
+            {
+                estaAturdido = false;
+            }
+        }
 
-        // CONTROL DE ORIENTACIÓN DINÁMICA (Rotamos el contenedor intermedio centrado)
-        if (centroVisual != null)
+        // --- LEER INPUTS ---
+        inputHorizontal = 0f;
+        // Si estÃ¡ bajo un Stun pesado no lee nada, si es un empuje comÃºn SÃ lee las teclas
+        if (!estaAturdido)
+        {
+            if (Input.GetKey(teclaIzquierda)) inputHorizontal = -1f;
+            if (Input.GetKey(teclaDerecha)) inputHorizontal = 1f;
+        }
+
+        // --- GIRO VISUAL DEL PERSONAJE ---
+        if (centroVisual != null && inputHorizontal != 0f)
         {
             Vector3 rotacionLocal = centroVisual.localEulerAngles;
-
-            if (inputHorizontal == 0f)
-            {
-                // IDLE: Mira de frente a la cámara
-                rotacionLocal.y = 90f;
-            }
-            else if (inputHorizontal > 0f)
-            {
-                // CAMINANDO DERECHA: Perfil a la derecha (90 grados)
-                rotacionLocal.y = 0f;
-            }
-            else if (inputHorizontal < 0f)
-            {
-                // CAMINANDO IZQUIERDA: Perfil a la izquierda (-90 grados)
-                rotacionLocal.y = -180f;
-            }
-
+            if (inputHorizontal > 0f) rotacionLocal.y = 0f;
+            else if (inputHorizontal < 0f) rotacionLocal.y = -180f;
             centroVisual.localEulerAngles = rotacionLocal;
         }
 
-        // Mandar los datos al Animator
+        // --- ACTUALIZACIÃ“N DE ANIMACIONES ---
         if (anim != null)
         {
             anim.SetFloat("Velocidad", Mathf.Abs(inputHorizontal * velocidad));
             anim.SetBool("EstaEnSuelo", EsSuelo());
         }
 
-        // 2. Salto con la tecla asignada
-        if (Input.GetKeyDown(teclaSalto) && EsSuelo())
+        // --- ACCIÃ“N: SALTO (Solo si no estÃ¡ aturdido) ---
+        if (Input.GetKeyDown(teclaSalto) && EsSuelo() && !estaAturdido)
         {
             rb.linearVelocity = new Vector3(rb.linearVelocity.x, fuerzaSalto, 0);
             if (anim != null) anim.SetTrigger("SaltoTrigger");
         }
 
-        // 3. Caída rápida (solo en el aire)
-        if (Input.GetKeyDown(teclaCaida) && !EsSuelo())
+        // --- ACCIÃ“N: CAÃDA RÃPIDA (Solo si no estÃ¡ aturdido) ---
+        if (Input.GetKeyDown(teclaCaida) && !EsSuelo() && !estaAturdido)
         {
             rb.AddForce(Vector3.down * fuerzaCaidaRapida, ForceMode.Impulse);
         }
@@ -101,62 +102,83 @@ public class MovimientoBasico25D : MonoBehaviour
 
     void FixedUpdate()
     {
-        // Si estamos tocando una tecla de movimiento Y además tenemos una pared enfrente
+        // CASO 1: Si estÃ¡ bajo STUN completo (ej. Rapero), congelamos sus fÃ­sicas de control horizontal
+        if (estaAturdido) return;
+
+        // CASO 2: Si recibiÃ³ un empuje comÃºn (SIN STUN), no tocamos rb.linearVelocity en X
+        // para dar una ventana donde la fuerza fÃ­sica del enviÃ³n actÃºe sin ser reseteada a 0.
+        if (Time.time < tiempoFinInerciaEmpuje) return;
+
+        // --- MOVIMIENTO NORMAL CONTROLADO ---
         if (inputHorizontal != 0f && EsPared())
         {
-            // Frenamos en seco el empuje horizontal para no trepar la pared
             rb.linearVelocity = new Vector3(0, rb.linearVelocity.y, 0);
         }
         else
         {
-            // Movimiento normal
             rb.linearVelocity = new Vector3(inputHorizontal * velocidad, rb.linearVelocity.y, 0);
         }
     }
+
+    // --- FUNCIÃ“N PARA EMPUJE CON STUN (MecÃ¡nicas tipo Rapero) ---
+    public void AplicarEmpujeYStun(Vector3 fuerzaEmpuje, float duracionStun)
+    {
+        estaAturdido = true;
+        tiempoFinStun = Time.time + duracionStun;
+
+        rb.linearVelocity = Vector3.zero;
+        rb.AddForce(fuerzaEmpuje, ForceMode.Impulse);
+    }
+
+    // --- NUEVA FUNCIÃ“N PARA EMPUJE PURO (AccionEmpuje Normal sin Stun) ---
+    public void RecibirEmpujePuro(Vector3 fuerzaEmpuje, float duracionInercia)
+    {
+        // Le damos una pequeÃ±a ventana de tiempo para que vuele por fÃ­sicas
+        tiempoFinInerciaEmpuje = Time.time + duracionInercia;
+
+        rb.linearVelocity = Vector3.zero;
+        rb.AddForce(fuerzaEmpuje, ForceMode.Impulse);
+    }
+
     bool EsSuelo()
     {
-        // Calculamos las posiciones de los pies (Izquierda y Derecha) usando el offset
         Vector3 puntoCentro = transform.position;
         Vector3 puntoIzquierda = transform.position + (Vector3.left * offsetRaycastSuelo);
         Vector3 puntoDerecha = transform.position + (Vector3.right * offsetRaycastSuelo);
 
-        // Lanzamos los tres rayos hacia abajo
-        bool tocaCentro = Physics.Raycast(puntoCentro, Vector3.down, distanciaRaycast, capaSuelo);
-        bool tocaIzquierda = Physics.Raycast(puntoIzquierda, Vector3.down, distanciaRaycast, capaSuelo);
-        bool tocaDerecha = Physics.Raycast(puntoDerecha, Vector3.down, distanciaRaycast, capaSuelo);
+        int layerColorMascara = LayerMask.GetMask("PlataformaColor");
+        LayerMask mascaraCombinada = capaSuelo | layerColorMascara;
 
-        // Si CUALQUIERA de los tres rayos toca el suelo, devolvemos true
+        bool tocaCentro = Physics.Raycast(puntoCentro, Vector3.down, distanciaRaycast, mascaraCombinada);
+        bool tocaIzquierda = Physics.Raycast(puntoIzquierda, Vector3.down, distanciaRaycast, mascaraCombinada);
+        bool tocaDerecha = Physics.Raycast(puntoDerecha, Vector3.down, distanciaRaycast, mascaraCombinada);
+
         return tocaCentro || tocaIzquierda || tocaDerecha;
     }
 
     bool EsPared()
     {
-        // Calculamos hacia dónde estamos yendo (1 para derecha, -1 para izquierda)
         float direccionX = Mathf.Sign(inputHorizontal);
         Vector3 direccion = new Vector3(direccionX, 0, 0);
+        Vector3 origenPared = transform.position;
 
-        // Levantamos el origen del rayo un poco desde los pies hacia la cintura
-        // para que no choque contra el piso por accidente
-        Vector3 origen = transform.position + (Vector3.down * 0.8f);
-
-        return Physics.Raycast(origen, direccion, distanciaRaycastPared, capaSuelo);
+        return Physics.Raycast(origenPared, direccion, distanciaRaycastPared, capaSuelo);
     }
+
     void OnDrawGizmos()
     {
-        // Calculamos los tres puntos del suelo para dibujarlos
+        if (transform == null) return;
+
         Vector3 puntoCentro = transform.position;
         Vector3 puntoIzquierda = transform.position + (Vector3.left * offsetRaycastSuelo);
         Vector3 puntoDerecha = transform.position + (Vector3.right * offsetRaycastSuelo);
 
-        // Dibujamos los 3 rayos del suelo en color Rojo
         Gizmos.color = Color.red;
         Gizmos.DrawLine(puntoCentro, puntoCentro + Vector3.down * distanciaRaycast);
         Gizmos.DrawLine(puntoIzquierda, puntoIzquierda + Vector3.down * distanciaRaycast);
         Gizmos.DrawLine(puntoDerecha, puntoDerecha + Vector3.down * distanciaRaycast);
 
-        // Gizmo de la pared (Azul) - Se dibuja a la altura de la cintura
         Gizmos.color = Color.blue;
-        Vector3 origenPared = transform.position + (Vector3.down * 0.8f);
-        Gizmos.DrawLine(origenPared, origenPared + Vector3.right * 0.6f);
+        Gizmos.DrawLine(transform.position, transform.position + (Vector3.right * Mathf.Sign(inputHorizontal == 0 ? 1 : inputHorizontal) * distanciaRaycastPared));
     }
 }
