@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using System.Collections;
 
 public class SeleccionMultijugador : MonoBehaviour
 {
@@ -10,38 +11,57 @@ public class SeleccionMultijugador : MonoBehaviour
     [Header("Los Pedestales")]
     public Transform[] posiciones;
 
-    [Header("Los Carteles (World Space)")]
+    [Header("Los Carteles de INFO (World Space)")]
     public CartelPersonaje[] carteles;
+
+    [Header("UI - Carteles de LISTO (World Space)")]
+    // Ahora pedimos Transforms para moverlos en el espacio 3D
+    public Transform transformListoP1; // Arrastrar "Cartel_Listo_P1"
+    public Transform transformListoP2; // Arrastrar "Cartel_Listo_P2"
+
+    [Header("Configuración de Posición LISTO")]
+    // Nos permite ajustar qué tan arriba/adelante sale el cartel "Listo" del personaje
+    public Vector3 offsetListo = new Vector3(0, 2.5f, -0.5f);
+
+    // Cuántos metros se moverá el cartel hacia el centro si eligen los costados
+    [Tooltip("Empuja los carteles de los costados hacia el centro para que no se corten con la pantalla")]
+    public float empujeHaciaElCentro = 1.2f;
 
     [Header("Controles Player 1")]
     public KeyCode p1Izquierda = KeyCode.A;
     public KeyCode p1Derecha = KeyCode.D;
     public KeyCode p1Confirmar = KeyCode.Space;
+    public KeyCode p1Cancelar = KeyCode.LeftShift;
 
     [Header("Controles Player 2")]
     public KeyCode p2Izquierda = KeyCode.LeftArrow;
     public KeyCode p2Derecha = KeyCode.RightArrow;
     public KeyCode p2Confirmar = KeyCode.Return;
+    public KeyCode p2Cancelar = KeyCode.RightShift;
 
     private int indiceP1 = 0;
     private int indiceP2 = 0;
 
     private bool p1Listo = false;
     private bool p2Listo = false;
+    private bool cargandoEscena = false;
 
     void Start()
     {
         if (posiciones.Length > 1) indiceP2 = posiciones.Length - 1;
 
+        // Apagamos los carteles de Listo al iniciar
+        if (transformListoP1 != null) transformListoP1.gameObject.SetActive(false);
+        if (transformListoP2 != null) transformListoP2.gameObject.SetActive(false);
+
         ActualizarReflector(reflectorP1, indiceP1);
         ActualizarReflector(reflectorP2, indiceP2);
-
-        // ¡NUEVO! Actualizamos luces, carteles y giros al arrancar
         ActualizarEntorno();
     }
 
     void Update()
     {
+        // --- PLAYER 1 ---
         if (!p1Listo)
         {
             if (Input.GetKeyDown(p1Derecha)) MoverP1(1);
@@ -50,11 +70,21 @@ public class SeleccionMultijugador : MonoBehaviour
             if (Input.GetKeyDown(p1Confirmar))
             {
                 p1Listo = true;
-                PlayerPrefs.SetInt("EleccionP1", indiceP1);
+                ConfirmarP1(); // ¡NUEVO FNC!
                 ChequearArranque();
             }
         }
+        else
+        {
+            if (Input.GetKeyDown(p1Cancelar))
+            {
+                p1Listo = false;
+                if (transformListoP1 != null) transformListoP1.gameObject.SetActive(false);
+                cargandoEscena = false;
+            }
+        }
 
+        // --- PLAYER 2 ---
         if (!p2Listo)
         {
             if (Input.GetKeyDown(p2Derecha)) MoverP2(1);
@@ -63,9 +93,55 @@ public class SeleccionMultijugador : MonoBehaviour
             if (Input.GetKeyDown(p2Confirmar))
             {
                 p2Listo = true;
-                PlayerPrefs.SetInt("EleccionP2", indiceP2);
+                ConfirmarP2(); // ¡NUEVO FNC!
                 ChequearArranque();
             }
+        }
+        else
+        {
+            if (Input.GetKeyDown(p2Cancelar))
+            {
+                p2Listo = false;
+                if (transformListoP2 != null) transformListoP2.gameObject.SetActive(false);
+                cargandoEscena = false;
+            }
+        }
+    }
+
+    void ConfirmarP1()
+    {
+        if (transformListoP1 != null && posiciones.Length > 0)
+        {
+            Vector3 posicionFinal = posiciones[indiceP1].position + offsetListo;
+
+            // Si es IZQUIERDA (0), restamos para empujar hacia el centro
+            if (indiceP1 == 0) posicionFinal.x -= empujeHaciaElCentro;
+
+            // Si es DERECHA (2), sumamos para empujar hacia el centro
+            else if (indiceP1 == posiciones.Length - 1) posicionFinal.x += empujeHaciaElCentro;
+
+            transformListoP1.position = posicionFinal;
+            transformListoP1.gameObject.SetActive(true);
+
+            PlayerPrefs.SetInt("EleccionP1", indiceP1);
+        }
+    }
+
+    void ConfirmarP2()
+    {
+        if (transformListoP2 != null && posiciones.Length > 0)
+        {
+            Vector3 posicionFinal = posiciones[indiceP2].position + offsetListo;
+
+            // ¡CORREGIDO! Ahora usa el indiceP2
+            if (indiceP2 == 0) posicionFinal.x -= empujeHaciaElCentro;
+
+            else if (indiceP2 == posiciones.Length - 1) posicionFinal.x += empujeHaciaElCentro;
+
+            transformListoP2.position = posicionFinal;
+            transformListoP2.gameObject.SetActive(true);
+
+            PlayerPrefs.SetInt("EleccionP2", indiceP2);
         }
     }
 
@@ -97,10 +173,8 @@ public class SeleccionMultijugador : MonoBehaviour
         }
     }
 
-    // ¡La función maestra que controla TODO!
     void ActualizarEntorno()
     {
-        // 1. Apagamos TODOS los carteles y hacemos girar a TODOS los personajes
         for (int i = 0; i < posiciones.Length; i++)
         {
             if (i < carteles.Length && carteles[i] != null)
@@ -108,13 +182,11 @@ public class SeleccionMultijugador : MonoBehaviour
 
             if (posiciones[i] != null)
             {
-                // Busca automáticamente el script en el modelo 3D adentro del cilindro
                 ReaccionPersonaje reaccion = posiciones[i].GetComponentInChildren<ReaccionPersonaje>();
                 if (reaccion != null) reaccion.CambiarEstado(false);
             }
         }
 
-        // 2. Encendemos el cartel y frenamos al personaje del P1
         if (indiceP1 < carteles.Length && carteles[indiceP1] != null) carteles[indiceP1].MostrarCartel(true);
         if (indiceP1 < posiciones.Length && posiciones[indiceP1] != null)
         {
@@ -122,7 +194,6 @@ public class SeleccionMultijugador : MonoBehaviour
             if (reaccion != null) reaccion.CambiarEstado(true);
         }
 
-        // 3. Encendemos el cartel y frenamos al personaje del P2 
         if (indiceP2 < carteles.Length && carteles[indiceP2] != null) carteles[indiceP2].MostrarCartel(true);
         if (indiceP2 < posiciones.Length && posiciones[indiceP2] != null)
         {
@@ -133,9 +204,24 @@ public class SeleccionMultijugador : MonoBehaviour
 
     void ChequearArranque()
     {
+        if (p1Listo && p2Listo && !cargandoEscena)
+        {
+            StartCoroutine(CargarNivelConRetraso());
+        }
+    }
+
+    IEnumerator CargarNivelConRetraso()
+    {
+        cargandoEscena = true;
+        yield return new WaitForSeconds(1.5f);
+
         if (p1Listo && p2Listo)
         {
             SceneManager.LoadScene("PantallaCarga");
+        }
+        else
+        {
+            cargandoEscena = false;
         }
     }
 }
