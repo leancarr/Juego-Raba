@@ -48,12 +48,16 @@ public class GameManager : MonoBehaviour
                 DatosTorneo.instancia.victoriasP2++;
                 Debug.Log($"<color=green>[GM] Punto para Player 2. Total: {DatosTorneo.instancia.victoriasP2}</color>");
             }
+
+            // --- CAMBIO: Guardamos el progreso en disco inmediatamente ---
+            DatosTorneo.instancia.GuardarProgreso();
         }
         else
         {
             Debug.LogError("<color=red>[GM] ¡ALERTA! DatosTorneo.instancia es NULL al intentar sumar puntos.</color>");
         }
 
+        // El resto de tu lógica se mantiene exactamente igual
         if (personajeGanador != null)
         {
             Animator anim = personajeGanador.GetComponentInChildren<Animator>();
@@ -110,7 +114,7 @@ public class GameManager : MonoBehaviour
             }
         }
 
-        if (panelTextoVictoria != null) 
+        if (panelTextoVictoria != null)
         {
             panelTextoVictoria.SetActive(true);
             Debug.Log("[GM] Panel Texto Victoria ACTIVADO.");
