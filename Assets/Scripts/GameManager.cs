@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using System.Collections;
+using TMPro; 
 
 public class GameManager : MonoBehaviour
 {
@@ -10,14 +11,16 @@ public class GameManager : MonoBehaviour
     public RectTransform imagenIris;
     public GameObject panelTextoVictoria;
     public GameObject panelEstadisticasFinales;
+    
+    [Header("Textos de EstadÃ­sticas Finales")]
+    public TextMeshProUGUI textoGanadorFinal;     
+    public TextMeshProUGUI textoContadorVictorias; 
 
     [Header("Configuracion del Efecto")]
     public float duracionCierre = 1.5f;
     public float tiempoEsperaPostCierre = 2.0f;
 
     private bool juegoTerminado = false;
-
-    // Almacenamos al ganador para que la corrutina de Iris sepa a quien seguir
     private GameObject personajeGanador;
 
     void Awake()
@@ -25,42 +28,46 @@ public class GameManager : MonoBehaviour
         if (instancia == null) instancia = this;
     }
 
-    // AHORA RECIBE AL JUGADOR QUE GANÓ POR PARÁMETRO
     public void GanarPartida(GameObject ganador)
     {
         if (juegoTerminado) return;
         juegoTerminado = true;
 
         personajeGanador = ganador;
+        Debug.LogWarning($"<color=cyan>=== [GM] GanarPartida() invocado por: {ganador.name} ===</color>");
 
-        // --- LÓGICA DE PUNTUACIÓN DE TORNEO ---
         if (DatosTorneo.instancia != null)
         {
-            // Sumamos el punto al jugador correcto según su nombre exacto
             if (ganador.name == "Player 1")
             {
                 DatosTorneo.instancia.victoriasP1++;
+                Debug.Log($"<color=green>[GM] Punto para Player 1. Total: {DatosTorneo.instancia.victoriasP1}</color>");
             }
             else if (ganador.name == "Player 2")
             {
                 DatosTorneo.instancia.victoriasP2++;
+                Debug.Log($"<color=green>[GM] Punto para Player 2. Total: {DatosTorneo.instancia.victoriasP2}</color>");
             }
+
+            // Guardamos el progreso en disco inmediatamente
+            DatosTorneo.instancia.GuardarProgreso();
+        }
+        else
+        {
+            Debug.LogError("<color=red>[GM] Â¡ALERTA! DatosTorneo.instancia es NULL al intentar sumar puntos.</color>");
         }
 
         if (personajeGanador != null)
         {
-            // 1. CONGELAR EL ANIMATOR
             Animator anim = personajeGanador.GetComponentInChildren<Animator>();
             if (anim != null) anim.SetFloat("Velocidad", 0f);
 
-            // 2. APAGAR SCRIPTS DE MOVIMIENTO DEL GANADOR
             MonoBehaviour[] scripts = personajeGanador.GetComponents<MonoBehaviour>();
             foreach (MonoBehaviour script in scripts)
             {
                 if (script != this) script.enabled = false;
             }
 
-            // 3. FRENAR FISICAS DEL GANADOR
             Rigidbody rb = personajeGanador.GetComponent<Rigidbody>();
             if (rb != null)
             {
@@ -69,14 +76,10 @@ public class GameManager : MonoBehaviour
                 rb.isKinematic = true;
             }
 
-            // 4. FORZAR ROTACION HACIA LA CAMARA
             float gradosDeRotacionY = 90f;
             personajeGanador.transform.rotation = Quaternion.Euler(0f, gradosDeRotacionY, 0f);
         }
 
-        // --- NUEVO: CORTE DEL DIRECTOR (Cámara y Perdedores) ---
-
-        // Enfocar la cámara solo en el ganador
         if (Camera.main != null)
         {
             CamaraScroll25D scriptCamara = Camera.main.GetComponent<CamaraScroll25D>();
@@ -86,20 +89,17 @@ public class GameManager : MonoBehaviour
             }
         }
 
-        // Desactivar a todos los demas jugadores (los perdedores)
         GameObject[] todosLosJugadores = GameObject.FindGameObjectsWithTag("Player");
         foreach (GameObject jugador in todosLosJugadores)
         {
-            if (jugador != personajeGanador) // Solo actuamos sobre los que NO ganaron
+            if (jugador != personajeGanador)
             {
-                // Apagamos sus scripts (MovimientoBasico25D, etc.)
                 MonoBehaviour[] scriptsPerdedor = jugador.GetComponents<MonoBehaviour>();
                 foreach (MonoBehaviour script in scriptsPerdedor)
                 {
                     script.enabled = false;
                 }
 
-                // Congelamos sus físicas en el aire
                 Rigidbody rbPerdedor = jugador.GetComponent<Rigidbody>();
                 if (rbPerdedor != null)
                 {
@@ -108,29 +108,36 @@ public class GameManager : MonoBehaviour
                     rbPerdedor.isKinematic = true;
                 }
 
-                // Opcional: Frenar la animación de los perdedores
                 Animator animPerdedor = jugador.GetComponentInChildren<Animator>();
                 if (animPerdedor != null) animPerdedor.SetFloat("Velocidad", 0f);
             }
         }
-        // --- FIN DEL CORTE DEL DIRECTOR ---
 
-        if (panelTextoVictoria != null) panelTextoVictoria.SetActive(true);
+        if (panelTextoVictoria != null)
+        {
+            panelTextoVictoria.SetActive(true);
+            Debug.Log("[GM] Panel Texto Victoria ACTIVADO.");
+        }
 
         if (imagenIris != null)
         {
             imagenIris.gameObject.SetActive(true);
+            Debug.Log("[GM] Iniciando Corrutina de Iris...");
             StartCoroutine(AnimarCierreIris());
+        }
+        else
+        {
+            Debug.LogError("<color=red>[GM] Imagen Iris es NULL. No se puede ejecutar el cierre.</color>");
         }
     }
 
     private IEnumerator AnimarCierreIris()
     {
-        // BUSQUEDA DINÁMICA: Busca el HeadTarget adentro del personaje que ganó
         Transform target = null;
         if (personajeGanador != null)
         {
             target = personajeGanador.transform.Find("HeadTarget");
+            if(target == null) Debug.LogWarning("[GM] No se encontrÃ³ 'HeadTarget' en el ganador, el Iris cerrarÃ¡ en el centro del objeto.");
         }
 
         float tiempoPasado = 0f;
@@ -153,91 +160,107 @@ public class GameManager : MonoBehaviour
         }
 
         imagenIris.localScale = escalaFinal;
+        Debug.Log("[GM] Efecto Iris Terminado. Esperando tiempo post-cierre...");
 
         yield return new WaitForSeconds(tiempoEsperaPostCierre);
 
-        // DETECTOR DE MENTIRAS (Pegá esto acá):
-        Debug.LogWarning($"=== [DEBUG TORNEO] ===");
-        Debug.LogWarning($"¿DatosTorneo existe en esta escena?: {(DatosTorneo.instancia != null ? "SÍ" : "NO, ES NULL")}");
-        if (DatosTorneo.instancia != null)
-        {
-            Debug.LogWarning($"Rondas Totales en memoria: {DatosTorneo.instancia.rondasTotales}");
-            Debug.LogWarning($"Marcador Actual -> P1: {DatosTorneo.instancia.victoriasP1} | P2: {DatosTorneo.instancia.victoriasP2}");
-            Debug.LogWarning($"Rondas necesarias para cortar: {DatosTorneo.instancia.ObtenerRondasParaGanar()}");
-        }
-        Debug.LogWarning($"=======================");
+        Debug.LogWarning("<color=orange>=== [GM] PasÃ³ el tiempo de espera. Evaluando condiciones de fin de torneo ===</color>");
 
-        // --- CHEQUEO MATEMÁTICO DE FIN DE TORNEO ---
         if (DatosTorneo.instancia != null)
         {
             int rondasParaGanar = DatosTorneo.instancia.ObtenerRondasParaGanar();
+            Debug.Log($"[GM] Datos Torneo -> Rondas para ganar: {rondasParaGanar} | P1: {DatosTorneo.instancia.victoriasP1} - P2: {DatosTorneo.instancia.victoriasP2}");
 
             if (DatosTorneo.instancia.victoriasP1 >= rondasParaGanar || DatosTorneo.instancia.victoriasP2 >= rondasParaGanar)
             {
-                // ¡TENEMOS UN GANADOR DEFINITIVO!
+                Debug.LogWarning("<color=green>[GM] Â¡CUMPLIDO! Un jugador alcanzÃ³ las victorias necesarias. Saltando a TerminarTorneoCompleto()</color>");
                 TerminarTorneoCompleto();
             }
             else
             {
-                // El torneo sigue, reiniciamos la ronda comun
+                Debug.Log("<color=yellow>[GM] Nadie llegÃ³ al lÃ­mite todavÃ­a. Recargando escena para la siguiente ronda...</color>");
                 SceneManager.LoadScene(SceneManager.GetActiveScene().name);
             }
         }
         else
         {
-            // Plan B: Si jugas desde el editor sin pasar por el menu, resetea normal
+            Debug.LogError("<color=red>[GM] DatosTorneo.instancia es NULL en la corrutina. Plan B: Reiniciando escena suelta.</color>");
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         }
     }
 
     private void TerminarTorneoCompleto()
     {
-        // Opción elegida: Activamos el panel de estadisticas aqui mismo en la escena
+        Debug.LogWarning("<color=magenta>=== [GM] ENTRANDO A TerminarTorneoCompleto() ===</color>");
+
         if (panelEstadisticasFinales != null)
         {
-            //Apagamos el Iris para que deje de tapar la pantalla
             if (imagenIris != null) imagenIris.gameObject.SetActive(false);
-            if (panelTextoVictoria != null) panelTextoVictoria.SetActive(false); // <--- ACÁ APAGÁS EL "GANASTE"
+            if (panelTextoVictoria != null) panelTextoVictoria.SetActive(false);
 
+            Debug.Log("[GM] Forzando encendido del Panel Estadisticas Finales...");
             panelEstadisticasFinales.SetActive(true);
 
-            // Aca podes rellenar los textos de tu panel usando los datos guardados:
-            // DatosTorneo.instancia.victoriasP1 y DatosTorneo.instancia.victoriasP2
-            Debug.Log("Torneo terminado. P1: " + DatosTorneo.instancia.victoriasP1 + " vs P2: " + DatosTorneo.instancia.victoriasP2);
+            if (DatosTorneo.instancia != null)
+            {
+                string nombreCampeon = "";
+                if (DatosTorneo.instancia.victoriasP1 > DatosTorneo.instancia.victoriasP2)
+                {
+                    nombreCampeon = "Â¡PLAYER 1 ES EL CAMPEÃ“N!";
+                }
+                else
+                {
+                    nombreCampeon = "Â¡PLAYER 2 ES EL CAMPEÃ“N!";
+                }
+
+                Debug.Log($"[GM] Ganador calculated: {nombreCampeon}");
+
+                if (textoGanadorFinal != null)
+                {
+                    textoGanadorFinal.text = nombreCampeon;
+                    Debug.Log("[GM] Texto del Ganador Final inyectado con Ã©xito.");
+                }
+                else
+                {
+                    Debug.LogError("<color=red>[GM] Â¡Ojo! El campo 'textoGanadorFinal' estÃ¡ vacÃ­o en el Inspector.</color>");
+                }
+
+                if (textoContadorVictorias != null)
+                {
+                    textoContadorVictorias.text = $"Player 1: {DatosTorneo.instancia.victoriasP1}  -  Player 2: {DatosTorneo.instancia.victoriasP2}";
+                    Debug.Log("[GM] Texto del Contador de Victorias inyectado con Ã©xito.");
+                }
+                else
+                {
+                    Debug.LogError("<color=red>[GM] Â¡Ojo! El campo 'textoContadorVictorias' estÃ¡ vacÃ­o en el Inspector.</color>");
+                }
+            }
         }
         else
         {
-            // Esto sirve si queremos que se vayan a otra escena (Escena separada del podio):
+            Debug.LogWarning("[GM] 'panelEstadisticasFinales' es NULL en el inspector, cargando 'Escena_Podio' como Plan B...");
             SceneManager.LoadScene("Escena_Podio");
         }
     }
 
-    // Función para el botón de "Reiniciar" / "Revancha"
     public void BotonReiniciarTorneo()
     {
-        // 1. Reseteamos los puntos a 0 en el objeto que no se destruye
         if (DatosTorneo.instancia != null)
         {
-            DatosTorneo.instancia.victoriasP1 = 0;
-            DatosTorneo.instancia.victoriasP2 = 0;
+            DatosTorneo.instancia.ResetearTorneo();
         }
 
-        // 2. Recargamos la escena de juego actual para empezar de cero
         Scene escenaActual = SceneManager.GetActiveScene();
         SceneManager.LoadScene(escenaActual.name);
     }
 
-    // Función para el botón de "Volver al Menú"
     public void BotonVolverAlMenu()
     {
-        // 1. Rompemos el DatosTorneo para que la próxima vez que entremos al juego
-        // desde el menú, se cree de cero con la nueva cantidad de rondas elegidas.
         if (DatosTorneo.instancia != null)
         {
             Destroy(DatosTorneo.instancia.gameObject);
         }
 
-        // 2. Cargamos la escena del Menú Principal 
         SceneManager.LoadScene("MenuPrincipal");
     }
 }
