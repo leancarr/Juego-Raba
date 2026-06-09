@@ -13,7 +13,15 @@ public class DatosTorneo : MonoBehaviour
         {
             instancia = this;
             DontDestroyOnLoad(gameObject);
-            CargarDatos(); // Cargamos al iniciar
+            CargarDatos(); // Cargamos la configuración inicial
+
+            // --- SOLUCIÓN AL CACHÉ ---
+            // Esto solo se ejecuta una vez al darle "Play" en el editor de Unity.
+            // Borra las victorias del Play anterior pero mantiene las rondas elegidas.
+            #if UNITY_EDITOR
+            ResetearTorneo();
+            Debug.Log("<color=yellow>[DatosTorneo] Modo Editor detectado: Registro de victorias previas limpiado con éxito.</color>");
+            #endif
         }
         else
         {
@@ -21,7 +29,7 @@ public class DatosTorneo : MonoBehaviour
         }
     }
 
-    // Llama a esto desde el GameManager despu�s de sumar un punto
+    // Llama a esto desde el GameManager después de sumar un punto
     public void GuardarProgreso()
     {
         PlayerPrefs.SetInt("VictoriasP1", victoriasP1);
@@ -38,14 +46,15 @@ public class DatosTorneo : MonoBehaviour
 
     public int ObtenerRondasParaGanar()
     {
-        // Esto calcula cu�ntas rondas necesita alguien para ganar el torneo
+        // Esto calcula cuántas rondas necesita alguien para ganar el torneo (Mayoría absoluta)
         return (rondasTotales / 2) + 1;
     }
+
     public void ResetearTorneo()
     {
         victoriasP1 = 0;
         victoriasP2 = 0;
-        PlayerPrefs.DeleteKey("VictoriasP1"); // Borramos del disco
+        PlayerPrefs.DeleteKey("VictoriasP1"); // Borramos del disco duro
         PlayerPrefs.DeleteKey("VictoriasP2");
         rondasTotales = PlayerPrefs.GetInt("RondasElegidas", 3);
     }

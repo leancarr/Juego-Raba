@@ -49,7 +49,7 @@ public class GameManager : MonoBehaviour
                 Debug.Log($"<color=green>[GM] Punto para Player 2. Total: {DatosTorneo.instancia.victoriasP2}</color>");
             }
 
-            // --- CAMBIO: Guardamos el progreso en disco inmediatamente ---
+            // Guardamos el progreso en disco inmediatamente
             DatosTorneo.instancia.GuardarProgreso();
         }
         else
@@ -57,7 +57,6 @@ public class GameManager : MonoBehaviour
             Debug.LogError("<color=red>[GM] ¡ALERTA! DatosTorneo.instancia es NULL al intentar sumar puntos.</color>");
         }
 
-        // El resto de tu lógica se mantiene exactamente igual
         if (personajeGanador != null)
         {
             Animator anim = personajeGanador.GetComponentInChildren<Animator>();
@@ -214,7 +213,7 @@ public class GameManager : MonoBehaviour
                     nombreCampeon = "¡PLAYER 2 ES EL CAMPEÓN!";
                 }
 
-                Debug.Log($"[GM] Ganador calculado: {nombreCampeon}");
+                Debug.Log($"[GM] Ganador calculated: {nombreCampeon}");
 
                 if (textoGanadorFinal != null)
                 {
