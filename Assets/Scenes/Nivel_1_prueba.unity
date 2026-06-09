@@ -556,6 +556,7 @@ MonoBehaviour:
   velocidad: 7
   fuerzaSalto: 7
   fuerzaCaidaRapida: 10
+  centroVisual: {fileID: 0}
   capaSuelo:
     serializedVersion: 2
     m_Bits: 8
@@ -5692,12 +5693,12 @@ GameObject:
   - component: {fileID: 1800846185}
   - component: {fileID: 1800846184}
   m_Layer: 6
-  m_Name: Son 30mil
+  m_Name: Player 1
   m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1800846179
 Transform:
   m_ObjectHideFlags: 0
@@ -5754,9 +5755,10 @@ MonoBehaviour:
   teclaDerecha: 100
   teclaSalto: 119
   teclaCaida: 115
-  velocidad: 15
-  fuerzaSalto: 8
+  velocidad: 7
+  fuerzaSalto: 7
   fuerzaCaidaRapida: 10
+  centroVisual: {fileID: 186846308}
   capaSuelo:
     serializedVersion: 2
     m_Bits: 8
@@ -7050,12 +7052,12 @@ GameObject:
   - component: {fileID: 2039438359}
   - component: {fileID: 2039438368}
   m_Layer: 6
-  m_Name: Player 1
+  m_Name: Player 1 30mil
   m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &2039438359
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7089,6 +7091,7 @@ MonoBehaviour:
   velocidad: 7
   fuerzaSalto: 7
   fuerzaCaidaRapida: 10
+  centroVisual: {fileID: 0}
   capaSuelo:
     serializedVersion: 2
     m_Bits: 8

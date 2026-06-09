@@ -578,6 +578,7 @@ MonoBehaviour:
   velocidad: 7
   fuerzaSalto: 10
   fuerzaCaidaRapida: 8
+  centroVisual: {fileID: 0}
   capaSuelo:
     serializedVersion: 2
     m_Bits: 8
@@ -2597,6 +2598,7 @@ MonoBehaviour:
   velocidad: 7
   fuerzaSalto: 10
   fuerzaCaidaRapida: 8
+  centroVisual: {fileID: 186846308}
   capaSuelo:
     serializedVersion: 2
     m_Bits: 8
@@ -2696,7 +2698,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   numeroJugador: 1
-  clase: 1
+  clase: 0
   teclaHabilidad: 114
   cooldown: 4
   prefabBloqueMecanico: {fileID: 4032537180759407973, guid: 5e73d9d6382364c4586382886258bd06, type: 3}

@@ -109,7 +109,7 @@ public class GameManager : MonoBehaviour
                 }
 
                 Animator animPerdedor = jugador.GetComponentInChildren<Animator>();
-                if (animPerdedor != null) animPerdedor.SetFloat("Velocidad", 0f);
+                if (animPerdedor != null) animPerdedor.SetFloat("VelocidadX", 0f);
             }
         }
 
