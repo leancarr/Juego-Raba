@@ -17,7 +17,8 @@ public class MovimientoBasico25D : MonoBehaviour
     private Rigidbody rb;
 
     private Animator anim;
-    private Transform centroVisual;
+    [Header("Referencias Visuales")]
+    public Transform centroVisual; // Ahora vas a poder arrastrar el modelo acá
 
     [Header("Físicas de Salto (Raycast Obligatorio)")]
     public LayerMask capaSuelo;
@@ -35,11 +36,6 @@ public class MovimientoBasico25D : MonoBehaviour
     {
         rb = GetComponent<Rigidbody>();
         anim = GetComponentInChildren<Animator>();
-
-        if (transform.childCount > 0)
-        {
-            centroVisual = transform.GetChild(0);
-        }
 
         // --- CONGELAR LA POSICIÓN EN Z (Plano 2.5D) ---
         rb.constraints = RigidbodyConstraints.FreezeRotationX |
@@ -63,28 +59,18 @@ public class MovimientoBasico25D : MonoBehaviour
 
         // --- LEER INPUTS ---
         inputHorizontal = 0f;
-        // Si está bajo un Stun pesado no lee nada, si es un empuje común SÍ lee las teclas
         if (!estaAturdido)
         {
             if (Input.GetKey(teclaIzquierda)) inputHorizontal = -1f;
             if (Input.GetKey(teclaDerecha)) inputHorizontal = 1f;
         }
 
-        // --- GIRO VISUAL DEL PERSONAJE (Mantenido intacto) ---
-        if (centroVisual != null && inputHorizontal != 0f)
-        {
-            Vector3 rotacionLocal = centroVisual.localEulerAngles;
-            if (inputHorizontal > 0f) rotacionLocal.y = 0f;
-            else if (inputHorizontal < 0f) rotacionLocal.y = -180f;
-            centroVisual.localEulerAngles = rotacionLocal;
-        }
-
-        // --- ACTUALIZACIÓN DE ANIMACIONES (Sincronizado con tu Animator) ---
+        // --- ACTUALIZACIÓN DE ANIMACIONES ---
         if (anim != null)
         {
-            anim.SetFloat("VelocidadX", Mathf.Abs(inputHorizontal * velocidad)); // Corregido para que coincida con tu Blend Tree
+            anim.SetFloat("VelocidadX", Mathf.Abs(inputHorizontal * velocidad));
             anim.SetBool("EstaEnSuelo", EsSuelo());
-            anim.SetFloat("VelocidadY", rb.linearVelocity.y); // Enviando la velocidad física vertical para la transición a Salto_Caida
+            anim.SetFloat("VelocidadY", rb.linearVelocity.y);
         }
 
         // --- ACCIÓN: SALTO (Solo si no está aturdido) ---
@@ -101,13 +87,21 @@ public class MovimientoBasico25D : MonoBehaviour
         }
     }
 
+    // --- SE EJECUTA DESPUÉS DEL ANIMATOR ---
+    void LateUpdate()
+    {
+        // --- GIRO VISUAL DEL PERSONAJE ---
+        // Al ejecutarlo acá, le ganamos de mano a cualquier rotación que la animación quiera forzar
+        if (centroVisual != null && inputHorizontal != 0f)
+        {
+            float anguloY = (inputHorizontal > 0f) ? 0f : -180f; // Mantenemos tus -180 grados exactos
+            centroVisual.localRotation = Quaternion.Euler(0f, anguloY, 0f);
+        }
+    }
+
     void FixedUpdate()
     {
-        // CASO 1: Si está bajo STUN completo (ej. Rapero), congelamos sus físicas de control horizontal
         if (estaAturdido) return;
-
-        // CASO 2: Si recibió un empuje común (SIN STUN), no tocamos rb.linearVelocity en X
-        // para dar una ventana donde la fuerza física del envión actúe sin ser reseteada a 0.
         if (Time.time < tiempoFinInerciaEmpuje) return;
 
         // --- MOVIMIENTO NORMAL CONTROLADO ---
@@ -121,22 +115,17 @@ public class MovimientoBasico25D : MonoBehaviour
         }
     }
 
-    // --- FUNCIÓN PARA EMPUJE CON STUN (Mecánicas tipo Rapero) ---
     public void AplicarEmpujeYStun(Vector3 fuerzaEmpuje, float duracionStun)
     {
         estaAturdido = true;
         tiempoFinStun = Time.time + duracionStun;
-
         rb.linearVelocity = Vector3.zero;
         rb.AddForce(fuerzaEmpuje, ForceMode.Impulse);
     }
 
-    // --- NUEVA FUNCIÓN PARA EMPUJE PURO (AccionEmpuje Normal sin Stun) ---
     public void RecibirEmpujePuro(Vector3 fuerzaEmpuje, float duracionInercia)
     {
-        // Le damos una pequeña ventana de tiempo para que vuele por físicas
         tiempoFinInerciaEmpuje = Time.time + duracionInercia;
-
         rb.linearVelocity = Vector3.zero;
         rb.AddForce(fuerzaEmpuje, ForceMode.Impulse);
     }

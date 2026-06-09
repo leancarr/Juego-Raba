@@ -556,6 +556,7 @@ MonoBehaviour:
   velocidad: 7
   fuerzaSalto: 7
   fuerzaCaidaRapida: 10
+  centroVisual: {fileID: 0}
   capaSuelo:
     serializedVersion: 2
     m_Bits: 8
@@ -5757,6 +5758,7 @@ MonoBehaviour:
   velocidad: 7
   fuerzaSalto: 7
   fuerzaCaidaRapida: 10
+  centroVisual: {fileID: 186846308}
   capaSuelo:
     serializedVersion: 2
     m_Bits: 8
@@ -7089,6 +7091,7 @@ MonoBehaviour:
   velocidad: 7
   fuerzaSalto: 7
   fuerzaCaidaRapida: 10
+  centroVisual: {fileID: 0}
   capaSuelo:
     serializedVersion: 2
     m_Bits: 8
