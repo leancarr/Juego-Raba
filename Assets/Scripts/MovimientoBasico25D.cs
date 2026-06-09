@@ -70,7 +70,7 @@ public class MovimientoBasico25D : MonoBehaviour
             if (Input.GetKey(teclaDerecha)) inputHorizontal = 1f;
         }
 
-        // --- GIRO VISUAL DEL PERSONAJE ---
+        // --- GIRO VISUAL DEL PERSONAJE (Mantenido intacto) ---
         if (centroVisual != null && inputHorizontal != 0f)
         {
             Vector3 rotacionLocal = centroVisual.localEulerAngles;
@@ -79,11 +79,12 @@ public class MovimientoBasico25D : MonoBehaviour
             centroVisual.localEulerAngles = rotacionLocal;
         }
 
-        // --- ACTUALIZACIÓN DE ANIMACIONES ---
+        // --- ACTUALIZACIÓN DE ANIMACIONES (Sincronizado con tu Animator) ---
         if (anim != null)
         {
-            anim.SetFloat("Velocidad", Mathf.Abs(inputHorizontal * velocidad));
+            anim.SetFloat("VelocidadX", Mathf.Abs(inputHorizontal * velocidad)); // Corregido para que coincida con tu Blend Tree
             anim.SetBool("EstaEnSuelo", EsSuelo());
+            anim.SetFloat("VelocidadY", rb.linearVelocity.y); // Enviando la velocidad física vertical para la transición a Salto_Caida
         }
 
         // --- ACCIÓN: SALTO (Solo si no está aturdido) ---
