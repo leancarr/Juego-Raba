@@ -80,8 +80,9 @@ public class HabilidadesJugador : MonoBehaviour
         }
     }
 
-    void HabilidadProfesor()
+void HabilidadProfesor()
     {
+        // 1. Averiguar hacia dónde mira el jugador (derecha 1f, izquierda -1f)
         float direccionX = 1f;
         if (transform.childCount > 0)
         {
@@ -92,35 +93,69 @@ public class HabilidadesJugador : MonoBehaviour
             }
         }
 
-        Vector3 direccionDisparo = new Vector3(direccionX, 0, 0);
-        // Forzamos el carril Z a 0 para que impacte de lleno en las plataformas
-        Vector3 origenLaser = new Vector3(transform.position.x, transform.position.y + 1f, 0f);
-        Vector3 puntoFinalLaser = origenLaser + direccionDisparo * radioMaximoEscaneo;
-
-        Debug.DrawRay(origenLaser, direccionDisparo * radioMaximoEscaneo, Color.green, 2f);
-
-        RaycastHit hit;
-        if (Physics.Raycast(origenLaser, direccionDisparo, out hit, radioMaximoEscaneo))
+        // 2. Detectar la plataforma sobre la que está parado el jugador (para ignorarla)
+        Transform plataformaActual = null;
+        RaycastHit hitSuelo;
+        // Lanzamos un rayo corto hacia abajo para ver qué pisamos
+        if (Physics.Raycast(transform.position, Vector3.down, out hitSuelo, 2f))
         {
-            if (hit.collider != null)
+            if (hitSuelo.collider.GetComponent<PlataformasColores>() != null)
             {
-                puntoFinalLaser = hit.point;
-                puntoFinalLaser.z = 0f; // Mantener el láser visual en el plano 2.5D
+                plataformaActual = hitSuelo.collider.transform;
+            }
+        }
 
-                // 1. Intentamos obtener tu script específico de la plataforma
-                PlataformasColores scriptPlataforma = hit.collider.GetComponent<PlataformasColores>();
+        // 3. Buscar todas las plataformas en el radio de escaneo
+        Collider[] objetosCercanos = Physics.OverlapSphere(transform.position, radioMaximoEscaneo);
+        
+        PlataformasColores plataformaObjetivo = null;
+        float distanciaMinima = Mathf.Infinity;
 
-                // 2. Si el objeto tiene el script y no es un jugador, ejecutamos tu función lógica
-                if (scriptPlataforma != null && hit.collider.GetComponent<MovimientoBasico25D>() == null)
+        foreach (Collider col in objetosCercanos)
+        {
+            PlataformasColores scriptPlataforma = col.GetComponent<PlataformasColores>();
+            
+            // Si tiene el script y NO es la plataforma que estamos pisando
+            if (scriptPlataforma != null && col.transform != plataformaActual)
+            {
+                // Solo apuntar a plataformas que estén hacia adelante de donde mira el jugador
+                float direccionHaciaPlataforma = Mathf.Sign(col.transform.position.x - transform.position.x);
+                
+                if (direccionHaciaPlataforma == direccionX) 
                 {
-                    // EJECUTAMOS TU FUNCIÓN OFICIAL: cambia el enum y el material al mismo tiempo
-                    scriptPlataforma.SabotearBando();
-
-                    Debug.LogWarning($"[PROFESOR] ¡Láser interactuó con {hit.collider.name} y ejecutó SabotearBando()!");
+                    float distancia = Vector3.Distance(transform.position, col.transform.position);
+                    
+                    // Nos quedamos con la que tenga la distancia más corta
+                    if (distancia < distanciaMinima)
+                    {
+                        distanciaMinima = distancia;
+                        plataformaObjetivo = scriptPlataforma;
+                    }
                 }
             }
         }
 
+        // 4. Configurar el disparo visual y lógico
+        Vector3 origenLaser = new Vector3(transform.position.x, transform.position.y + 1f, 0f);
+        Vector3 puntoFinalLaser;
+
+        if (plataformaObjetivo != null)
+        {
+            // Encontramos un objetivo válido: apuntamos al centro exacto de esa plataforma
+            puntoFinalLaser = plataformaObjetivo.transform.position;
+            puntoFinalLaser.z = 0f; // Mantenemos el láser en el plano 2.5D
+
+            // Ejecutamos tu función de sabotaje
+            plataformaObjetivo.SabotearBando();
+            Debug.LogWarning($"[PROFESOR] ¡Láser auto-apuntó a {plataformaObjetivo.name} y ejecutó SabotearBando()!");
+        }
+        else
+        {
+            // Si no encontró ninguna plataforma cerca adelante, tira el rayo derecho al vacío (feedback visual de que falló)
+            puntoFinalLaser = origenLaser + new Vector3(direccionX * radioMaximoEscaneo, 0, 0);
+        }
+
+        // 5. Mostrar el láser visual
         if (efectoVisualLaser != null)
         {
             StartCoroutine(MostrarLaserVisual(origenLaser, puntoFinalLaser));
