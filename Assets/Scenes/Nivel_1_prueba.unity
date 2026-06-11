@@ -6140,14 +6140,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   numeroJugador: 1
   clase: 0
+
   teclaHabilidad: 114
+
+
   cooldown: 4
   prefabBloqueMecanico: {fileID: 0}
   radioMaximoEscaneo: 7
   capaObstaculosYPlataformas:
     serializedVersion: 2
     m_Bits: 0
+
   efectoVisualLaser: {fileID: 1587994730}
+
   radioEmpuje: 5
   fuerzaEmpuje: 12
   duracionStunRival: 0.5
