@@ -4,6 +4,11 @@ public class HabilidadesJugador : MonoBehaviour
 {
     public enum TipoClase { Profesor, Mecanico, Rapero }
 
+    [Header("Animación")]
+    public Animator anim; // Arrastrá el Animator de tu personaje acá en el Inspector
+                          // [NUEVO] Arrastrá el GameObject "visualCenter" (o ModeloVisual) de Marcus acá en el Inspector
+    public Transform visualCenter;
+
     [Header("Identificación del Jugador")]
     public int numeroJugador = 1;
 
@@ -80,23 +85,24 @@ public class HabilidadesJugador : MonoBehaviour
         }
     }
 
-void HabilidadProfesor()
+    void HabilidadProfesor()
     {
-        // 1. Averiguar hacia dónde mira el jugador (derecha 1f, izquierda -1f)
-        float direccionX = 1f;
-        if (transform.childCount > 0)
+        // 1. Averiguar hacia dónde mira el jugador ACTUALMENTE (derecha 1f, izquierda -1f)
+        float facingX = 1f;
+        bool isFacingRight = true;
+        if (visualCenter != null)
         {
-            Transform centroVisual = transform.GetChild(0);
-            if (centroVisual.localEulerAngles.y > 100f || centroVisual.localEulerAngles.y < -100f)
+            // En Unity, localY 0 es Derecha, localY 180 es Izquierda
+            if (visualCenter.localEulerAngles.y > 100f || visualCenter.localEulerAngles.y < -100f)
             {
-                direccionX = -1f;
+                facingX = -1f;
+                isFacingRight = false;
             }
         }
 
         // 2. Detectar la plataforma sobre la que está parado el jugador (para ignorarla)
         Transform plataformaActual = null;
         RaycastHit hitSuelo;
-        // Lanzamos un rayo corto hacia abajo para ver qué pisamos
         if (Physics.Raycast(transform.position, Vector3.down, out hitSuelo, 2f))
         {
             if (hitSuelo.collider.GetComponent<PlataformasColores>() != null)
@@ -105,60 +111,92 @@ void HabilidadProfesor()
             }
         }
 
-        // 3. Buscar todas las plataformas en el radio de escaneo
+        // 3. Buscar la plataforma MÁS CERCANA (Pura distancia en 360°)
         Collider[] objetosCercanos = Physics.OverlapSphere(transform.position, radioMaximoEscaneo);
-        
         PlataformasColores plataformaObjetivo = null;
         float distanciaMinima = Mathf.Infinity;
+        Vector3 centroJugador = new Vector3(transform.position.x, transform.position.y + 0.5f, 0f);
 
         foreach (Collider col in objetosCercanos)
         {
             PlataformasColores scriptPlataforma = col.GetComponent<PlataformasColores>();
-            
-            // Si tiene el script y NO es la plataforma que estamos pisando
             if (scriptPlataforma != null && col.transform != plataformaActual)
             {
-                // Solo apuntar a plataformas que estén hacia adelante de donde mira el jugador
-                float direccionHaciaPlataforma = Mathf.Sign(col.transform.position.x - transform.position.x);
-                
-                if (direccionHaciaPlataforma == direccionX) 
+                Vector3 puntoMasCercano = col.ClosestPoint(centroJugador);
+                float distancia = Vector3.Distance(centroJugador, puntoMasCercano);
+
+                if (distancia < distanciaMinima)
                 {
-                    float distancia = Vector3.Distance(transform.position, col.transform.position);
-                    
-                    // Nos quedamos con la que tenga la distancia más corta
-                    if (distancia < distanciaMinima)
-                    {
-                        distanciaMinima = distancia;
-                        plataformaObjetivo = scriptPlataforma;
-                    }
+                    distanciaMinima = distancia;
+                    plataformaObjetivo = scriptPlataforma;
                 }
             }
         }
 
-        // 4. Configurar el disparo visual y lógico
-        Vector3 origenLaser = new Vector3(transform.position.x, transform.position.y + 1f, 0f);
-        Vector3 puntoFinalLaser;
-
-        if (plataformaObjetivo != null)
+        // 4. Si encontramos objetivo, procesamos el giro automático y el disparo
+        if (plataformaObjetivo != null && visualCenter != null)
         {
-            // Encontramos un objetivo válido: apuntamos al centro exacto de esa plataforma
-            puntoFinalLaser = plataformaObjetivo.transform.position;
-            puntoFinalLaser.z = 0f; // Mantenemos el láser en el plano 2.5D
+            Collider coliderPlataforma = plataformaObjetivo.GetComponent<Collider>();
+            Vector3 targetPoint = coliderPlataforma != null ? coliderPlataforma.ClosestPoint(centroJugador) : plataformaObjetivo.transform.position;
+            targetPoint.z = 0f;
 
-            // Ejecutamos tu función de sabotaje
+            // [NUEVO LOGIC START] --- GIRO AUTOMÁTICO ---
+
+            // Calculamos la dirección del mundo hacia el objetivo (X positivo es Derecha, X negativo es Izquierda)
+            float directionToTargetWorldX = Mathf.Sign(targetPoint.x - transform.position.x);
+
+            // Si hay una diferencia horizontal clara (más de 0.2m)
+            if (Mathf.Abs(targetPoint.x - transform.position.x) > 0.2f)
+            {
+                // Matriz de decisión de giro:
+                // Si el objetivo está a la DERECHA (+X) y miramos a la IZQUIERDA (localY 180) -> OBLIGAR GIRO DERECHA (localY 0)
+                // Si el objetivo está a la IZQUIERDA (-X) y miramos a la DERECHA (localY 0) -> OBLIGAR GIRO IZQUIERDA (localY 180)
+
+                if (directionToTargetWorldX > 0 && !isFacingRight)
+                {
+                    visualCenter.localEulerAngles = new Vector3(0f, 0f, 0f); // Girar a Derecha
+                    facingX = 1f; // Actualizar variable local
+                }
+                else if (directionToTargetWorldX < 0 && isFacingRight)
+                {
+                    visualCenter.localEulerAngles = new Vector3(0f, 180f, 0f); // Girar a Izquierda
+                    facingX = -1f; // Actualizar variable local
+                }
+            }
+
+            // [NUEVO LOGIC END] 
+
+            // 5. Configurar el disparo y animación (Ahora Marcus SIEMPRE mira al objetivo)
+            // El origen de la mano se proyecta simétricamente según la nueva orientación de Marcus
+            Vector3 origenLaser = new Vector3(transform.position.x + (0.4f * facingX), transform.position.y + 1f, 0f);
+            Vector3 puntoFinalLaser = coliderPlataforma != null ? coliderPlataforma.ClosestPoint(origenLaser) : plataformaObjetivo.transform.position;
+            puntoFinalLaser.z = 0f;
+
+            if (anim != null)
+            {
+                // Como forzamos al personaje a mirar al frente del objetivo, 
+                // la distancia horizontal pura "adelante" SIEMPRE es positiva
+                float diffX = Mathf.Abs(puntoFinalLaser.x - origenLaser.x);
+                float diffY = puntoFinalLaser.y - origenLaser.y;
+
+                // Atan2 ahora siempre devuelve datos coherentes (hemisferio frontal de -90 a 90)
+                float anguloFinal = Mathf.Atan2(diffY, diffX) * Mathf.Rad2Deg;
+
+                // Protegemos los límites de tu Blend Tree frontal
+                anguloFinal = Mathf.Clamp(anguloFinal, -90f, 90f);
+
+                anim.SetFloat("AnguloApuntado", anguloFinal);
+                anim.SetTrigger("PulsoTrigger");
+            }
+
+            Debug.DrawLine(origenLaser, puntoFinalLaser, Color.magenta, 1f);
             plataformaObjetivo.SabotearBando();
-            Debug.LogWarning($"[PROFESOR] ¡Láser auto-apuntó a {plataformaObjetivo.name} y ejecutó SabotearBando()!");
-        }
-        else
-        {
-            // Si no encontró ninguna plataforma cerca adelante, tira el rayo derecho al vacío (feedback visual de que falló)
-            puntoFinalLaser = origenLaser + new Vector3(direccionX * radioMaximoEscaneo, 0, 0);
-        }
+            Debug.LogWarning($"[PROFESOR] Sabotaje simétrico y giro automático exitosos. Ángulo Local enviado: {anim.GetFloat("AnguloApuntado")}");
 
-        // 5. Mostrar el láser visual
-        if (efectoVisualLaser != null)
-        {
-            StartCoroutine(MostrarLaserVisual(origenLaser, puntoFinalLaser));
+            if (efectoVisualLaser != null)
+            {
+                StartCoroutine(MostrarLaserVisual(origenLaser, puntoFinalLaser));
+            }
         }
     }
     void HabilidadRapero()
