@@ -3,11 +3,32 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody))]
 public class MovimientoBasico25D : MonoBehaviour
 {
-    [Header("Configuración de Teclas (Custom)")]
-    public KeyCode teclaIzquierda = KeyCode.A;
-    public KeyCode teclaDerecha = KeyCode.D;
-    public KeyCode teclaSalto = KeyCode.W;
-    public KeyCode teclaCaida = KeyCode.S;
+    // --- CONTROLES DINÁMICOS (Ya no se ven en el Inspector) ---
+    private KeyCode teclaIzquierda;
+    private KeyCode teclaDerecha;
+    private KeyCode teclaSalto;
+    private KeyCode teclaCaida;
+
+    // --- [NUEVO] ESTA ES LA FUNCIÓN QUE LLAMA EL GENERADOR ---
+    public void ConfigurarControles(int numeroDeJugador)
+    {
+        if (numeroDeJugador == 1)
+        {
+            // Controles estándar Jugador 1
+            teclaIzquierda = KeyCode.A;
+            teclaDerecha = KeyCode.D;
+            teclaSalto = KeyCode.W;
+            teclaCaida = KeyCode.S;
+        }
+        else if (numeroDeJugador == 2)
+        {
+            // Controles estándar Jugador 2
+            teclaIzquierda = KeyCode.LeftArrow;
+            teclaDerecha = KeyCode.RightArrow;
+            teclaSalto = KeyCode.UpArrow;
+            teclaCaida = KeyCode.DownArrow;
+        }
+    }
 
     [Header("Configuración de Movimiento")]
     public float velocidad = 7f;
@@ -18,7 +39,7 @@ public class MovimientoBasico25D : MonoBehaviour
 
     private Animator anim;
     [Header("Referencias Visuales")]
-    public Transform centroVisual; // Ahora vas a poder arrastrar el modelo acá
+    public Transform centroVisual;
 
     [Header("Físicas de Salto (Raycast Obligatorio)")]
     public LayerMask capaSuelo;
@@ -28,8 +49,6 @@ public class MovimientoBasico25D : MonoBehaviour
 
     private bool estaAturdido = false;
     private float tiempoFinStun = 0f;
-
-    // --- NUEVA VARIABLE PARA EMPUJE COMÚN (SIN STUN) ---
     private float tiempoFinInerciaEmpuje = 0f;
 
     void Start()
@@ -61,6 +80,7 @@ public class MovimientoBasico25D : MonoBehaviour
         inputHorizontal = 0f;
         if (!estaAturdido)
         {
+            // Ahora leemos las variables dinámicas en lugar de las estáticas
             if (Input.GetKey(teclaIzquierda)) inputHorizontal = -1f;
             if (Input.GetKey(teclaDerecha)) inputHorizontal = 1f;
         }
@@ -74,6 +94,7 @@ public class MovimientoBasico25D : MonoBehaviour
         }
 
         // --- ACCIÓN: SALTO (Solo si no está aturdido) ---
+        // Ahora usamos teclaSalto
         if (Input.GetKeyDown(teclaSalto) && EsSuelo() && !estaAturdido)
         {
             rb.linearVelocity = new Vector3(rb.linearVelocity.x, fuerzaSalto, 0);
@@ -81,20 +102,19 @@ public class MovimientoBasico25D : MonoBehaviour
         }
 
         // --- ACCIÓN: CAÍDA RÁPIDA (Solo si no está aturdido) ---
+        // Ahora usamos teclaCaida
         if (Input.GetKeyDown(teclaCaida) && !EsSuelo() && !estaAturdido)
         {
             rb.AddForce(Vector3.down * fuerzaCaidaRapida, ForceMode.Impulse);
         }
     }
 
-    // --- SE EJECUTA DESPUÉS DEL ANIMATOR ---
     void LateUpdate()
     {
         // --- GIRO VISUAL DEL PERSONAJE ---
-        // Al ejecutarlo acá, le ganamos de mano a cualquier rotación que la animación quiera forzar
         if (centroVisual != null && inputHorizontal != 0f)
         {
-            float anguloY = (inputHorizontal > 0f) ? 0f : -180f; // Mantenemos tus -180 grados exactos
+            float anguloY = (inputHorizontal > 0f) ? 0f : -180f;
             centroVisual.localRotation = Quaternion.Euler(0f, anguloY, 0f);
         }
     }

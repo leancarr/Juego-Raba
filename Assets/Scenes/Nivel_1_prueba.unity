@@ -385,7 +385,7 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 4322743165819993945, guid: 3757e8ee85de9bc48b7133b22a0afe55, type: 3}
   m_PrefabInstance: {fileID: 1462825776}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 1462825777}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7c20b5a4ff59d2c4ea20dcc13b1b46f9, type: 3}
@@ -656,12 +656,12 @@ GameObject:
   - component: {fileID: 229182539}
   - component: {fileID: 229182548}
   m_Layer: 6
-  m_Name: Player 2
+  m_Name: Player 2 (xDD)
   m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &229182539
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -688,10 +688,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1ceeceeeec1f9a9409ee85b18ead99d7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  teclaIzquierda: 276
-  teclaDerecha: 275
-  teclaSalto: 273
-  teclaCaida: 274
   velocidad: 7
   fuerzaSalto: 7
   fuerzaCaidaRapida: 10
@@ -874,11 +870,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   anim: {fileID: 0}
   visualCenter: {fileID: 0}
-  numeroJugador: 1
-  clase: 0
-  teclaHabilidad: 108
+  clase: 1
   cooldown: 4
-  prefabBloqueMecanico: {fileID: 0}
+  prefabBloqueMecanico: {fileID: 302593096}
   radioMaximoEscaneo: 7
   capaObstaculosYPlataformas:
     serializedVersion: 2
@@ -1400,6 +1394,72 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.99999994, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!1001 &302593095
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 4032537180759407973, guid: 5e73d9d6382364c4586382886258bd06, type: 3}
+      propertyPath: m_Name
+      value: BloqueMecanico
+      objectReference: {fileID: 0}
+    - target: {fileID: 4032537180759407973, guid: 5e73d9d6382364c4586382886258bd06, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8778444412188857929, guid: 5e73d9d6382364c4586382886258bd06, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -18.01
+      objectReference: {fileID: 0}
+    - target: {fileID: 8778444412188857929, guid: 5e73d9d6382364c4586382886258bd06, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 3.7
+      objectReference: {fileID: 0}
+    - target: {fileID: 8778444412188857929, guid: 5e73d9d6382364c4586382886258bd06, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0.27
+      objectReference: {fileID: 0}
+    - target: {fileID: 8778444412188857929, guid: 5e73d9d6382364c4586382886258bd06, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8778444412188857929, guid: 5e73d9d6382364c4586382886258bd06, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8778444412188857929, guid: 5e73d9d6382364c4586382886258bd06, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8778444412188857929, guid: 5e73d9d6382364c4586382886258bd06, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8778444412188857929, guid: 5e73d9d6382364c4586382886258bd06, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8778444412188857929, guid: 5e73d9d6382364c4586382886258bd06, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8778444412188857929, guid: 5e73d9d6382364c4586382886258bd06, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 5e73d9d6382364c4586382886258bd06, type: 3}
+--- !u!1 &302593096 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4032537180759407973, guid: 5e73d9d6382364c4586382886258bd06, type: 3}
+  m_PrefabInstance: {fileID: 302593095}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &313487909
 GameObject:
   m_ObjectHideFlags: 0
@@ -2852,7 +2912,7 @@ Transform:
   m_GameObject: {fileID: 736376733}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -35.09, y: 0.49, z: 0.1}
+  m_LocalPosition: {x: -35.09, y: 3.33, z: 0.1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -3404,6 +3464,37 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 742495172482566299, guid: 3d77cb9ab9858d24a8554c3be8f3f881, type: 3}
   m_PrefabInstance: {fileID: 1784614339}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1089092491
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1089092492}
+  m_Layer: 0
+  m_Name: Punto_Inicio 2
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1089092492
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1089092491}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -30.62, y: 0.49, z: 0.1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1158251933
 GameObject:
   m_ObjectHideFlags: 0
@@ -4647,8 +4738,34 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 4915241202587988454, guid: 3757e8ee85de9bc48b7133b22a0afe55, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1462825778}
   m_SourcePrefab: {fileID: 100100000, guid: 3757e8ee85de9bc48b7133b22a0afe55, type: 3}
+--- !u!1 &1462825777 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4915241202587988454, guid: 3757e8ee85de9bc48b7133b22a0afe55, type: 3}
+  m_PrefabInstance: {fileID: 1462825776}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1462825778
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1462825777}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: df5c5c9a99cda204184f9c4bd6d96244, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  personajesPrefabs:
+  - {fileID: 229182538}
+  - {fileID: 1800846178}
+  - {fileID: 2039438358}
+  puntoInicioP1: {fileID: 736376734}
+  puntoInicioP2: {fileID: 736376734}
 --- !u!1 &1467907979
 GameObject:
   m_ObjectHideFlags: 0
@@ -6341,12 +6458,12 @@ GameObject:
   - component: {fileID: 1800846184}
   - component: {fileID: 1800846186}
   m_Layer: 6
-  m_Name: Player 1
+  m_Name: Player  1 (XADA)
   m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1800846179
 Transform:
   m_ObjectHideFlags: 0
@@ -6400,10 +6517,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1ceeceeeec1f9a9409ee85b18ead99d7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  teclaIzquierda: 97
-  teclaDerecha: 100
-  teclaSalto: 119
-  teclaCaida: 115
   velocidad: 7
   fuerzaSalto: 7
   fuerzaCaidaRapida: 10
@@ -6508,9 +6621,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   anim: {fileID: 1800846183}
   visualCenter: {fileID: 186846308}
-  numeroJugador: 1
   clase: 0
-  teclaHabilidad: 102
   cooldown: 4
   prefabBloqueMecanico: {fileID: 0}
   radioMaximoEscaneo: 7
@@ -7729,7 +7840,7 @@ GameObject:
   - component: {fileID: 2039438359}
   - component: {fileID: 2039438368}
   m_Layer: 6
-  m_Name: Player 1 30mil
+  m_Name: Raperito
   m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -7761,10 +7872,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1ceeceeeec1f9a9409ee85b18ead99d7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  teclaIzquierda: 97
-  teclaDerecha: 100
-  teclaSalto: 119
-  teclaCaida: 115
   velocidad: 7
   fuerzaSalto: 7
   fuerzaCaidaRapida: 10
@@ -7946,9 +8053,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   anim: {fileID: 0}
   visualCenter: {fileID: 0}
-  numeroJugador: 1
-  clase: 1
-  teclaHabilidad: 101
+  clase: 2
   cooldown: 4
   prefabBloqueMecanico: {fileID: 4032537180759407973, guid: 5e73d9d6382364c4586382886258bd06, type: 3}
   radioMaximoEscaneo: 7
@@ -8263,4 +8368,6 @@ SceneRoots:
   - {fileID: 489284671}
   - {fileID: 536311981}
   - {fileID: 736376734}
+  - {fileID: 1089092492}
   - {fileID: 551299200}
+  - {fileID: 302593095}
