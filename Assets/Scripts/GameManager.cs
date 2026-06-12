@@ -60,7 +60,7 @@ public class GameManager : MonoBehaviour
         if (personajeGanador != null)
         {
             Animator anim = personajeGanador.GetComponentInChildren<Animator>();
-            if (anim != null) anim.SetFloat("Velocidad", 0f);
+            if (anim != null) anim.SetFloat("VelocidadX", 0f);
 
             MonoBehaviour[] scripts = personajeGanador.GetComponents<MonoBehaviour>();
             foreach (MonoBehaviour script in scripts)

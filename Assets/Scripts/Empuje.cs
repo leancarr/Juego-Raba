@@ -16,10 +16,12 @@ public class AccionEmpuje : MonoBehaviour
 
     private Rigidbody rb;
     private Transform pelvis;
+    private Animator anim; // <-- NUEVO: Para la animación del atacante (opcional)
 
     void Start()
     {
         rb = GetComponent<Rigidbody>();
+        anim = GetComponentInChildren<Animator>(); // <-- NUEVO: Buscamos el Animator en los hijos
 
         pelvis = transform.Find("Centro_Visual/Modelo/Circle006/Circle008/Bip002");
 
@@ -51,7 +53,9 @@ public class AccionEmpuje : MonoBehaviour
     {
         Debug.Log("¡Habilidad Ejecutada: EMPUJAR desde la Pelvis!");
 
-        // El origen visual/detección sigue siendo la pelvis (está perfecto para el OverlapSphere)
+        // [OPCIONAL] Si tenés una animación para el personaje que REALIZA el empuje:
+        // if (anim != null) anim.SetTrigger("EjecutarAtaqueEmpuje");
+
         Vector3 origenGolpe = (pelvis != null) ? pelvis.position : transform.position;
         Collider[] objetosGolpeados = Physics.OverlapSphere(origenGolpe, radioDeGolpe);
 
@@ -64,15 +68,10 @@ public class AccionEmpuje : MonoBehaviour
                 if (scriptRival != null)
                 {
                     // --- FIX DE DIRECCIÓN SEGURO (2.5D) ---
-                    // En lugar de usar la pelvis que deforma el ángulo vertical, usamos la posición del objeto padre.
-                    // Calculamos la dirección pura en X basándonos en quién está a la izquierda y quién a la derecha.
                     float signoDireccion = Mathf.Sign(col.transform.position.x - transform.position.x);
 
-                    // Si por alguna razón están perfectamente superpuestos (distancia casi 0),
-                    // usamos la dirección hacia donde está mirando tu personaje actual en su jerarquía.
                     if (Mathf.Abs(col.transform.position.x - transform.position.x) < 0.1f)
                     {
-                        // Si tu objeto visual está rotado a la izquierda (Y aproximado a 180 o -180), empuja a la izquierda
                         if (transform.GetChild(0).localEulerAngles.y > 100f || transform.GetChild(0).localEulerAngles.y < -100f)
                         {
                             signoDireccion = -1f;
@@ -83,24 +82,38 @@ public class AccionEmpuje : MonoBehaviour
                         }
                     }
 
-                    // Creamos el vector de dirección limpio: solo en X, y le sumamos un *mínimo* toque en Y (0.15f)
-                    // para que despegue apenas los pies del suelo y la fricción no lo frene, pero que NO sea un gancho hacia arriba.
+                    // Creamos el vector de dirección limpio
                     Vector3 direccionFinal = new Vector3(signoDireccion, 0.15f, 0f).normalized;
 
-                    // Calculamos fuerzas normales
+                    // Calculamos fuerzas
                     float velocidadNuestra = (rb != null) ? rb.linearVelocity.magnitude : 0f;
                     float fuerzaTotal = fuerzaEmpujeBase + (velocidadNuestra * factorVelocidadEmpuje);
 
                     Vector3 fuerzaFinal = direccionFinal * fuerzaTotal;
 
-                    // Aplicamos el empuje puro sin stun por 0.35 segundos
-                    scriptRival.RecibirEmpujePuro(fuerzaFinal, 0.35f);
+                    // --- [NUEVO] DISPARAR ANIMACIÓN DE IMPACTO EN EL RIVAL ---
+                    // Buscamos el Animator en el rival que acabamos de golpear
+                    Animator animRival = col.GetComponentInChildren<Animator>();
+                    if (animRival != null)
+                    {
+                        // Activamos el Trigger que creaste en el Animator de Unity
+                        animRival.SetTrigger("RecibirGolpe");
+                        Debug.Log($"[ANIM] Trigger 'RecibirGolpe' enviado a {col.gameObject.name}");
+                    }
+                    else
+                    {
+                        Debug.LogError($"[ANIM] No se encontró Animator en los hijos de {col.gameObject.name} para aplicar el golpe.");
+                    }
+
+                    // Aplicamos el empuje físico puro
+                    scriptRival.RecibirEmpujePuro(fuerzaFinal, 0.5f);
 
                     Debug.Log($"¡Empuje exitoso a {col.gameObject.name}! Dirección X: {signoDireccion} | Fuerza: {fuerzaTotal}");
                 }
             }
         }
     }
+
     void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.cyan;
