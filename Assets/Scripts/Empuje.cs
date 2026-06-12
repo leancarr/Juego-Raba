@@ -2,8 +2,8 @@ using UnityEngine;
 
 public class AccionEmpuje : MonoBehaviour
 {
-    [Header("Configuración del Input")]
-    public KeyCode teclaEmpuje = KeyCode.E;
+    // --- CONTROLES DINÁMICOS (Asignados por el Generador) ---
+    private KeyCode teclaEmpuje;
 
     [Header("Físicas del Empuje")]
     public float fuerzaEmpujeBase = 12f;
@@ -16,6 +16,19 @@ public class AccionEmpuje : MonoBehaviour
 
     private Rigidbody rb;
     private Transform pelvis;
+
+    // --- NUEVO: ESTA ES LA FUNCIÓN QUE LLAMA EL GENERADOR ---
+    public void ConfigurarControlesEmpuje(int numeroDeJugador)
+    {
+        if (numeroDeJugador == 1)
+        {
+            teclaEmpuje = KeyCode.E;
+        }
+        else if (numeroDeJugador == 2)
+        {
+            teclaEmpuje = KeyCode.Space;
+        }
+    }
 
     void Start()
     {

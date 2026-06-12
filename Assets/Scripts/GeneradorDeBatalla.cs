@@ -39,6 +39,7 @@ public class GeneradorDeBatalla : MonoBehaviour
             // [NUEVO] Le avisamos que es el P1
             jugador1.GetComponent<MovimientoBasico25D>().ConfigurarControles(1);
             jugador1.GetComponent<HabilidadesJugador>().ConfigurarHabilidades(1);
+            jugador1.GetComponent<AccionEmpuje>().ConfigurarControlesEmpuje(1);
         }
 
         // 3. Hacer aparecer al Player 2
@@ -51,6 +52,7 @@ public class GeneradorDeBatalla : MonoBehaviour
             // [NUEVO] Le avisamos que es el P2
             jugador2.GetComponent<MovimientoBasico25D>().ConfigurarControles(2);
             jugador2.GetComponent<HabilidadesJugador>().ConfigurarHabilidades(2);
+            jugador2.GetComponent<AccionEmpuje>().ConfigurarControlesEmpuje(2);
         }
     }
 }
