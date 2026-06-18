@@ -278,6 +278,16 @@ Canvas:
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
+--- !u!95 &138089851 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 5113897059631521204, guid: 93c84f693af3bab4baedd0fb4fde1507, type: 3}
+  m_PrefabInstance: {fileID: 1795490238852153805}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &145786767 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2123113176691645756, guid: 93c84f693af3bab4baedd0fb4fde1507, type: 3}
+  m_PrefabInstance: {fileID: 1795490238852153805}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &158284833
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -539,7 +549,7 @@ GameObject:
   - component: {fileID: 229182539}
   - component: {fileID: 229182548}
   m_Layer: 6
-  m_Name: Player 2
+  m_Name: Player 3
   m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -571,10 +581,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1ceeceeeec1f9a9409ee85b18ead99d7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  teclaIzquierda: 276
-  teclaDerecha: 275
-  teclaSalto: 273
-  teclaCaida: 274
+  teclaIzquierda: 0
+  teclaDerecha: 0
+  teclaSalto: 0
+  teclaCaida: 0
   velocidad: 7
   fuerzaSalto: 10
   fuerzaCaidaRapida: 8
@@ -597,7 +607,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7dd3a303e7afe4f418c43380a601c803, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  teclaEmpuje: 32
+  teclaEmpuje: 0
   fuerzaEmpujeBase: 10
   factorVelocidadEmpuje: 2
   radioDeGolpe: 1.5
@@ -753,10 +763,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c1f7af5476734c44ca38569f4e0d9055, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  numeroJugador: 2
+  anim: {fileID: 0}
+  visualCenter: {fileID: 0}
+  teclaHabilidad: 0
   clase: 0
-  teclaHabilidad: 108
   cooldown: 4
+  duracionAnimEspecial: 3
   prefabBloqueMecanico: {fileID: 4032537180759407973, guid: 5e73d9d6382364c4586382886258bd06, type: 3}
   radioMaximoEscaneo: 15
   capaObstaculosYPlataformas:
@@ -2591,10 +2603,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1ceeceeeec1f9a9409ee85b18ead99d7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  teclaIzquierda: 97
-  teclaDerecha: 100
-  teclaSalto: 119
-  teclaCaida: 115
+  teclaIzquierda: 0
+  teclaDerecha: 0
+  teclaSalto: 0
+  teclaCaida: 0
   velocidad: 7
   fuerzaSalto: 10
   fuerzaCaidaRapida: 8
@@ -2680,7 +2692,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7dd3a303e7afe4f418c43380a601c803, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  teclaEmpuje: 101
+  teclaEmpuje: 0
   fuerzaEmpujeBase: 12
   factorVelocidadEmpuje: 2
   radioDeGolpe: 1.8
@@ -2697,10 +2709,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c1f7af5476734c44ca38569f4e0d9055, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  numeroJugador: 1
+  anim: {fileID: 0}
+  visualCenter: {fileID: 0}
+  teclaHabilidad: 0
   clase: 0
-  teclaHabilidad: 114
   cooldown: 4
+  duracionAnimEspecial: 3
   prefabBloqueMecanico: {fileID: 4032537180759407973, guid: 5e73d9d6382364c4586382886258bd06, type: 3}
   radioMaximoEscaneo: 7
   capaObstaculosYPlataformas:
@@ -3898,6 +3912,83 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0454ec0135baf8247a32fe64205be363, type: 3}
+--- !u!1001 &1795490238852153805
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 2499755209268833793, guid: 93c84f693af3bab4baedd0fb4fde1507, type: 3}
+      propertyPath: anim
+      value: 
+      objectReference: {fileID: 138089851}
+    - target: {fileID: 2499755209268833793, guid: 93c84f693af3bab4baedd0fb4fde1507, type: 3}
+      propertyPath: clase
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2499755209268833793, guid: 93c84f693af3bab4baedd0fb4fde1507, type: 3}
+      propertyPath: visualCenter
+      value: 
+      objectReference: {fileID: 145786767}
+    - target: {fileID: 3787966512487274287, guid: 93c84f693af3bab4baedd0fb4fde1507, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4069591509439559589, guid: 93c84f693af3bab4baedd0fb4fde1507, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6406157521477035051, guid: 93c84f693af3bab4baedd0fb4fde1507, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -37.23
+      objectReference: {fileID: 0}
+    - target: {fileID: 6406157521477035051, guid: 93c84f693af3bab4baedd0fb4fde1507, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 2.309228
+      objectReference: {fileID: 0}
+    - target: {fileID: 6406157521477035051, guid: 93c84f693af3bab4baedd0fb4fde1507, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0.08785021
+      objectReference: {fileID: 0}
+    - target: {fileID: 6406157521477035051, guid: 93c84f693af3bab4baedd0fb4fde1507, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6406157521477035051, guid: 93c84f693af3bab4baedd0fb4fde1507, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6406157521477035051, guid: 93c84f693af3bab4baedd0fb4fde1507, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6406157521477035051, guid: 93c84f693af3bab4baedd0fb4fde1507, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6406157521477035051, guid: 93c84f693af3bab4baedd0fb4fde1507, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6406157521477035051, guid: 93c84f693af3bab4baedd0fb4fde1507, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6406157521477035051, guid: 93c84f693af3bab4baedd0fb4fde1507, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9148307963933697096, guid: 93c84f693af3bab4baedd0fb4fde1507, type: 3}
+      propertyPath: m_Name
+      value: Player 2
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 93c84f693af3bab4baedd0fb4fde1507, type: 3}
 --- !u!1001 &7445193090162697659
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4003,3 +4094,4 @@ SceneRoots:
   - {fileID: 1551827584}
   - {fileID: 7445193090162697659}
   - {fileID: 558228307}
+  - {fileID: 1795490238852153805}

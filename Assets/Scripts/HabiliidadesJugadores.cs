@@ -4,14 +4,30 @@ public class HabilidadesJugador : MonoBehaviour
 {
     public enum TipoClase { Profesor, Mecanico, Rapero }
 
-    [Header("Identificación del Jugador")]
-    public int numeroJugador = 1;
+    [Header("Animación")]
+    public Animator anim;
+    public Transform visualCenter;
+
+    [Header("Controles")]
+    public KeyCode teclaHabilidad = KeyCode.F; // Cambiá esta tecla desde el Inspector
+
+    // --- ESTAS VARIABLES SON PRIVADAS Y DINÁMICAS ---
+    private int numeroJugador;
+
+    // --- LA FUNCIÓN QUE CONFIGURA EL NÚMERO DE JUGADOR ---
+    public void ConfigurarHabilidades(int numJugador)
+    {
+        numeroJugador = numJugador;
+    }
 
     [Header("Configuración de Clase")]
     public TipoClase clase;
-    public KeyCode teclaHabilidad = KeyCode.E;
     public float cooldown = 4f;
     private float tiempoSiguienteUso = 0f;
+
+    [Header("Animación del Poder")]
+    public float duracionAnimEspecial = 3f; // Duración de la animación de tu poder en segundos
+    private bool estaCantando = false;
 
     [Header("Habilidad Mecánico")]
     public GameObject prefabBloqueMecanico;
@@ -31,7 +47,6 @@ public class HabilidadesJugador : MonoBehaviour
     {
         if (Input.GetKeyDown(teclaHabilidad))
         {
-            // FIX: Saqué la variable que no existía. Esto va a avisar limpio en consola.
             Debug.Log($"[RASTREO] Tecla {teclaHabilidad} apretada por Player {numeroJugador}. Clase: {clase}");
 
             if (Time.time >= tiempoSiguienteUso)
@@ -46,8 +61,21 @@ public class HabilidadesJugador : MonoBehaviour
         }
     }
 
+    void TerminarAnimEspecial()
+    {
+        estaCantando = false;
+    }
+
     void UsarHabilidad()
     {
+        // --- Activa la animación del poder al mismo tiempo que la habilidad ---
+        if (anim != null && !estaCantando)
+        {
+            estaCantando = true;
+            anim.SetTrigger("CantarTrigger");
+            Invoke("TerminarAnimEspecial", duracionAnimEspecial);
+        }
+
         switch (clase)
         {
             case TipoClase.Mecanico:
@@ -82,55 +110,101 @@ public class HabilidadesJugador : MonoBehaviour
 
     void HabilidadProfesor()
     {
-        float direccionX = 1f;
-        if (transform.childCount > 0)
+        float facingX = 1f;
+        bool isFacingRight = true;
+        if (visualCenter != null)
         {
-            Transform centroVisual = transform.GetChild(0);
-            if (centroVisual.localEulerAngles.y > 100f || centroVisual.localEulerAngles.y < -100f)
+            if (visualCenter.localEulerAngles.y > 100f || visualCenter.localEulerAngles.y < -100f)
             {
-                direccionX = -1f;
+                facingX = -1f;
+                isFacingRight = false;
             }
         }
 
-        Vector3 direccionDisparo = new Vector3(direccionX, 0, 0);
-        // Forzamos el carril Z a 0 para que impacte de lleno en las plataformas
-        Vector3 origenLaser = new Vector3(transform.position.x, transform.position.y + 1f, 0f);
-        Vector3 puntoFinalLaser = origenLaser + direccionDisparo * radioMaximoEscaneo;
-
-        Debug.DrawRay(origenLaser, direccionDisparo * radioMaximoEscaneo, Color.green, 2f);
-
-        RaycastHit hit;
-        if (Physics.Raycast(origenLaser, direccionDisparo, out hit, radioMaximoEscaneo))
+        Transform plataformaActual = null;
+        RaycastHit hitSuelo;
+        if (Physics.Raycast(transform.position, Vector3.down, out hitSuelo, 2f))
         {
-            if (hit.collider != null)
+            if (hitSuelo.collider.GetComponent<PlataformasColores>() != null)
             {
-                puntoFinalLaser = hit.point;
-                puntoFinalLaser.z = 0f; // Mantener el láser visual en el plano 2.5D
+                plataformaActual = hitSuelo.collider.transform;
+            }
+        }
 
-                // 1. Intentamos obtener tu script específico de la plataforma
-                PlataformasColores scriptPlataforma = hit.collider.GetComponent<PlataformasColores>();
+        Collider[] objetosCercanos = Physics.OverlapSphere(transform.position, radioMaximoEscaneo);
+        PlataformasColores plataformaObjetivo = null;
+        float distanciaMinima = Mathf.Infinity;
+        Vector3 centroJugador = new Vector3(transform.position.x, transform.position.y + 0.5f, 0f);
 
-                // 2. Si el objeto tiene el script y no es un jugador, ejecutamos tu función lógica
-                if (scriptPlataforma != null && hit.collider.GetComponent<MovimientoBasico25D>() == null)
+        foreach (Collider col in objetosCercanos)
+        {
+            PlataformasColores scriptPlataforma = col.GetComponent<PlataformasColores>();
+            if (scriptPlataforma != null && col.transform != plataformaActual)
+            {
+                Vector3 puntoMasCercano = col.ClosestPoint(centroJugador);
+                float distancia = Vector3.Distance(centroJugador, puntoMasCercano);
+
+                if (distancia < distanciaMinima)
                 {
-                    // EJECUTAMOS TU FUNCIÓN OFICIAL: cambia el enum y el material al mismo tiempo
-                    scriptPlataforma.SabotearBando();
-
-                    Debug.LogWarning($"[PROFESOR] ¡Láser interactuó con {hit.collider.name} y ejecutó SabotearBando()!");
+                    distanciaMinima = distancia;
+                    plataformaObjetivo = scriptPlataforma;
                 }
             }
         }
 
-        if (efectoVisualLaser != null)
+        if (plataformaObjetivo != null && visualCenter != null)
         {
-            StartCoroutine(MostrarLaserVisual(origenLaser, puntoFinalLaser));
+            Collider coliderPlataforma = plataformaObjetivo.GetComponent<Collider>();
+            Vector3 targetPoint = coliderPlataforma != null ? coliderPlataforma.ClosestPoint(centroJugador) : plataformaObjetivo.transform.position;
+            targetPoint.z = 0f;
+
+            float directionToTargetWorldX = Mathf.Sign(targetPoint.x - transform.position.x);
+
+            if (Mathf.Abs(targetPoint.x - transform.position.x) > 0.2f)
+            {
+                if (directionToTargetWorldX > 0 && !isFacingRight)
+                {
+                    visualCenter.localEulerAngles = new Vector3(0f, 0f, 0f);
+                    facingX = 1f;
+                }
+                else if (directionToTargetWorldX < 0 && isFacingRight)
+                {
+                    visualCenter.localEulerAngles = new Vector3(0f, 180f, 0f);
+                    facingX = -1f;
+                }
+            }
+
+            Vector3 origenLaser = new Vector3(transform.position.x + (0.4f * facingX), transform.position.y + 1f, 0f);
+            Vector3 puntoFinalLaser = coliderPlataforma != null ? coliderPlataforma.ClosestPoint(origenLaser) : plataformaObjetivo.transform.position;
+            puntoFinalLaser.z = 0f;
+
+            if (anim != null)
+            {
+                float diffX = Mathf.Abs(puntoFinalLaser.x - origenLaser.x);
+                float diffY = puntoFinalLaser.y - origenLaser.y;
+
+                float anguloFinal = Mathf.Atan2(diffY, diffX) * Mathf.Rad2Deg;
+                anguloFinal = Mathf.Clamp(anguloFinal, -90f, 90f);
+
+                anim.SetFloat("AnguloApuntado", anguloFinal);
+                anim.SetTrigger("PulsoTrigger");
+            }
+
+            Debug.DrawLine(origenLaser, puntoFinalLaser, Color.magenta, 1f);
+            plataformaObjetivo.SabotearBando();
+            Debug.LogWarning($"[PROFESOR] Sabotaje simétrico y giro automático exitosos. Ángulo Local enviado: {anim.GetFloat("AnguloApuntado")}");
+
+            if (efectoVisualLaser != null)
+            {
+                StartCoroutine(MostrarLaserVisual(origenLaser, puntoFinalLaser));
+            }
         }
     }
+
     void HabilidadRapero()
     {
         Debug.Log($"Jugador {numeroJugador} ejecutando habilidad de Rapero.");
 
-        // 1. RESPUESTA VISUAL
         if (visualOndaRapero != null)
         {
             Vector3 posicionOnda = new Vector3(transform.position.x, transform.position.y, 0f);
@@ -138,32 +212,26 @@ public class HabilidadesJugador : MonoBehaviour
             Destroy(onda, 0.5f);
         }
 
-        // 2. DETECCIÓN EN ÁREA
         Collider[] objetosCercanos = Physics.OverlapSphere(transform.position, radioEmpuje);
 
         foreach (Collider col in objetosCercanos)
         {
             if (col.gameObject == this.gameObject) continue;
 
-            // 3. EFECTO SOBRE EL RIVAL
             MovimientoBasico25D scriptRival = col.GetComponent<MovimientoBasico25D>();
             if (scriptRival != null)
             {
                 Vector3 direccionEmpuje = col.transform.position - transform.position;
-
-                // --- FIX: Declaramos direccionX como float ---
                 float direccionX = Mathf.Sign(direccionEmpuje.x);
 
-                // Armamos el vector de fuerza final
                 Vector3 fuerzaFinal = new Vector3(direccionX * fuerzaEmpuje, fuerzaEmpuje * 0.4f, 0f);
-
-                // Aplicamos el empuje y congelamos al rival
                 scriptRival.AplicarEmpujeYStun(fuerzaFinal, duracionStunRival);
 
                 Debug.LogWarning($"[RAPERO] ¡Onda expansiva golpeó a {col.name}! Mandado a volar.");
             }
         }
     }
+
     System.Collections.IEnumerator MostrarLaserVisual(Vector3 inicio, Vector3 fin)
     {
         efectoVisualLaser.enabled = true;

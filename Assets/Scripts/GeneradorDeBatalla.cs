@@ -29,20 +29,30 @@ public class GeneradorDeBatalla : MonoBehaviour
             return;
         }
 
-        // 2. Hacer aparecer (Instanciar) al Player 1
+        // 2. Hacer aparecer al Player 1
         if (eleccionP1 >= 0 && eleccionP1 < personajesPrefabs.Length)
         {
-            // Crea una copia del Prefab en la posición y rotación del Punto 1
             GameObject jugador1 = Instantiate(personajesPrefabs[eleccionP1], puntoInicioP1.position, puntoInicioP1.rotation);
-            jugador1.name = "Jugador_1"; // Le limpiamos el nombre para que quede prolijo
+            jugador1.name = "Player 1";
+            jugador1.SetActive(true);
+
+            // [NUEVO] Le avisamos que es el P1
+            jugador1.GetComponent<MovimientoBasico25D>().ConfigurarControles(1);
+            jugador1.GetComponent<HabilidadesJugador>().ConfigurarHabilidades(1);
+            jugador1.GetComponent<AccionEmpuje>().ConfigurarControlesEmpuje(1);
         }
 
-        // 3. Hacer aparecer (Instanciar) al Player 2
+        // 3. Hacer aparecer al Player 2
         if (eleccionP2 >= 0 && eleccionP2 < personajesPrefabs.Length)
         {
-            // Crea una copia del Prefab en la posición y rotación del Punto 2
             GameObject jugador2 = Instantiate(personajesPrefabs[eleccionP2], puntoInicioP2.position, puntoInicioP2.rotation);
-            jugador2.name = "Jugador_2";
+            jugador2.name = "Player 2";
+            jugador2.SetActive(true);
+
+            // [NUEVO] Le avisamos que es el P2
+            jugador2.GetComponent<MovimientoBasico25D>().ConfigurarControles(2);
+            jugador2.GetComponent<HabilidadesJugador>().ConfigurarHabilidades(2);
+            jugador2.GetComponent<AccionEmpuje>().ConfigurarControlesEmpuje(2);
         }
     }
 }
