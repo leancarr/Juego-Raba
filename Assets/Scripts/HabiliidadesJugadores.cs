@@ -8,29 +8,26 @@ public class HabilidadesJugador : MonoBehaviour
     public Animator anim;
     public Transform visualCenter;
 
-    // --- ESTAS VARIABLES AHORA SON PRIVADAS Y DINÁMICAS ---
-    private int numeroJugador;
-    private KeyCode teclaHabilidad;
+    [Header("Controles")]
+    public KeyCode teclaHabilidad = KeyCode.F; // Cambiá esta tecla desde el Inspector
 
-    // --- [NUEVO] LA FUNCIÓN QUE CONFIGURA TODO ---
+    // --- ESTAS VARIABLES SON PRIVADAS Y DINÁMICAS ---
+    private int numeroJugador;
+
+    // --- LA FUNCIÓN QUE CONFIGURA EL NÚMERO DE JUGADOR ---
     public void ConfigurarHabilidades(int numJugador)
     {
         numeroJugador = numJugador;
-
-        if (numeroJugador == 1)
-        {
-            teclaHabilidad = KeyCode.F;
-        }
-        else if (numeroJugador == 2)
-        {
-            teclaHabilidad = KeyCode.L;
-        }
     }
 
     [Header("Configuración de Clase")]
     public TipoClase clase;
     public float cooldown = 4f;
     private float tiempoSiguienteUso = 0f;
+
+    [Header("Animación del Poder")]
+    public float duracionAnimEspecial = 3f; // Duración de la animación de tu poder en segundos
+    private bool estaCantando = false;
 
     [Header("Habilidad Mecánico")]
     public GameObject prefabBloqueMecanico;
@@ -64,8 +61,21 @@ public class HabilidadesJugador : MonoBehaviour
         }
     }
 
+    void TerminarAnimEspecial()
+    {
+        estaCantando = false;
+    }
+
     void UsarHabilidad()
     {
+        // --- Activa la animación del poder al mismo tiempo que la habilidad ---
+        if (anim != null && !estaCantando)
+        {
+            estaCantando = true;
+            anim.SetTrigger("CantarTrigger");
+            Invoke("TerminarAnimEspecial", duracionAnimEspecial);
+        }
+
         switch (clase)
         {
             case TipoClase.Mecanico:

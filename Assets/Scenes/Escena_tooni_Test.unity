@@ -278,6 +278,16 @@ Canvas:
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
+--- !u!95 &138089851 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 5113897059631521204, guid: 93c84f693af3bab4baedd0fb4fde1507, type: 3}
+  m_PrefabInstance: {fileID: 1795490238852153805}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &145786767 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2123113176691645756, guid: 93c84f693af3bab4baedd0fb4fde1507, type: 3}
+  m_PrefabInstance: {fileID: 1795490238852153805}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &158284833
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -755,8 +765,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   anim: {fileID: 0}
   visualCenter: {fileID: 0}
+  teclaHabilidad: 0
   clase: 0
   cooldown: 4
+  duracionAnimEspecial: 3
   prefabBloqueMecanico: {fileID: 4032537180759407973, guid: 5e73d9d6382364c4586382886258bd06, type: 3}
   radioMaximoEscaneo: 15
   capaObstaculosYPlataformas:
@@ -2699,8 +2711,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   anim: {fileID: 0}
   visualCenter: {fileID: 0}
+  teclaHabilidad: 0
   clase: 0
   cooldown: 4
+  duracionAnimEspecial: 3
   prefabBloqueMecanico: {fileID: 4032537180759407973, guid: 5e73d9d6382364c4586382886258bd06, type: 3}
   radioMaximoEscaneo: 7
   capaObstaculosYPlataformas:
@@ -3906,6 +3920,26 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2499755209268833793, guid: 93c84f693af3bab4baedd0fb4fde1507, type: 3}
+      propertyPath: anim
+      value: 
+      objectReference: {fileID: 138089851}
+    - target: {fileID: 2499755209268833793, guid: 93c84f693af3bab4baedd0fb4fde1507, type: 3}
+      propertyPath: clase
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2499755209268833793, guid: 93c84f693af3bab4baedd0fb4fde1507, type: 3}
+      propertyPath: visualCenter
+      value: 
+      objectReference: {fileID: 145786767}
+    - target: {fileID: 3787966512487274287, guid: 93c84f693af3bab4baedd0fb4fde1507, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4069591509439559589, guid: 93c84f693af3bab4baedd0fb4fde1507, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6406157521477035051, guid: 93c84f693af3bab4baedd0fb4fde1507, type: 3}
       propertyPath: m_LocalPosition.x
       value: -37.23

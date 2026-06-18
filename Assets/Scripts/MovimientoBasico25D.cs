@@ -80,7 +80,6 @@ public class MovimientoBasico25D : MonoBehaviour
         inputHorizontal = 0f;
         if (!estaAturdido)
         {
-            // Ahora leemos las variables dinámicas en lugar de las estáticas
             if (Input.GetKey(teclaIzquierda)) inputHorizontal = -1f;
             if (Input.GetKey(teclaDerecha)) inputHorizontal = 1f;
         }
