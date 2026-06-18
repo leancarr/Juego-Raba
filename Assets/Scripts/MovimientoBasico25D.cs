@@ -3,11 +3,11 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody))]
 public class MovimientoBasico25D : MonoBehaviour
 {
-    // --- CONTROLES DINÁMICOS (Ya no se ven en el Inspector) ---
-    private KeyCode teclaIzquierda;
-    private KeyCode teclaDerecha;
-    private KeyCode teclaSalto;
-    private KeyCode teclaCaida;
+    [Header("Controles Dinámicos (Modificables para pruebas)")]
+    public KeyCode teclaIzquierda = KeyCode.A;
+    public KeyCode teclaDerecha = KeyCode.D;
+    public KeyCode teclaSalto = KeyCode.W;
+    public KeyCode teclaCaida = KeyCode.S;
 
     // --- [NUEVO] ESTA ES LA FUNCIÓN QUE LLAMA EL GENERADOR ---
     public void ConfigurarControles(int numeroDeJugador)
@@ -111,11 +111,14 @@ public class MovimientoBasico25D : MonoBehaviour
 
     void LateUpdate()
     {
-        // --- GIRO VISUAL DEL PERSONAJE ---
-        if (centroVisual != null && inputHorizontal != 0f)
+        // --- GIRO VISUAL DEL PERSONAJE (flip en el objeto del Animator) ---
+        // Usamos anim.transform directamente porque es el padre de todos los huesos.
+        // Cambiar la escala X del padre los voltea a todos sin que el Animator lo pise.
+        if (anim != null && inputHorizontal != 0f)
         {
-            float anguloY = (inputHorizontal > 0f) ? 0f : -180f;
-            centroVisual.localRotation = Quaternion.Euler(0f, anguloY, 0f);
+            Vector3 escala = anim.transform.localScale;
+            escala.x = (inputHorizontal > 0f) ? Mathf.Abs(escala.x) : -Mathf.Abs(escala.x);
+            anim.transform.localScale = escala;
         }
     }
 

@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 84c6d61c35b6e174cbe6d34fa63e2b12
+guid: 84713fd8aa193824e9dfaae461643a24
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
@@ -31,25 +31,25 @@ ModelImporter:
     extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
-      name: Indle
+      name: Salto-Caida
       takeName: Take 001
       internalID: 1827226128182048838
-      firstFrame: 0
-      lastFrame: 10
+      firstFrame: 40
+      lastFrame: 68
       wrapMode: 0
-      orientationOffsetY: 0
-      level: 0
+      orientationOffsetY: -0.5
+      level: -0.5
       cycleOffset: 0
       loop: 0
-      hasAdditiveReferencePose: 1
-      loopTime: 1
-      loopBlend: 1
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
       loopBlendOrientation: 1
       loopBlendPositionY: 1
       loopBlendPositionXZ: 1
-      keepOriginalOrientation: 0
+      keepOriginalOrientation: 1
       keepOriginalPositionY: 1
-      keepOriginalPositionXZ: 0
+      keepOriginalPositionXZ: 1
       heightFromFeet: 0
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
@@ -118,7 +118,7 @@ ModelImporter:
     legStretch: 0.05
     feetSpacing: 0
     globalScale: 1
-    rootMotionBoneName: Circle007
+    rootMotionBoneName: 
     hasTranslationDoF: 0
     hasExtraRoot: 0
     skeletonHasParents: 1

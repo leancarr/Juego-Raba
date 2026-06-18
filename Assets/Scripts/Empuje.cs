@@ -3,7 +3,7 @@ using UnityEngine;
 public class AccionEmpuje : MonoBehaviour
 {
     // --- CONTROLES DINÁMICOS (Asignados por el Generador) ---
-    private KeyCode teclaEmpuje;
+    public KeyCode teclaEmpuje;
 
     [Header("Físicas del Empuje")]
     public float fuerzaEmpujeBase = 12f;
