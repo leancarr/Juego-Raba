@@ -571,10 +571,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1ceeceeeec1f9a9409ee85b18ead99d7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  teclaIzquierda: 276
-  teclaDerecha: 275
-  teclaSalto: 273
-  teclaCaida: 274
   velocidad: 7
   fuerzaSalto: 10
   fuerzaCaidaRapida: 8
@@ -597,7 +593,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7dd3a303e7afe4f418c43380a601c803, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  teclaEmpuje: 32
   fuerzaEmpujeBase: 10
   factorVelocidadEmpuje: 2
   radioDeGolpe: 1.5
@@ -753,9 +748,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c1f7af5476734c44ca38569f4e0d9055, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  numeroJugador: 2
+  anim: {fileID: 0}
+  visualCenter: {fileID: 0}
   clase: 0
-  teclaHabilidad: 108
   cooldown: 4
   prefabBloqueMecanico: {fileID: 4032537180759407973, guid: 5e73d9d6382364c4586382886258bd06, type: 3}
   radioMaximoEscaneo: 15
@@ -2591,10 +2586,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1ceeceeeec1f9a9409ee85b18ead99d7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  teclaIzquierda: 97
-  teclaDerecha: 100
-  teclaSalto: 119
-  teclaCaida: 115
   velocidad: 7
   fuerzaSalto: 10
   fuerzaCaidaRapida: 8
@@ -2680,7 +2671,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7dd3a303e7afe4f418c43380a601c803, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  teclaEmpuje: 101
   fuerzaEmpujeBase: 12
   factorVelocidadEmpuje: 2
   radioDeGolpe: 1.8
@@ -2697,9 +2687,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c1f7af5476734c44ca38569f4e0d9055, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  numeroJugador: 1
+  anim: {fileID: 0}
+  visualCenter: {fileID: 0}
   clase: 0
-  teclaHabilidad: 114
   cooldown: 4
   prefabBloqueMecanico: {fileID: 4032537180759407973, guid: 5e73d9d6382364c4586382886258bd06, type: 3}
   radioMaximoEscaneo: 7

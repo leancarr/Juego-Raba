@@ -710,7 +710,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7dd3a303e7afe4f418c43380a601c803, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  teclaEmpuje: 32
   fuerzaEmpujeBase: 15
   factorVelocidadEmpuje: 4
   radioDeGolpe: 1.5
@@ -1009,7 +1008,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &253926554
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3850,7 +3849,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1280943501
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6536,7 +6535,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7dd3a303e7afe4f418c43380a601c803, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  teclaEmpuje: 101
   fuerzaEmpujeBase: 12
   factorVelocidadEmpuje: 2
   radioDeGolpe: 1.8
@@ -7828,7 +7826,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7dd3a303e7afe4f418c43380a601c803, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  teclaEmpuje: 101
   fuerzaEmpujeBase: 15
   factorVelocidadEmpuje: 4
   radioDeGolpe: 1.5
