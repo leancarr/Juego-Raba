@@ -38,18 +38,4 @@ public class ZonaCamara : MonoBehaviour
         }
     }
 
-    private void OnTriggerExit(Collider other)
-    {
-        if (other.CompareTag("Player"))
-        {
-            if (Camera.main != null)
-            {
-                CamaraScroll25D camara = Camera.main.GetComponent<CamaraScroll25D>();
-                if (camara != null)
-                {
-                    camara.LimpiarZona(this);
-                }
-            }
-        }
-    }
 }

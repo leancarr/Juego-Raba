@@ -1,17 +1,24 @@
 using UnityEngine;
 
+[RequireComponent(typeof(Rigidbody))]
 public class PlataformaMovilDiagonal : MonoBehaviour
 {
     public enum TipoMovimiento { PingPong, Loop, OneWay }
 
     [Header("Configuracion de Puntos")]
-    public Vector3 puntoA;
-    public Vector3 puntoB;
+    [Tooltip("La plataforma arrancará donde la pusiste en la escena.")]
     public bool usarPosicionActualComoA = true;
+    
+    [Tooltip("Coordenada exacta del mundo desde donde arranca (si no usas la posición actual).")]
+    public Vector3 puntoA;
+
+    [Tooltip("Coordenada exacta del mundo a la que viajará la plataforma.")]
+    public Vector3 puntoB;
 
     [Header("Parametros de Movimiento")]
     public float velocidad = 3f;
-    public TipoMovimiento tipoMovimiento = TipoMovimiento.PingPong;
+    [Tooltip("¡Elegí 'Loop' para que vaya a B y aparezca mágicamente en A de nuevo!")]
+    public TipoMovimiento tipoMovimiento = TipoMovimiento.Loop;
     public float pausaEnExtremos = 0f;
     public bool empezarEnB = false;
 
@@ -19,9 +26,15 @@ public class PlataformaMovilDiagonal : MonoBehaviour
     private bool yendoAB = true;
     private float tiempoEsperaTerminado = 0f;
     private bool esperando = false;
+    
+    private Rigidbody rb;
 
     void Start()
     {
+        rb = GetComponent<Rigidbody>();
+        rb.isKinematic = true; // Fundamental para que no se caiga por gravedad
+        rb.interpolation = RigidbodyInterpolation.Interpolate; // Movimiento suave
+
         if (usarPosicionActualComoA)
         {
             puntoA = transform.position;
@@ -35,13 +48,13 @@ public class PlataformaMovilDiagonal : MonoBehaviour
         }
         else
         {
-            transform.position = puntoA;
+            // NO teletransportar al iniciar. Se queda en su posición visual actual (en el medio de la cascada).
             target = puntoB;
             yendoAB = true;
         }
     }
 
-    void Update()
+    void FixedUpdate() // Usamos FixedUpdate para físicas perfectas
     {
         if (esperando)
         {
@@ -55,10 +68,13 @@ public class PlataformaMovilDiagonal : MonoBehaviour
             }
         }
 
-        float paso = velocidad * Time.deltaTime;
-        transform.position = Vector3.MoveTowards(transform.position, target, paso);
+        float paso = velocidad * Time.fixedDeltaTime;
+        Vector3 nuevaPos = Vector3.MoveTowards(rb.position, target, paso);
+        
+        // MovePosition mueve la plataforma y arrastra físicamente al jugador sin buguearlo
+        rb.MovePosition(nuevaPos);
 
-        if (Vector3.Distance(transform.position, target) < 0.001f)
+        if (Vector3.Distance(rb.position, target) < 0.001f)
         {
             if (pausaEnExtremos > 0f)
             {
@@ -88,7 +104,9 @@ public class PlataformaMovilDiagonal : MonoBehaviour
                 break;
 
             case TipoMovimiento.Loop:
-                transform.position = puntoA;
+                // Transporta la plataforma al inicio (Punto A) instantáneamente
+                rb.position = puntoA;
+                transform.position = puntoA; 
                 target = puntoB;
                 yendoAB = true;
                 break;
@@ -96,22 +114,6 @@ public class PlataformaMovilDiagonal : MonoBehaviour
             case TipoMovimiento.OneWay:
                 // Se queda quieta
                 break;
-        }
-    }
-
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.CompareTag("Player"))
-        {
-            other.transform.SetParent(transform);
-        }
-    }
-
-    private void OnTriggerExit(Collider other)
-    {
-        if (other.CompareTag("Player"))
-        {
-            other.transform.SetParent(null);
         }
     }
 

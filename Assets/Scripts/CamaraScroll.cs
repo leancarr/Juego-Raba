@@ -98,6 +98,7 @@ public class CamaraScroll25D : MonoBehaviour
     public void SetZonaActiva(ZonaCamara nuevaZona)
     {
         zonaActiva = nuevaZona;
+        Debug.Log("<color=cyan>[CAMARA] Entrando a nueva zona: " + nuevaZona.gameObject.name + " | SeguirEnY: " + nuevaZona.seguirEnY + "</color>");
     }
 
     public void LimpiarZona(ZonaCamara zonaAEliminar)
