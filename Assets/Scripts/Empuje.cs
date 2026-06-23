@@ -53,8 +53,10 @@ public class AccionEmpuje : MonoBehaviour
     {
         Debug.Log("¡Habilidad Ejecutada: EMPUJAR desde la Pelvis!");
 
-        // [OPCIONAL] Si tenés una animación para el personaje que REALIZA el empuje:
-        // if (anim != null) anim.SetTrigger("EjecutarAtaqueEmpuje");
+        if (anim != null)
+        {
+            anim.SetTrigger("EjecutarAtaqueEmpuje");
+        }
 
         Vector3 origenGolpe = (pelvis != null) ? pelvis.position : transform.position;
         Collider[] objetosGolpeados = Physics.OverlapSphere(origenGolpe, radioDeGolpe);
