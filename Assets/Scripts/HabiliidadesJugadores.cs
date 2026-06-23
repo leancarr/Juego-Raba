@@ -18,6 +18,16 @@ public class HabilidadesJugador : MonoBehaviour
     public void ConfigurarHabilidades(int numJugador)
     {
         numeroJugador = numJugador;
+        
+        // Asignamos teclas distintas para que no choquen
+        if (numJugador == 1)
+        {
+            teclaHabilidad = KeyCode.F; // Jugador 1
+        }
+        else if (numJugador == 2)
+        {
+            teclaHabilidad = KeyCode.RightShift; // Jugador 2
+        }
     }
 
     [Header("Configuración de Clase")]

@@ -294,7 +294,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &6406157521477035051
 Transform:
   m_ObjectHideFlags: 0
@@ -363,10 +363,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c1f7af5476734c44ca38569f4e0d9055, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  anim: {fileID: 0}
-  visualCenter: {fileID: 0}
-  clase: 0
+  anim: {fileID: 5113897059631521204}
+  visualCenter: {fileID: 2123113176691645756}
+  teclaHabilidad: 102
+  clase: 2
   cooldown: 4
+  duracionAnimEspecial: 3
   prefabBloqueMecanico: {fileID: 0}
   radioMaximoEscaneo: 7
   capaObstaculosYPlataformas:
@@ -376,7 +378,7 @@ MonoBehaviour:
   radioEmpuje: 5
   fuerzaEmpuje: 12
   duracionStunRival: 0.5
-  visualOndaRapero: {fileID: 0}
+  visualOndaRapero: {fileID: 1909243214991789484, guid: 7ef8b40504ff3d74cbb00b915a42a697, type: 3}
 --- !u!54 &7378765280723660723
 Rigidbody:
   m_ObjectHideFlags: 0
