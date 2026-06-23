@@ -511,13 +511,33 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1916760657292843144, guid: c31a6319a5f764040a9021fd4ca36991, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 5000
+      objectReference: {fileID: 0}
+    - target: {fileID: 1916760657292843144, guid: c31a6319a5f764040a9021fd4ca36991, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 5000
+      objectReference: {fileID: 0}
     - target: {fileID: 2875699283879318936, guid: c31a6319a5f764040a9021fd4ca36991, type: 3}
       propertyPath: m_Name
       value: CanvaEfectoLooneyToons
       objectReference: {fileID: 0}
-    - target: {fileID: 2875699283879318936, guid: c31a6319a5f764040a9021fd4ca36991, type: 3}
-      propertyPath: m_IsActive
+    - target: {fileID: 3670031752830832589, guid: c31a6319a5f764040a9021fd4ca36991, type: 3}
+      propertyPath: m_UiScaleMode
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3670031752830832589, guid: c31a6319a5f764040a9021fd4ca36991, type: 3}
+      propertyPath: m_MatchWidthOrHeight
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3670031752830832589, guid: c31a6319a5f764040a9021fd4ca36991, type: 3}
+      propertyPath: m_ReferenceResolution.x
+      value: 1920
+      objectReference: {fileID: 0}
+    - target: {fileID: 3670031752830832589, guid: c31a6319a5f764040a9021fd4ca36991, type: 3}
+      propertyPath: m_ReferenceResolution.y
+      value: 1080
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -688,6 +708,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1ceeceeeec1f9a9409ee85b18ead99d7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  teclaIzquierda: 97
+  teclaDerecha: 100
+  teclaSalto: 119
+  teclaCaida: 115
   velocidad: 7
   fuerzaSalto: 7
   fuerzaCaidaRapida: 10
@@ -870,8 +894,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   anim: {fileID: 0}
   visualCenter: {fileID: 0}
+  teclaHabilidad: 102
   clase: 1
   cooldown: 4
+  duracionAnimEspecial: 3
   prefabBloqueMecanico: {fileID: 4032537180759407973, guid: 5e73d9d6382364c4586382886258bd06, type: 3}
   radioMaximoEscaneo: 7
   capaObstaculosYPlataformas:
@@ -2341,22 +2367,34 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 120227501}
-    - target: {fileID: 384909038244492701, guid: 0454ec0135baf8247a32fe64205be363, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: BotonVolverAlMenu
-      objectReference: {fileID: 0}
     - target: {fileID: 3183933495566562931, guid: 0454ec0135baf8247a32fe64205be363, type: 3}
       propertyPath: m_Name
       value: Canva Estadistica-Finales
+      objectReference: {fileID: 0}
+    - target: {fileID: 3764174080730700271, guid: 0454ec0135baf8247a32fe64205be363, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3764174080730700271, guid: 0454ec0135baf8247a32fe64205be363, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3764174080730700271, guid: 0454ec0135baf8247a32fe64205be363, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -63
+      objectReference: {fileID: 0}
+    - target: {fileID: 3764174080730700271, guid: 0454ec0135baf8247a32fe64205be363, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -200
+      objectReference: {fileID: 0}
+    - target: {fileID: 3959796729994582264, guid: 0454ec0135baf8247a32fe64205be363, type: 3}
+      propertyPath: m_MatchWidthOrHeight
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 4305908945935365566, guid: 0454ec0135baf8247a32fe64205be363, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 120227501}
-    - target: {fileID: 4305908945935365566, guid: 0454ec0135baf8247a32fe64205be363, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: BotonReiniciarTorneo
-      objectReference: {fileID: 0}
     - target: {fileID: 6203811060690011327, guid: 0454ec0135baf8247a32fe64205be363, type: 3}
       propertyPath: m_Pivot.x
       value: 0
@@ -2436,6 +2474,22 @@ PrefabInstance:
     - target: {fileID: 6203811060690011327, guid: 0454ec0135baf8247a32fe64205be363, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6492189069061028290, guid: 0454ec0135baf8247a32fe64205be363, type: 3}
+      propertyPath: m_fontSizeMax
+      value: 200
+      objectReference: {fileID: 0}
+    - target: {fileID: 6492189069061028290, guid: 0454ec0135baf8247a32fe64205be363, type: 3}
+      propertyPath: m_fontSizeMin
+      value: 150
+      objectReference: {fileID: 0}
+    - target: {fileID: 6492189069061028290, guid: 0454ec0135baf8247a32fe64205be363, type: 3}
+      propertyPath: m_charWidthMaxAdj
+      value: 22
+      objectReference: {fileID: 0}
+    - target: {fileID: 6492189069061028290, guid: 0454ec0135baf8247a32fe64205be363, type: 3}
+      propertyPath: m_enableAutoSizing
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -6451,6 +6505,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1ceeceeeec1f9a9409ee85b18ead99d7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  teclaIzquierda: 97
+  teclaDerecha: 100
+  teclaSalto: 119
+  teclaCaida: 115
   velocidad: 7
   fuerzaSalto: 7
   fuerzaCaidaRapida: 10
@@ -6555,8 +6613,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   anim: {fileID: 1800846183}
   visualCenter: {fileID: 186846308}
+  teclaHabilidad: 102
   clase: 0
   cooldown: 4
+  duracionAnimEspecial: 3
   prefabBloqueMecanico: {fileID: 0}
   radioMaximoEscaneo: 7
   capaObstaculosYPlataformas:
@@ -7806,6 +7866,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1ceeceeeec1f9a9409ee85b18ead99d7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  teclaIzquierda: 97
+  teclaDerecha: 100
+  teclaSalto: 119
+  teclaCaida: 115
   velocidad: 7
   fuerzaSalto: 7
   fuerzaCaidaRapida: 10
@@ -7987,8 +8051,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   anim: {fileID: 0}
   visualCenter: {fileID: 0}
+  teclaHabilidad: 102
   clase: 2
   cooldown: 4
+  duracionAnimEspecial: 3
   prefabBloqueMecanico: {fileID: 4032537180759407973, guid: 5e73d9d6382364c4586382886258bd06, type: 3}
   radioMaximoEscaneo: 7
   capaObstaculosYPlataformas:
