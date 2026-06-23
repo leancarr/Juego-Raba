@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5149723816821316482}
   - component: {fileID: 457813693799889993}
+  - component: {fileID: 3949646759115755631}
   m_Layer: 0
   m_Name: _GameManager (1)
   m_TagString: Untagged
@@ -49,5 +50,24 @@ MonoBehaviour:
   panelEstadisticasFinales: {fileID: 0}
   textoGanadorFinal: {fileID: 0}
   textoContadorVictorias: {fileID: 0}
+  nombreSiguienteNivel: Nivel-2
   duracionCierre: 1.5
   tiempoEsperaPostCierre: 2
+--- !u!114 &3949646759115755631
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8759909143787877110}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: df5c5c9a99cda204184f9c4bd6d96244, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  personajesPrefabs:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  puntoInicioP1: {fileID: 0}
+  puntoInicioP2: {fileID: 0}
