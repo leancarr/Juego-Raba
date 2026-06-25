@@ -1,31 +1,38 @@
+﻿/* 
+ * ==============================================================================
+ * SCRIPT: GeneradorDeBatalla.cs
+ * CATEGORIA: 2. Core y Managers (Gestores Invisibles)
+ * DESCRIPCION: Se ejecuta al principio de cada Nivel. Lee la memoria (PlayerPrefs) para saber que eligieron los jugadores en el menu y los hace aparecer (Instantiate) magicamente en sus puntos de aparicion, asignandoles sus controles respectivos.
+ * ==============================================================================
+ */
 using UnityEngine;
 
 public class GeneradorDeBatalla : MonoBehaviour
 {
     [Header("Roster de Personajes Jugables")]
-    [Tooltip("¡IMPORTANTE! Arrastra aquí los PREFABS REALES (con físicas y controles) en el mismo orden que el menú.")]
+    [Tooltip("Â¡IMPORTANTE! Arrastra aquÃ­ los PREFABS REALES (con fÃ­sicas y controles) en el mismo orden que el menÃº.")]
     public GameObject[] personajesPrefabs;
 
-    [Header("Puntos de Aparición (Spawn Points)")]
+    [Header("Puntos de ApariciÃ³n (Spawn Points)")]
     public Transform puntoInicioP1;
     public Transform puntoInicioP2;
 
     void Start()
     {
-        // Al arrancar la escena, llamamos a la función que crea a los luchadores
+        // Al arrancar la escena, llamamos a la funciÃ³n que crea a los luchadores
         GenerarJugadores();
     }
 
     void GenerarJugadores()
     {
-        // 1. Leemos la memoria. Si por algún error no hay datos, por defecto elegirá el 0
+        // 1. Leemos la memoria. Si por algÃºn error no hay datos, por defecto elegirÃ¡ el 0
         int eleccionP1 = PlayerPrefs.GetInt("EleccionP1", 0);
         int eleccionP2 = PlayerPrefs.GetInt("EleccionP2", 0);
 
         // Seguridad: Evitar que el juego explote si olvidaste arrastrar los prefabs
         if (personajesPrefabs.Length == 0)
         {
-            Debug.LogError("¡No pusiste personajes en la lista del GeneradorDeBatalla!");
+            Debug.LogError("Â¡No pusiste personajes en la lista del GeneradorDeBatalla!");
             return;
         }
 

@@ -1,3 +1,10 @@
+﻿/* 
+ * ==============================================================================
+ * SCRIPT: BloqueMecanico.cs
+ * CATEGORIA: 5. Elementos del Nivel (Efectos y Triggers)
+ * DESCRIPCION: El comportamiento de la pared de cajas que invoca el Mecanico con su habilidad.
+ * ==============================================================================
+ */
 using UnityEngine;
 
 public class BloqueMecanico : MonoBehaviour

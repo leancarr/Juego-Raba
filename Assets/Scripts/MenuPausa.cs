@@ -1,17 +1,24 @@
+/* 
+ * ==============================================================================
+ * SCRIPT: MenuPausa.cs
+ * CATEGORIA: 4. Menues y UI (Interfaz)
+ * DESCRIPCION: Congela el tiempo (Time.timeScale = 0) en medio de la partida y te deja volver al menu.
+ * ==============================================================================
+ */
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class MenuPausa : MonoBehaviour
 {
     [Header("Referencias UI")]
-    public GameObject panelPausa; // El panel semitransparente que contiene todo el menú
+    public GameObject panelPausa; // El panel semitransparente que contiene todo el menÃº
     public GameObject panelOpciones; // El recuadro flotante de configuraciones
 
     private bool juegoPausado = false;
 
     void Start()
     {
-        // Nos aseguramos de que los menúes arranquen escondidos y el tiempo corra normal
+        // Nos aseguramos de que los menÃºes arranquen escondidos y el tiempo corra normal
         panelPausa.SetActive(false);
         if (panelOpciones != null) panelOpciones.SetActive(false);
         Time.timeScale = 1f;
@@ -48,16 +55,20 @@ public class MenuPausa : MonoBehaviour
         juegoPausado = false;
     }
 
-    public void ReiniciarNivel()
+    public void ReiniciarPartida()
     {
-        // ES VITAL devolver el tiempo a 1 antes de recargar, sino el nivel arranca congelado
-        Time.timeScale = 1f; 
+        // Resetea el contador de victorias a 0 y recarga el nivel desde cero
+        Time.timeScale = 1f;
+        if (DatosTorneo.instancia != null)
+        {
+            DatosTorneo.instancia.ResetearTorneo();
+        }
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
     public void CargarMenuPrincipal()
     {
-        // Descongelamos y volvemos al menú
+        // Descongelamos y volvemos al menÃº
         Time.timeScale = 1f;
         SceneManager.LoadScene("MenuPrincipal");
     }
@@ -74,3 +85,4 @@ public class MenuPausa : MonoBehaviour
         panelPausa.SetActive(true);
     }
 }
+

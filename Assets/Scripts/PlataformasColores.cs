@@ -1,3 +1,10 @@
+ï»¿/* 
+ * ==============================================================================
+ * SCRIPT: PlataformasColores.cs
+ * CATEGORIA: 3. Camara y Entorno
+ * DESCRIPCION: Gestiona mecanicas especificas de pisos que cambian de color (quizas se caen o se activan).
+ * ==============================================================================
+ */
 using UnityEngine;
 
 public class PlataformasColores : MonoBehaviour
@@ -18,12 +25,12 @@ public class PlataformasColores : MonoBehaviour
 
         if (misColliders.Length == 0)
         {
-            Debug.LogError("¡ALERTA! El script en " + gameObject.name + " NO encontró ningún Collider. Revisá dónde está pegado el script.");
+            Debug.LogError("Â¡ALERTA! El script en " + gameObject.name + " NO encontrÃ³ ningÃºn Collider. RevisÃ¡ dÃ³nde estÃ¡ pegado el script.");
         }
 
         if (miRenderer == null)
         {
-            Debug.LogError("¡ALERTA! El script en " + gameObject.name + " NO encontró ningún MeshRenderer.");
+            Debug.LogError("Â¡ALERTA! El script en " + gameObject.name + " NO encontrÃ³ ningÃºn MeshRenderer.");
         }
 
         if (miRenderer != null)
@@ -83,10 +90,10 @@ public class PlataformasColores : MonoBehaviour
         if (miRenderer != null) miRenderer.enabled = true;
     }
 
-    // --- FUNCIÓN CORREGIDA CON TUS COLORES OFICIALES ---
+    // --- FUNCIÃ“N CORREGIDA CON TUS COLORES OFICIALES ---
     public void SabotearBando()
     {
-        // Rotación cíclica entre tus 3 colores oficiales
+        // RotaciÃ³n cÃ­clica entre tus 3 colores oficiales
         if (colorDeEstaPlataforma == ColorDeFondo.ColorEstado.Azul)
         {
             colorDeEstaPlataforma = ColorDeFondo.ColorEstado.Amarillo;
@@ -103,6 +110,6 @@ public class PlataformasColores : MonoBehaviour
             if (miRenderer != null) miRenderer.material.color = Color.blue; // Azul
         }
 
-        Debug.Log("¡Plataforma " + gameObject.name + " saboteada! Nuevo color: " + colorDeEstaPlataforma);
+        Debug.Log("Â¡Plataforma " + gameObject.name + " saboteada! Nuevo color: " + colorDeEstaPlataforma);
     }
 }

@@ -1,3 +1,10 @@
+﻿/* 
+ * ==============================================================================
+ * SCRIPT: PlataformaMovilDiagonal.cs
+ * CATEGORIA: 3. Camara y Entorno
+ * DESCRIPCION: Hace que los pisos floten en diagonal para los parkours.
+ * ==============================================================================
+ */
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody))]
@@ -6,18 +13,18 @@ public class PlataformaMovilDiagonal : MonoBehaviour
     public enum TipoMovimiento { PingPong, Loop, OneWay }
 
     [Header("Configuracion de Puntos")]
-    [Tooltip("La plataforma arrancará donde la pusiste en la escena.")]
+    [Tooltip("La plataforma arrancarÃ¡ donde la pusiste en la escena.")]
     public bool usarPosicionActualComoA = true;
     
-    [Tooltip("Coordenada exacta del mundo desde donde arranca (si no usas la posición actual).")]
+    [Tooltip("Coordenada exacta del mundo desde donde arranca (si no usas la posiciÃ³n actual).")]
     public Vector3 puntoA;
 
-    [Tooltip("Coordenada exacta del mundo a la que viajará la plataforma.")]
+    [Tooltip("Coordenada exacta del mundo a la que viajarÃ¡ la plataforma.")]
     public Vector3 puntoB;
 
     [Header("Parametros de Movimiento")]
     public float velocidad = 3f;
-    [Tooltip("¡Elegí 'Loop' para que vaya a B y aparezca mágicamente en A de nuevo!")]
+    [Tooltip("Â¡ElegÃ­ 'Loop' para que vaya a B y aparezca mÃ¡gicamente en A de nuevo!")]
     public TipoMovimiento tipoMovimiento = TipoMovimiento.Loop;
     public float pausaEnExtremos = 0f;
     public bool empezarEnB = false;
@@ -48,13 +55,13 @@ public class PlataformaMovilDiagonal : MonoBehaviour
         }
         else
         {
-            // NO teletransportar al iniciar. Se queda en su posición visual actual (en el medio de la cascada).
+            // NO teletransportar al iniciar. Se queda en su posiciÃ³n visual actual (en el medio de la cascada).
             target = puntoB;
             yendoAB = true;
         }
     }
 
-    void FixedUpdate() // Usamos FixedUpdate para físicas perfectas
+    void FixedUpdate() // Usamos FixedUpdate para fÃ­sicas perfectas
     {
         if (esperando)
         {
@@ -71,7 +78,7 @@ public class PlataformaMovilDiagonal : MonoBehaviour
         float paso = velocidad * Time.fixedDeltaTime;
         Vector3 nuevaPos = Vector3.MoveTowards(rb.position, target, paso);
         
-        // MovePosition mueve la plataforma y arrastra físicamente al jugador sin buguearlo
+        // MovePosition mueve la plataforma y arrastra fÃ­sicamente al jugador sin buguearlo
         rb.MovePosition(nuevaPos);
 
         if (Vector3.Distance(rb.position, target) < 0.001f)
@@ -104,7 +111,7 @@ public class PlataformaMovilDiagonal : MonoBehaviour
                 break;
 
             case TipoMovimiento.Loop:
-                // Transporta la plataforma al inicio (Punto A) instantáneamente
+                // Transporta la plataforma al inicio (Punto A) instantÃ¡neamente
                 rb.position = puntoA;
                 transform.position = puntoA; 
                 target = puntoB;
@@ -128,3 +135,4 @@ public class PlataformaMovilDiagonal : MonoBehaviour
         Gizmos.DrawWireSphere(posB, 0.25f);
     }
 }
+

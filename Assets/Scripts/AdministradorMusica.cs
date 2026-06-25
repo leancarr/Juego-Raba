@@ -1,10 +1,17 @@
+﻿/* 
+ * ==============================================================================
+ * SCRIPT: AdministradorMusica.cs
+ * CATEGORIA: 2. Core y Managers (Gestores Invisibles)
+ * DESCRIPCION: Script global inmortal (DontDestroyOnLoad). Viaja entre todas las escenas sin borrarse para que la musica sea fluida y decide que cancion poner segun el nombre del nivel.
+ * ==============================================================================
+ */
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 [RequireComponent(typeof(AudioSource))]
 public class AdministradorMusica : MonoBehaviour
 {
-    // --- PATRÓN SINGLETON ---
+    // --- PATRÃ“N SINGLETON ---
     public static AdministradorMusica instancia;
 
     [Header("Pistas de Audio")]
@@ -15,7 +22,7 @@ public class AdministradorMusica : MonoBehaviour
 
     void Awake()
     {
-        // Si ya existe otro AdministradorMusica, destruimos este nuevo para no tener música doble
+        // Si ya existe otro AdministradorMusica, destruimos este nuevo para no tener mÃºsica doble
         if (instancia != null && instancia != this)
         {
             Destroy(gameObject);
@@ -25,7 +32,7 @@ public class AdministradorMusica : MonoBehaviour
         // Si somos el primero, nos guardamos como la instancia oficial
         instancia = this;
         audioSource = GetComponent<AudioSource>();
-        audioSource.loop = true; // La música siempre debe repetirse
+        audioSource.loop = true; // La mÃºsica siempre debe repetirse
 
         // Hacemos que este objeto NO se destruya al cambiar de escena
         DontDestroyOnLoad(gameObject);
@@ -44,7 +51,7 @@ public class AdministradorMusica : MonoBehaviour
 
     void AlCargarEscena(Scene escena, LoadSceneMode modo)
     {
-        // Revisamos el nombre de la escena para saber qué música poner
+        // Revisamos el nombre de la escena para saber quÃ© mÃºsica poner
         string nombreEscena = escena.name.ToLower();
 
         if (nombreEscena.Contains("menu") || nombreEscena.Contains("seleccion") || nombreEscena.Contains("victoria"))
@@ -59,10 +66,10 @@ public class AdministradorMusica : MonoBehaviour
 
     void CambiarMusica(AudioClip nuevaMusica)
     {
-        // Si no hay música asignada, no hacemos nada
+        // Si no hay mÃºsica asignada, no hacemos nada
         if (nuevaMusica == null) return;
 
-        // Si YA está sonando esta misma pista, no la reiniciamos (así es fluido entre niveles)
+        // Si YA estÃ¡ sonando esta misma pista, no la reiniciamos (asÃ­ es fluido entre niveles)
         if (audioSource.clip == nuevaMusica) return;
 
         // Cambiamos y reproducimos
@@ -70,3 +77,4 @@ public class AdministradorMusica : MonoBehaviour
         audioSource.Play();
     }
 }
+

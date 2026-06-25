@@ -1,3 +1,10 @@
+﻿/* 
+ * ==============================================================================
+ * SCRIPT: ZonaCamara.cs
+ * CATEGORIA: 3. Camara y Entorno
+ * DESCRIPCION: Triggers invisibles en el mapa. Cuando un jugador los toca, le dicen a la camara 'Ey, frena aca' o 'Cambia a esta nueva vista', para lograr ese estilo Crash Bandicoot.
+ * ==============================================================================
+ */
 using UnityEngine;
 
 public class ZonaCamara : MonoBehaviour
@@ -39,3 +46,4 @@ public class ZonaCamara : MonoBehaviour
     }
 
 }
+

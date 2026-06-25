@@ -1,3 +1,10 @@
+﻿/* 
+ * ==============================================================================
+ * SCRIPT: MenuOpciones.cs
+ * CATEGORIA: 4. Menues y UI (Interfaz)
+ * DESCRIPCION: Controla el Slider del volumen maestro y la Pantalla Completa, guardando los gustos del jugador.
+ * ==============================================================================
+ */
 using UnityEngine;
 using UnityEngine.UI; // Necesario para usar Sliders y Toggles
 
@@ -43,3 +50,4 @@ public class MenuOpciones : MonoBehaviour
         PlayerPrefs.Save();
     }
 }
+

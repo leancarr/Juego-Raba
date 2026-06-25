@@ -1,3 +1,10 @@
+﻿/* 
+ * ==============================================================================
+ * SCRIPT: DatosTorneo.cs
+ * CATEGORIA: 2. Core y Managers (Gestores Invisibles)
+ * DESCRIPCION: Gestor de memoria permanente para guardar victorias, puntajes o la racha del torneo entre los jugadores.
+ * ==============================================================================
+ */
 using UnityEngine;
 
 public class DatosTorneo : MonoBehaviour
@@ -13,14 +20,14 @@ public class DatosTorneo : MonoBehaviour
         {
             instancia = this;
             DontDestroyOnLoad(gameObject);
-            CargarDatos(); // Cargamos la configuración inicial
+            CargarDatos(); // Cargamos la configuraciÃ³n inicial
 
-            // --- SOLUCIÓN AL CACHÉ ---
+            // --- SOLUCIÃ“N AL CACHÃ‰ ---
             // Esto solo se ejecuta una vez al darle "Play" en el editor de Unity.
             // Borra las victorias del Play anterior pero mantiene las rondas elegidas.
             #if UNITY_EDITOR
             ResetearTorneo();
-            Debug.Log("<color=yellow>[DatosTorneo] Modo Editor detectado: Registro de victorias previas limpiado con éxito.</color>");
+            Debug.Log("<color=yellow>[DatosTorneo] Modo Editor detectado: Registro de victorias previas limpiado con Ã©xito.</color>");
             #endif
         }
         else
@@ -29,7 +36,7 @@ public class DatosTorneo : MonoBehaviour
         }
     }
 
-    // Llama a esto desde el GameManager después de sumar un punto
+    // Llama a esto desde el GameManager despuÃ©s de sumar un punto
     public void GuardarProgreso()
     {
         PlayerPrefs.SetInt("VictoriasP1", victoriasP1);
@@ -46,7 +53,7 @@ public class DatosTorneo : MonoBehaviour
 
     public int ObtenerRondasParaGanar()
     {
-        // Esto calcula cuántas rondas necesita alguien para ganar el torneo (Mayoría absoluta)
+        // Esto calcula cuÃ¡ntas rondas necesita alguien para ganar el torneo (MayorÃ­a absoluta)
         return (rondasTotales / 2) + 1;
     }
 

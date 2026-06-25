@@ -1,3 +1,10 @@
+﻿/* 
+ * ==============================================================================
+ * SCRIPT: GameManager.cs
+ * CATEGORIA: 2. Core y Managers (Gestores Invisibles)
+ * DESCRIPCION: El script principal que controla el estado del Nivel actual. Controla a quien sigue la camara, cuando alguien gana/pierde, y cuando debe terminar la ronda para cargar la siguiente pantalla.
+ * ==============================================================================
+ */
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using System.Collections;
@@ -12,7 +19,7 @@ public class GameManager : MonoBehaviour
     public GameObject panelTextoVictoria;
     public GameObject panelEstadisticasFinales;
     
-    [Header("Textos de Estadísticas Finales")]
+    [Header("Textos de EstadÃ­sticas Finales")]
     public TextMeshProUGUI textoGanadorFinal;     
     public TextMeshProUGUI textoContadorVictorias; 
 
@@ -58,7 +65,7 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            Debug.LogError("<color=red>[GM] ¡ALERTA! DatosTorneo.instancia es NULL al intentar sumar puntos.</color>");
+            Debug.LogError("<color=red>[GM] Â¡ALERTA! DatosTorneo.instancia es NULL al intentar sumar puntos.</color>");
         }
 
         if (personajeGanador != null)
@@ -141,7 +148,7 @@ public class GameManager : MonoBehaviour
         if (personajeGanador != null)
         {
             target = personajeGanador.transform.Find("HeadTarget");
-            if(target == null) Debug.LogWarning("[GM] No se encontró 'HeadTarget' en el ganador, el Iris cerrará en el centro del objeto.");
+            if(target == null) Debug.LogWarning("[GM] No se encontrÃ³ 'HeadTarget' en el ganador, el Iris cerrarÃ¡ en el centro del objeto.");
         }
 
         float tiempoPasado = 0f;
@@ -168,7 +175,7 @@ public class GameManager : MonoBehaviour
 
         yield return new WaitForSeconds(tiempoEsperaPostCierre);
 
-        Debug.LogWarning("<color=orange>=== [GM] Pasó el tiempo de espera. Evaluando condiciones de fin de torneo ===</color>");
+        Debug.LogWarning("<color=orange>=== [GM] PasÃ³ el tiempo de espera. Evaluando condiciones de fin de torneo ===</color>");
 
         if (DatosTorneo.instancia != null)
         {
@@ -177,7 +184,7 @@ public class GameManager : MonoBehaviour
 
             if (DatosTorneo.instancia.victoriasP1 >= rondasParaGanar || DatosTorneo.instancia.victoriasP2 >= rondasParaGanar)
             {
-                Debug.LogWarning("<color=green>[GM] ¡CUMPLIDO! Un jugador alcanzó las victorias necesarias. Saltando a TerminarTorneoCompleto()</color>");
+                Debug.LogWarning("<color=green>[GM] Â¡CUMPLIDO! Un jugador alcanzÃ³ las victorias necesarias. Saltando a TerminarTorneoCompleto()</color>");
                 TerminarTorneoCompleto();
             }
             else
@@ -218,11 +225,11 @@ public class GameManager : MonoBehaviour
                 string nombreCampeon = "";
                 if (DatosTorneo.instancia.victoriasP1 > DatosTorneo.instancia.victoriasP2)
                 {
-                    nombreCampeon = "¡PLAYER 1 ES EL CAMPEÓN!";
+                    nombreCampeon = "Â¡PLAYER 1 ES EL CAMPEÃ“N!";
                 }
                 else
                 {
-                    nombreCampeon = "¡PLAYER 2 ES EL CAMPEÓN!";
+                    nombreCampeon = "Â¡PLAYER 2 ES EL CAMPEÃ“N!";
                 }
 
                 Debug.Log($"[GM] Ganador calculated: {nombreCampeon}");
@@ -230,21 +237,21 @@ public class GameManager : MonoBehaviour
                 if (textoGanadorFinal != null)
                 {
                     textoGanadorFinal.text = nombreCampeon;
-                    Debug.Log("[GM] Texto del Ganador Final inyectado con éxito.");
+                    Debug.Log("[GM] Texto del Ganador Final inyectado con Ã©xito.");
                 }
                 else
                 {
-                    Debug.LogError("<color=red>[GM] ¡Ojo! El campo 'textoGanadorFinal' está vacío en el Inspector.</color>");
+                    Debug.LogError("<color=red>[GM] Â¡Ojo! El campo 'textoGanadorFinal' estÃ¡ vacÃ­o en el Inspector.</color>");
                 }
 
                 if (textoContadorVictorias != null)
                 {
                     textoContadorVictorias.text = $"Player 1: {DatosTorneo.instancia.victoriasP1}  -  Player 2: {DatosTorneo.instancia.victoriasP2}";
-                    Debug.Log("[GM] Texto del Contador de Victorias inyectado con éxito.");
+                    Debug.Log("[GM] Texto del Contador de Victorias inyectado con Ã©xito.");
                 }
                 else
                 {
-                    Debug.LogError("<color=red>[GM] ¡Ojo! El campo 'textoContadorVictorias' está vacío en el Inspector.</color>");
+                    Debug.LogError("<color=red>[GM] Â¡Ojo! El campo 'textoContadorVictorias' estÃ¡ vacÃ­o en el Inspector.</color>");
                 }
             }
         }
