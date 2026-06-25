@@ -4,10 +4,10 @@ using UnityEngine;
 public class MovimientoBasico25D : MonoBehaviour
 {
     // --- CONTROLES DINÁMICOS (Ya no se ven en el Inspector) ---
-    private KeyCode teclaIzquierda;
-    private KeyCode teclaDerecha;
-    private KeyCode teclaSalto;
-    private KeyCode teclaCaida;
+    public KeyCode teclaIzquierda;
+    public KeyCode teclaDerecha;
+    public KeyCode teclaSalto;
+    public KeyCode teclaCaida;
 
     // --- [NUEVO] ESTA ES LA FUNCIÓN QUE LLAMA EL GENERADOR ---
     public void ConfigurarControles(int numeroDeJugador)

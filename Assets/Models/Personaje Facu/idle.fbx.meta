@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 02e5cb320fd31d042a6464cea4d8d2ff
+guid: 5fecefd2b67af7a4bb3d6176b020d007
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
@@ -31,13 +31,13 @@ ModelImporter:
     extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
-      name: corriendo
+      name: idle
       takeName: Take 001
       internalID: 1827226128182048838
       firstFrame: 0
-      lastFrame: 32
+      lastFrame: 100
       wrapMode: 0
-      orientationOffsetY: 90
+      orientationOffsetY: -90
       level: 0
       cycleOffset: 0
       loop: 0
@@ -118,7 +118,7 @@ ModelImporter:
     legStretch: 0.05
     feetSpacing: 0
     globalScale: 0.055
-    rootMotionBoneName: Circle006
+    rootMotionBoneName: Bip002
     hasTranslationDoF: 0
     hasExtraRoot: 0
     skeletonHasParents: 1
