@@ -227,7 +227,8 @@ public class GameManager : MonoBehaviour
 
                 if (textoContadorVictorias != null)
                 {
-                    textoContadorVictorias.text = $"Player 1: {DatosTorneo.instancia.victoriasP1}  -  Player 2: {DatosTorneo.instancia.victoriasP2}";
+                    // Podés usar nombres de colores (red, blue) o códigos Hexadecimales
+                    textoContadorVictorias.text = $"<color=#0088FF>Player 1:</color> {DatosTorneo.instancia.victoriasP1}  -  <color=red>Player 2:</color> {DatosTorneo.instancia.victoriasP2}";
                     Debug.Log("[GM] Texto del Contador de Victorias inyectado con éxito.");
                 }
                 else
