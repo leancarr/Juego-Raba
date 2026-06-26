@@ -10,16 +10,34 @@ using UnityEngine.SceneManagement;
 
 public class MenuPrincipalManager : MonoBehaviour
 {
-    // Ahora el botón de jugar te manda a elegir las rondas
+    [Header("Referencias UI")]
+    public GameObject panelOpciones;
+
     public void IrA_SeleccionRondas()
     {
         SceneManager.LoadScene("SeleccionRondas");
     }
 
-    // El botón de salir cierra el juego por completo
     public void SalirDelJuego()
     {
         Debug.Log("Saliendo del juego de forma segura...");
-        Application.Quit(); // Cierra el .exe compilado
+        Application.Quit();
+    }
+
+    public void AbrirOpciones()
+    {
+        if (panelOpciones != null)
+        {
+            panelOpciones.SetActive(true);
+            panelOpciones.transform.SetAsLastSibling();
+        }
+    }
+
+    public void CerrarOpciones()
+    {
+        if (panelOpciones != null)
+        {
+            panelOpciones.SetActive(false);
+        }
     }
 }
