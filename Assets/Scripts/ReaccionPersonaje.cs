@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 public class ReaccionPersonaje : MonoBehaviour
 {
@@ -41,7 +41,7 @@ public class ReaccionPersonaje : MonoBehaviour
         // Si el personaje camina, lo frenamos al iluminarlo
         if (miAnimator != null)
         {
-            miAnimator.SetFloat("Velocidad", iluminado ? 0f : 1f);
+            try { miAnimator.SetFloat("Velocidad", iluminado ? 0f : 1f); } catch {} try { miAnimator.SetFloat("VelocidadX", iluminado ? 0f : 1f); } catch {}
         }
     }
 }

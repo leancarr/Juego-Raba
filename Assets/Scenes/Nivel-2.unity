@@ -3479,7 +3479,7 @@ PrefabInstance:
     - target: {fileID: 3949646759115755631, guid: 1ed8305b650304a4d9213ffb63b16ec9, type: 3}
       propertyPath: 'personajesPrefabs.Array.data[0]'
       value: 
-      objectReference: {fileID: 318753904340278326, guid: 463b9a6b328195648bdc48ffd119f8fe, type: 3}
+      objectReference: {fileID: 6713968483049301198, guid: 6995f7e8d329e5748bf3ebf4d25615e4, type: 3}
     - target: {fileID: 3949646759115755631, guid: 1ed8305b650304a4d9213ffb63b16ec9, type: 3}
       propertyPath: 'personajesPrefabs.Array.data[1]'
       value: 
@@ -7401,6 +7401,7 @@ MonoBehaviour:
   factorVelocidadEmpuje: 4
   radioDeGolpe: 1.5
   cooldownEmpuje: 3
+  pelvis: {fileID: 0}
 --- !u!65 &2039438362
 BoxCollider:
   m_ObjectHideFlags: 0

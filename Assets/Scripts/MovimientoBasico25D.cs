@@ -40,6 +40,10 @@ public class MovimientoBasico25D : MonoBehaviour
     private Animator anim;
     [Header("Referencias Visuales")]
     public Transform centroVisual;
+    [Tooltip("Activa esto si tu modelo salta en Z al darse vuelta")]
+    public bool usarRotacionParaVoltear = false;
+    public float rotacionMirandoDerecha = 90f;
+    public float rotacionMirandoIzquierda = -90f;
 
     [Header("Físicas de Salto (Raycast Obligatorio)")]
     public LayerMask capaSuelo;
@@ -110,14 +114,23 @@ public class MovimientoBasico25D : MonoBehaviour
 
     void LateUpdate()
     {
-        // --- GIRO VISUAL DEL PERSONAJE (flip en el objeto del Animator) ---
-        // Usamos anim.transform directamente porque es el padre de todos los huesos.
-        // Cambiar la escala X del padre los voltea a todos sin que el Animator lo pise.
-        if (anim != null && inputHorizontal != 0f)
+        // --- GIRO VISUAL DEL PERSONAJE ---
+        if (inputHorizontal != 0f)
         {
-            Vector3 escala = anim.transform.localScale;
-            escala.x = (inputHorizontal > 0f) ? Mathf.Abs(escala.x) : -Mathf.Abs(escala.x);
-            anim.transform.localScale = escala;
+            if (usarRotacionParaVoltear && centroVisual != null)
+            {
+                // Usar rotación (ideal si el modelo original no mira hacia el frente)
+                Vector3 rot = centroVisual.localEulerAngles;
+                rot.y = (inputHorizontal > 0f) ? rotacionMirandoDerecha : rotacionMirandoIzquierda;
+                centroVisual.localEulerAngles = rot;
+            }
+            else if (anim != null)
+            {
+                // Comportamiento original (escala) de los compañeros
+                Vector3 escala = anim.transform.localScale;
+                escala.x = (inputHorizontal > 0f) ? Mathf.Abs(escala.x) : -Mathf.Abs(escala.x);
+                anim.transform.localScale = escala;
+            }
         }
     }
 
