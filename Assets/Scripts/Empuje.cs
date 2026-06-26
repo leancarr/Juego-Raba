@@ -1,11 +1,11 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 
 public class AccionEmpuje : MonoBehaviour
 {
-    // --- CONTROLES DINÁMICOS (Asignados por el Generador) ---
+    // --- CONTROLES DINï¿½MICOS (Asignados por el Generador) ---
     private KeyCode teclaEmpuje;
 
-    [Header("Físicas del Empuje")]
+    [Header("Fï¿½sicas del Empuje")]
     public float fuerzaEmpujeBase = 12f;
     public float factorVelocidadEmpuje = 2.0f;
     public float radioDeGolpe = 1.8f;
@@ -15,9 +15,9 @@ public class AccionEmpuje : MonoBehaviour
     private float tiempoSiguienteEmpuje = 0f;
 
     private Rigidbody rb;
-    private Transform pelvis;
+    public Transform pelvis;
 
-    // --- NUEVO: ESTA ES LA FUNCIÓN QUE LLAMA EL GENERADOR ---
+    // --- NUEVO: ESTA ES LA FUNCIï¿½N QUE LLAMA EL GENERADOR ---
     public void ConfigurarControlesEmpuje(int numeroDeJugador)
     {
         if (numeroDeJugador == 1)
@@ -38,8 +38,8 @@ public class AccionEmpuje : MonoBehaviour
 
         if (pelvis == null)
         {
-            GameObject objetoPelvis = GameObject.Find("Bip002");
-            if (objetoPelvis != null) pelvis = objetoPelvis.transform;
+            // GameObject objetoPelvis = GameObject.Find("Bip002");
+            // if (objetoPelvis != null) pelvis = objetoPelvis.transform;
         }
     }
 
@@ -55,16 +55,16 @@ public class AccionEmpuje : MonoBehaviour
             else
             {
                 float tiempoRestante = tiempoSiguienteEmpuje - Time.time;
-                Debug.Log("Empuje en Cooldown. Esperá: " + tiempoRestante.ToString("F1") + "s");
+                Debug.Log("Empuje en Cooldown. Esperï¿½: " + tiempoRestante.ToString("F1") + "s");
             }
         }
     }
 
     void EjecutarEmpuje()
     {
-        Debug.Log("¡Habilidad Ejecutada: EMPUJAR desde la Pelvis!");
+        Debug.Log("ï¿½Habilidad Ejecutada: EMPUJAR desde la Pelvis!");
 
-        // El origen visual/detección sigue siendo la pelvis (está perfecto para el OverlapSphere)
+        // El origen visual/detecciï¿½n sigue siendo la pelvis (estï¿½ perfecto para el OverlapSphere)
         Vector3 origenGolpe = (pelvis != null) ? pelvis.position : transform.position;
         Collider[] objetosGolpeados = Physics.OverlapSphere(origenGolpe, radioDeGolpe);
 
@@ -76,16 +76,16 @@ public class AccionEmpuje : MonoBehaviour
 
                 if (scriptRival != null)
                 {
-                    // --- FIX DE DIRECCIÓN SEGURO (2.5D) ---
-                    // En lugar de usar la pelvis que deforma el ángulo vertical, usamos la posición del objeto padre.
-                    // Calculamos la dirección pura en X basándonos en quién está a la izquierda y quién a la derecha.
+                    // --- FIX DE DIRECCIï¿½N SEGURO (2.5D) ---
+                    // En lugar de usar la pelvis que deforma el ï¿½ngulo vertical, usamos la posiciï¿½n del objeto padre.
+                    // Calculamos la direcciï¿½n pura en X basï¿½ndonos en quiï¿½n estï¿½ a la izquierda y quiï¿½n a la derecha.
                     float signoDireccion = Mathf.Sign(col.transform.position.x - transform.position.x);
 
-                    // Si por alguna razón están perfectamente superpuestos (distancia casi 0),
-                    // usamos la dirección hacia donde está mirando tu personaje actual en su jerarquía.
+                    // Si por alguna razï¿½n estï¿½n perfectamente superpuestos (distancia casi 0),
+                    // usamos la direcciï¿½n hacia donde estï¿½ mirando tu personaje actual en su jerarquï¿½a.
                     if (Mathf.Abs(col.transform.position.x - transform.position.x) < 0.1f)
                     {
-                        // Si tu objeto visual está rotado a la izquierda (Y aproximado a 180 o -180), empuja a la izquierda
+                        // Si tu objeto visual estï¿½ rotado a la izquierda (Y aproximado a 180 o -180), empuja a la izquierda
                         if (transform.GetChild(0).localEulerAngles.y > 100f || transform.GetChild(0).localEulerAngles.y < -100f)
                         {
                             signoDireccion = -1f;
@@ -96,8 +96,8 @@ public class AccionEmpuje : MonoBehaviour
                         }
                     }
 
-                    // Creamos el vector de dirección limpio: solo en X, y le sumamos un *mínimo* toque en Y (0.15f)
-                    // para que despegue apenas los pies del suelo y la fricción no lo frene, pero que NO sea un gancho hacia arriba.
+                    // Creamos el vector de direcciï¿½n limpio: solo en X, y le sumamos un *mï¿½nimo* toque en Y (0.15f)
+                    // para que despegue apenas los pies del suelo y la fricciï¿½n no lo frene, pero que NO sea un gancho hacia arriba.
                     Vector3 direccionFinal = new Vector3(signoDireccion, 0.15f, 0f).normalized;
 
                     // Calculamos fuerzas normales
@@ -109,7 +109,7 @@ public class AccionEmpuje : MonoBehaviour
                     // Aplicamos el empuje puro sin stun por 0.35 segundos
                     scriptRival.RecibirEmpujePuro(fuerzaFinal, 0.35f);
 
-                    Debug.Log($"¡Empuje exitoso a {col.gameObject.name}! Dirección X: {signoDireccion} | Fuerza: {fuerzaTotal}");
+                    Debug.Log($"ï¿½Empuje exitoso a {col.gameObject.name}! Direcciï¿½n X: {signoDireccion} | Fuerza: {fuerzaTotal}");
                 }
             }
         }

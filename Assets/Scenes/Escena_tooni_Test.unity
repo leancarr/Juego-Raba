@@ -601,6 +601,7 @@ MonoBehaviour:
   factorVelocidadEmpuje: 2
   radioDeGolpe: 1.5
   cooldownEmpuje: 3
+  pelvis: {fileID: 0}
 --- !u!65 &229182542
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1508,6 +1509,8 @@ GameObject:
   - component: {fileID: 828367471}
   - component: {fileID: 828367470}
   - component: {fileID: 828367469}
+  - component: {fileID: 828367473}
+  - component: {fileID: 828367474}
   m_Layer: 6
   m_Name: Player_Facu
   m_TagString: Untagged
@@ -1522,7 +1525,7 @@ CapsuleCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 828367468}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: 1169c25bf6e1880448687ba722e2191b, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -1607,6 +1610,49 @@ Transform:
   - {fileID: 260750756}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &828367473
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 828367468}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7dd3a303e7afe4f418c43380a601c803, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  fuerzaEmpujeBase: 12
+  factorVelocidadEmpuje: 2
+  radioDeGolpe: 1.8
+  cooldownEmpuje: 3
+  pelvis: {fileID: 0}
+--- !u!114 &828367474
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 828367468}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c1f7af5476734c44ca38569f4e0d9055, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  anim: {fileID: 0}
+  visualCenter: {fileID: 0}
+  clase: 1
+  cooldown: 4
+  prefabBloqueMecanico: {fileID: 0}
+  radioMaximoEscaneo: 7
+  capaObstaculosYPlataformas:
+    serializedVersion: 2
+    m_Bits: 0
+  efectoVisualLaser: {fileID: 0}
+  radioEmpuje: 5
+  fuerzaEmpuje: 12
+  duracionStunRival: 0.5
+  visualOndaRapero: {fileID: 0}
 --- !u!1 &832575517
 GameObject:
   m_ObjectHideFlags: 0
@@ -3018,7 +3064,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1800846179
 Transform:
   m_ObjectHideFlags: 0
@@ -3164,6 +3210,7 @@ MonoBehaviour:
   factorVelocidadEmpuje: 2
   radioDeGolpe: 1.8
   cooldownEmpuje: 3
+  pelvis: {fileID: 0}
 --- !u!114 &1800846186
 MonoBehaviour:
   m_ObjectHideFlags: 0
