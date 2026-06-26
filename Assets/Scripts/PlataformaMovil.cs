@@ -1,8 +1,15 @@
+﻿/* 
+ * ==============================================================================
+ * SCRIPT: PlataformaMovil.cs
+ * CATEGORIA: 3. Camara y Entorno
+ * DESCRIPCION: Hace que los pisos floten de lado a lado o arriba a abajo para los parkours.
+ * ==============================================================================
+ */
 using UnityEngine;
 
 public class PlataformaMovil : MonoBehaviour
 {
-    [Header("Configuración de Movimiento")]
+    [Header("ConfiguraciÃ³n de Movimiento")]
     public float velocidad = 3f;
     public float distancia = 4f;
     public bool moverHorizontal = true; // Si marcas la casilla en Unity, va de lado a lado. Si la desmarcas, va de arriba a abajo.
@@ -17,7 +24,7 @@ public class PlataformaMovil : MonoBehaviour
 
     void Update()
     {
-        // Mathf.Sin crea un movimiento de vaivén suave
+        // Mathf.Sin crea un movimiento de vaivÃ©n suave
         float desfase = Mathf.Sin(Time.time * velocidad) * distancia;
 
         // Aplicamos el movimiento dependiendo del eje elegido

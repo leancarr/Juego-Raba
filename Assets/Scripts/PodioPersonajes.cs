@@ -1,6 +1,13 @@
+ï»¿/* 
+ * ==============================================================================
+ * SCRIPT: PodioPersonajes.cs
+ * CATEGORIA: 4. Menues y UI (Interfaz)
+ * DESCRIPCION: El script que pone a los ganadores en sus lugares cuando termina la ronda/torneo para sacarles la foto final.
+ * ==============================================================================
+ */
 using UnityEngine;
 using TMPro; // Obligatorio para manejar el TextMeshPro de la UI
-using UnityEngine.SceneManagement; // <-- IMPORTANTE: Añadimos esto para poder cambiar de pantalla
+using UnityEngine.SceneManagement; // <-- IMPORTANTE: AÃ±adimos esto para poder cambiar de pantalla
 
 public class PodioPersonaje : MonoBehaviour
 {
@@ -13,21 +20,21 @@ public class PodioPersonaje : MonoBehaviour
     private bool estaPreseleccionado = false;
     private bool estaConfirmado = false;
 
-    [Header("Configuración de Velocidad de Animación")]
+    [Header("ConfiguraciÃ³n de Velocidad de AnimaciÃ³n")]
     [Range(0f, 1f)][SerializeField] private float velocidadAlCaminar = 1f;
 
-    [Header("Configuración de Rotación")]
+    [Header("ConfiguraciÃ³n de RotaciÃ³n")]
     [SerializeField] private float velocidadRotacion = 30f;
     [SerializeField] private float suavizadoFrente = 10f;
 
-    [Header("UI - Componentes Básicos")]
-    [SerializeField] private TextMeshProUGUI componenteTextoUI; // Arrastramos el TextoInfo acá
-    [SerializeField] private GameObject panelResumenUI;         // Arrastramos el PanelResumen acá
+    [Header("UI - Componentes BÃ¡sicos")]
+    [SerializeField] private TextMeshProUGUI componenteTextoUI; // Arrastramos el TextoInfo acÃ¡
+    [SerializeField] private GameObject panelResumenUI;         // Arrastramos el PanelResumen acÃ¡
 
-    [Header("UI - Controles de Selección (Objetos Completos)")]
-    [SerializeField] private GameObject botonPreseleccionUI;   // Arrastramos BotonSelceccio entero acá
-    [SerializeField] private GameObject botonConfirmarUI;       // Arrastramos BotonConfirmar_P1 entero acá
-    [SerializeField] private GameObject textoListoUI;           // Arrastramos el TextoListo ("¡LISTO!") acá
+    [Header("UI - Controles de SelecciÃ³n (Objetos Completos)")]
+    [SerializeField] private GameObject botonPreseleccionUI;   // Arrastramos BotonSelceccio entero acÃ¡
+    [SerializeField] private GameObject botonConfirmarUI;       // Arrastramos BotonConfirmar_P1 entero acÃ¡
+    [SerializeField] private GameObject textoListoUI;           // Arrastramos el TextoListo ("Â¡LISTO!") acÃ¡
 
     [Header("Textos del Personaje")]
     [TextArea(2, 4)][SerializeField] private string lineaNombre = "PROFESOR";
@@ -51,20 +58,20 @@ public class PodioPersonaje : MonoBehaviour
         if (botonConfirmarUI != null) botonConfirmarUI.SetActive(false);
         if (textoListoUI != null) textoListoUI.SetActive(false);
 
-        // Seteamos el texto inicial del botón principal de forma segura
+        // Seteamos el texto inicial del botÃ³n principal de forma segura
         CambiarTextoBotonPrincipal("Preseleccionar");
     }
 
     void Update()
     {
-        // Si ya está preseleccionado o confirmado, se clava mirando al frente pase lo que pase
+        // Si ya estÃ¡ preseleccionado o confirmado, se clava mirando al frente pase lo que pase
         if (estaPreseleccionado || estaConfirmado)
         {
             transform.rotation = Quaternion.Slerp(transform.rotation, rotacionOriginal, Time.deltaTime * suavizadoFrente);
             return;
         }
 
-        // Lógica de rotación normal por mouse
+        // LÃ³gica de rotaciÃ³n normal por mouse
         if (!mouseEncima)
         {
             transform.Rotate(Vector3.up * velocidadRotacion * Time.deltaTime);
@@ -75,11 +82,11 @@ public class PodioPersonaje : MonoBehaviour
         }
     }
 
-    // FUNCIÓN DEL BOTÓN PRINCIPAL (Preseleccionar / Cancelar)
-    // Vinculá esta función al OnClick() de tu botón "Preseleccionar"
+    // FUNCIÃ“N DEL BOTÃ“N PRINCIPAL (Preseleccionar / Cancelar)
+    // VinculÃ¡ esta funciÃ³n al OnClick() de tu botÃ³n "Preseleccionar"
     public void PresionarBotonPrincipal()
     {
-        if (estaConfirmado) return; // Seguridad: si ya confirmó, bloqueamos interacciones
+        if (estaConfirmado) return; // Seguridad: si ya confirmÃ³, bloqueamos interacciones
 
         if (!estaPreseleccionado)
         {
@@ -87,10 +94,10 @@ public class PodioPersonaje : MonoBehaviour
             estaPreseleccionado = true;
 
             if (panelResumenUI != null) panelResumenUI.SetActive(true);
-            if (botonConfirmarUI != null) botonConfirmarUI.SetActive(true); // Muestra botón Confirmar
+            if (botonConfirmarUI != null) botonConfirmarUI.SetActive(true); // Muestra botÃ³n Confirmar
             CambiarTextoBotonPrincipal("Cancelar");                         // Cambia texto a Cancelar
 
-            if (miAnimator != null) miAnimator.SetFloat(nombreParametro, 0f); // Pausa la animación
+            if (miAnimator != null) miAnimator.SetFloat(nombreParametro, 0f); // Pausa la animaciÃ³n
 
             // Escribimos los textos formateados en el cuadro
             if (componenteTextoUI != null)
@@ -112,25 +119,25 @@ public class PodioPersonaje : MonoBehaviour
         }
     }
 
-    // FUNCIÓN PARA EL BOTÓN CONFIRMAR
-    // Vinculá esta función al OnClick() de tu botón "Confirmar"
+    // FUNCIÃ“N PARA EL BOTÃ“N CONFIRMAR
+    // VinculÃ¡ esta funciÃ³n al OnClick() de tu botÃ³n "Confirmar"
     public void ConfirmarEleccion()
     {
         estaConfirmado = true;
         estaPreseleccionado = false;
 
-        if (botonConfirmarUI != null) botonConfirmarUI.SetActive(false); // Se apaga a sí mismo
+        if (botonConfirmarUI != null) botonConfirmarUI.SetActive(false); // Se apaga a sÃ­ mismo
         if (panelResumenUI != null) panelResumenUI.SetActive(false);     // Apaga el cartel gris (opcional)
 
-        if (textoListoUI != null) textoListoUI.SetActive(true);          // Muestra el "¡LISTO!" verde en pantalla
-        if (botonPreseleccionUI != null) botonPreseleccionUI.SetActive(false); // Apaga por completo el botón de Preseleccionar/Cancelar
+        if (textoListoUI != null) textoListoUI.SetActive(true);          // Muestra el "Â¡LISTO!" verde en pantalla
+        if (botonPreseleccionUI != null) botonPreseleccionUI.SetActive(false); // Apaga por completo el botÃ³n de Preseleccionar/Cancelar
 
         // --- EL CAMBIO CLAVE: Mandamos al juego a la pantalla de carga ---
         Debug.Log("Personaje confirmado, cargando juego...");
         SceneManager.LoadScene("PantallaCarga");
     }
 
-    // Función auxiliar para cambiar el texto del botón principal sin renegar con la asignación
+    // FunciÃ³n auxiliar para cambiar el texto del botÃ³n principal sin renegar con la asignaciÃ³n
     private void CambiarTextoBotonPrincipal(string nuevoTexto)
     {
         if (botonPreseleccionUI != null)
