@@ -1,4 +1,4 @@
-﻿/* 
+/* 
  * ==============================================================================
  * SCRIPT: CamaraScroll.cs
  * CATEGORIA: 3. Camara y Entorno
@@ -17,6 +17,10 @@ public class CamaraScroll25D : MonoBehaviour
     public bool usarLimites = false;   // Por si quieren que la cÃ¡mara no pase de cierto punto
     public float limiteIzquierdo = 0f;
     public float limiteDerecho = 100f;
+
+    [Header("Seguridad Anti-Caída al Vacío")]
+    [Tooltip("Si un jugador baja de esta Y, la cámara lo ignora hasta que reaparezca. Pone el mismo valor que el límite de caída del spawner.")]
+    public float pisoSeguroY = -20f;
 
     private float alturaFijaY;
     private float profundidadFijaZ;
@@ -46,19 +50,25 @@ public class CamaraScroll25D : MonoBehaviour
         // Si no hay jugadores en la escena, no hace nada
         if (jugadores.Length == 0) return;
 
-        // 2. Encontrar cuÃ¡l es el jugador que va ganando (el que tiene el X mÃ¡s alto o mejor puntaje de progreso)
-        GameObject jugadorMasAdelantado = jugadores[0];
-        float mejorPuntaje = ObtenerPuntajeProgreso(jugadores[0]);
+        // 2. Encontrar cuál es el jugador que va ganando, ignorando a los que cayeron al vacío
+        GameObject jugadorMasAdelantado = null;
+        float mejorPuntaje = float.MinValue;
 
-        for (int i = 1; i < jugadores.Length; i++)
+        foreach (GameObject j in jugadores)
         {
-            float puntaje = ObtenerPuntajeProgreso(jugadores[i]);
+            // Si el jugador está por debajo del piso seguro, lo ignoramos (está cayendo al vacío)
+            if (j.transform.position.y < pisoSeguroY) continue;
+
+            float puntaje = ObtenerPuntajeProgreso(j);
             if (puntaje > mejorPuntaje)
             {
                 mejorPuntaje = puntaje;
-                jugadorMasAdelantado = jugadores[i];
+                jugadorMasAdelantado = j;
             }
         }
+
+        // Si TODOS cayeron al vacío a la vez, no movemos la cámara
+        if (jugadorMasAdelantado == null) return;
 
         // 3. Calcular la posiciÃ³n de destino
         float desvioActualX = (zonaActiva != null) ? zonaActiva.desvioX : desvÃ­oX;
