@@ -1,10 +1,17 @@
+Ôªø/* 
+ * ==============================================================================
+ * SCRIPT: EfectoFlotacion.cs
+ * CATEGORIA: 5. Elementos del Nivel (Efectos y Triggers)
+ * DESCRIPCION: Le da un movimiento suave de 'arriba-abajo' a objetos del mapa para que parezcan vivos.
+ * ==============================================================================
+ */
 using UnityEngine;
 
 public class EfectoFlotacion : MonoBehaviour
 {
-    public float velocidadVeces = 3f;      // QuÈ tan r·pido oscila
-    public float amplitudDistancia = 15f;  // Cu·ntos pÌxeles sube y baja
-    public float desfaseInicio = 0f;       // El truco: cu·ndo arranca a moverse
+    public float velocidadVeces = 3f;      // Qu√© tan r√°pido oscila
+    public float amplitudDistancia = 15f;  // Cu√°ntos p√≠xeles sube y baja
+    public float desfaseInicio = 0f;       // El truco: cu√°ndo arranca a moverse
 
     private Vector3 posicionInicial;
 
@@ -15,7 +22,7 @@ public class EfectoFlotacion : MonoBehaviour
 
     void Update()
     {
-        // Sumamos el desfase dentro del tiempo para romper la sincronÌa perfecta
+        // Sumamos el desfase dentro del tiempo para romper la sincron√≠a perfecta
         float tiempoModificado = (Time.time * velocidadVeces) + desfaseInicio;
         float nuevoY = posicionInicial.y + Mathf.Sin(tiempoModificado) * amplitudDistancia;
 

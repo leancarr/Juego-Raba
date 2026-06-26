@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8849711420987807890}
   - component: {fileID: 4322743165819993945}
+  - component: {fileID: 2472210105126958242}
   m_Layer: 0
   m_Name: _GameManager
   m_TagString: Untagged
@@ -47,5 +48,43 @@ MonoBehaviour:
   imagenIris: {fileID: 0}
   panelTextoVictoria: {fileID: 0}
   panelEstadisticasFinales: {fileID: 0}
+  textoTituloResultado: {fileID: 0}
+  textoPuntajeP1: {fileID: 0}
+  textoPuntajeP2: {fileID: 0}
+  personajesDisponibles:
+  - nombrePersonaje: Mecanico
+    spriteTriunfante: {fileID: -1616705294, guid: c0e5d5230f451a7499a077f8702f9b0c, type: 3}
+    spriteDerrotado: {fileID: 95239831, guid: c3d30b07a03d6244faa71888cfbdf2b8, type: 3}
+  - nombrePersonaje: Profesor
+    spriteTriunfante: {fileID: 498432724, guid: 6ac9d6cc523fb2149a671a153475612a, type: 3}
+    spriteDerrotado: {fileID: 1012645019, guid: 3a4088d6a63fe284a8f686d9a09e3468, type: 3}
+  - nombrePersonaje: Raperito
+    spriteTriunfante: {fileID: -1793513419, guid: 3a78da5d0eddba04b859857d5eb405b2, type: 3}
+    spriteDerrotado: {fileID: -1460054596, guid: cc255bd51bd3dee499417baf3f3d0acf, type: 3}
+  ui_MarcoPlayer1: {fileID: 0}
+  ui_RetratoPlayer1: {fileID: 0}
+  ui_MarcoPlayer2: {fileID: 0}
+  ui_RetratoPlayer2: {fileID: 0}
+  spriteMarcoDorado: {fileID: 1569989732, guid: 3282ac830458aaf4c978bd7d2fa6dc03, type: 3}
+  spriteMarcoMadera: {fileID: -1943948544, guid: 6f905e8ea1df865449da29d92d112368, type: 3}
+  nombreSiguienteNivel: Nivel-2
   duracionCierre: 1.5
   tiempoEsperaPostCierre: 2
+--- !u!114 &2472210105126958242
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4915241202587988454}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: df5c5c9a99cda204184f9c4bd6d96244, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  personajesPrefabs:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  puntoInicioP1: {fileID: 0}
+  puntoInicioP2: {fileID: 0}

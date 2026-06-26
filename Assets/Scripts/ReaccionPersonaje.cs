@@ -1,10 +1,17 @@
-﻿using UnityEngine;
+﻿/* 
+ * ==============================================================================
+ * SCRIPT: ReaccionPersonaje.cs
+ * CATEGORIA: 1. Control del Jugador (Personajes)
+ * DESCRIPCION: Probablemente usado para manejar animaciones o efectos visuales cuando un personaje es golpeado (o como un sistema auxiliar de hitboxes).
+ * ==============================================================================
+ */
+using UnityEngine;
 
 public class ReaccionPersonaje : MonoBehaviour
 {
-    [Header("Configuración")]
+    [Header("ConfiguraciÃ³n")]
     public float velocidadRotacion = 45f;
-    public float suavizado = 10f; // Qué tan rápido frena y se da vuelta
+    public float suavizado = 10f; // QuÃ© tan rÃ¡pido frena y se da vuelta
 
     private Quaternion rotacionOriginal;
     private bool estaIluminado = false;
@@ -12,7 +19,7 @@ public class ReaccionPersonaje : MonoBehaviour
 
     void Start()
     {
-        // Guardamos su posición frontal exacta al arrancar el juego
+        // Guardamos su posiciÃ³n frontal exacta al arrancar el juego
         rotacionOriginal = transform.rotation;
 
         // Si tienes animaciones, esto las controla
@@ -28,12 +35,12 @@ public class ReaccionPersonaje : MonoBehaviour
         }
         else
         {
-            // MODO VITRINA: Gira constantemente sobre sí mismo
+            // MODO VITRINA: Gira constantemente sobre sÃ­ mismo
             transform.Rotate(Vector3.up * velocidadRotacion * Time.deltaTime);
         }
     }
 
-    // El Manager usará esta función para avisarle que la luz lo está tocando
+    // El Manager usarÃ¡ esta funciÃ³n para avisarle que la luz lo estÃ¡ tocando
     public void CambiarEstado(bool iluminado)
     {
         estaIluminado = iluminado;

@@ -1,3 +1,10 @@
+Ôªø/* 
+ * ==============================================================================
+ * SCRIPT: CargaAsincronica.cs
+ * CATEGORIA: 2. Core y Managers (Gestores Invisibles)
+ * DESCRIPCION: Script para cargar escenas de fondo (probablemente usado para pantallas de carga para que no se trabe el juego al pasar de nivel).
+ * ==============================================================================
+ */
 using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -6,7 +13,7 @@ using UnityEngine.UI; // Obligatorio si usan el Slider
 public class CargaAsincronica : MonoBehaviour
 {
     [Header("Nombre de la escena del juego")]
-    public string escenaA_Cargar = "Nivel_1_prueba"; // PonÈ ac· el nombre exacto de tu mapa
+    public string escenaA_Cargar = "Nivel_1_prueba"; // Pon√© ac√° el nombre exacto de tu mapa
 
     [Header("UI Componentes (Opcional)")]
     public Slider barraDeProgreso;
@@ -36,7 +43,7 @@ public class CargaAsincronica : MonoBehaviour
 
             Debug.Log("Progreso de carga: " + (progresoReal * 100) + "%");
 
-            // Espera al siguiente frame antes de seguir el bucle (asÌ no se congela el juego)
+            // Espera al siguiente frame antes de seguir el bucle (as√≠ no se congela el juego)
             yield return null;
         }
     }

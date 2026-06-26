@@ -1,3 +1,10 @@
+﻿/* 
+ * ==============================================================================
+ * SCRIPT: OndaExpansiva.cs
+ * CATEGORIA: 5. Elementos del Nivel (Efectos y Triggers)
+ * DESCRIPCION: El efecto visual del Rapero. Hace que una esfera crezca rapidisimo y desaparezca para simular un sonido fisico.
+ * ==============================================================================
+ */
 using UnityEngine;
 
 public class OndaExpansiva : MonoBehaviour
@@ -8,14 +15,14 @@ public class OndaExpansiva : MonoBehaviour
 
     void Start()
     {
-        // Empieza a la mitad de su tamaño original para que el crecimiento sea más notorio
+        // Empieza a la mitad de su tamaÃ±o original para que el crecimiento sea mÃ¡s notorio
         transform.localScale = Vector3.one * 0.5f;
 
         MeshRenderer render = GetComponent<MeshRenderer>();
         if (render != null)
         {
             mat = render.material;
-            // Chequeamos qué tipo de shader tiene para agarrar el color base
+            // Chequeamos quÃ© tipo de shader tiene para agarrar el color base
             if (mat.HasProperty("_BaseColor")) // Usualmente en Universal Render Pipeline
             {
                 colorOriginal = mat.GetColor("_BaseColor");
@@ -32,7 +39,7 @@ public class OndaExpansiva : MonoBehaviour
         // Crece uniformemente en todos los ejes
         transform.localScale += Vector3.one * velocidadExpansion * Time.deltaTime;
 
-        // Se va desvaneciendo a medida que se hace más grande
+        // Se va desvaneciendo a medida que se hace mÃ¡s grande
         if (mat != null)
         {
             Color c = colorOriginal;
@@ -47,3 +54,4 @@ public class OndaExpansiva : MonoBehaviour
         }
     }
 }
+

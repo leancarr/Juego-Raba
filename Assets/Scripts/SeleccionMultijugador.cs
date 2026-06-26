@@ -1,3 +1,10 @@
+﻿/* 
+ * ==============================================================================
+ * SCRIPT: SeleccionMultijugador.cs
+ * CATEGORIA: 4. Menues y UI (Interfaz)
+ * DESCRIPCION: La pantalla epica donde el P1 y el P2 eligen a sus personajes y se guarda esa decision en la memoria.
+ * ==============================================================================
+ */
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using System.Collections;
@@ -19,11 +26,11 @@ public class SeleccionMultijugador : MonoBehaviour
     public Transform transformListoP1; // Arrastrar "Cartel_Listo_P1"
     public Transform transformListoP2; // Arrastrar "Cartel_Listo_P2"
 
-    [Header("Configuración de Posición LISTO")]
-    // Nos permite ajustar qué tan arriba/adelante sale el cartel "Listo" del personaje
+    [Header("ConfiguraciÃ³n de PosiciÃ³n LISTO")]
+    // Nos permite ajustar quÃ© tan arriba/adelante sale el cartel "Listo" del personaje
     public Vector3 offsetListo = new Vector3(0, 2.5f, -0.5f);
 
-    // Cuántos metros se moverá el cartel hacia el centro si eligen los costados
+    // CuÃ¡ntos metros se moverÃ¡ el cartel hacia el centro si eligen los costados
     [Tooltip("Empuja los carteles de los costados hacia el centro para que no se corten con la pantalla")]
     public float empujeHaciaElCentro = 1.2f;
 
@@ -70,7 +77,7 @@ public class SeleccionMultijugador : MonoBehaviour
             if (Input.GetKeyDown(p1Confirmar))
             {
                 p1Listo = true;
-                ConfirmarP1(); // ¡NUEVO FNC!
+                ConfirmarP1(); // Â¡NUEVO FNC!
                 ChequearArranque();
             }
         }
@@ -93,7 +100,7 @@ public class SeleccionMultijugador : MonoBehaviour
             if (Input.GetKeyDown(p2Confirmar))
             {
                 p2Listo = true;
-                ConfirmarP2(); // ¡NUEVO FNC!
+                ConfirmarP2(); // Â¡NUEVO FNC!
                 ChequearArranque();
             }
         }
@@ -137,7 +144,7 @@ public class SeleccionMultijugador : MonoBehaviour
         {
             Vector3 posicionFinal = posiciones[indiceP2].position + offsetListo;
 
-            // ¡CORREGIDO! Ahora usa el indiceP2
+            // Â¡CORREGIDO! Ahora usa el indiceP2
             if (indiceP2 == 0) posicionFinal.x -= empujeHaciaElCentro;
 
             else if (indiceP2 == posiciones.Length - 1) posicionFinal.x += empujeHaciaElCentro;

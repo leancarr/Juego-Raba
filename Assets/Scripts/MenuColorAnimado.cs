@@ -1,18 +1,25 @@
+Ôªø/* 
+ * ==============================================================================
+ * SCRIPT: MenuColorAnimado.cs
+ * CATEGORIA: 3. Camara y Entorno
+ * DESCRIPCION: Script estetico que da animaciones al fondo del menu para que no se vea estatico.
+ * ==============================================================================
+ */
 using UnityEngine;
 using System.Collections;
 
 public class MenuColorAnimado : MonoBehaviour
 {
-    // Usamos el mismo sistema de estados para el men˙
+    // Usamos el mismo sistema de estados para el men√∫
     public enum ColorEstado { Rojo, Azul, Amarillo }
     public ColorEstado colorActual = ColorEstado.Rojo;
 
-    [Header("Tiempos del Men˙")]
-    public float tiempoPorColor = 4.0f; // Un poquito m·s lento para que el men˙ sea relajado
-    public float velocidadBarrido = 1.2f; // QuÈ tan r·pido se expande la onda radial
+    [Header("Tiempos del Men√∫")]
+    public float tiempoPorColor = 4.0f; // Un poquito m√°s lento para que el men√∫ sea relajado
+    public float velocidadBarrido = 1.2f; // Qu√© tan r√°pido se expande la onda radial
 
     [Header("Material del Shader Graph")]
-    public Material materialFondoMenu; // Ac· arrastr·s tu 'Mat_FondoDinamico'
+    public Material materialFondoMenu; // Ac√° arrastr√°s tu 'Mat_FondoDinamico'
 
     [Header("Paleta de Colores")]
     public Color colorRojoVisual = Color.red;
@@ -24,7 +31,7 @@ public class MenuColorAnimado : MonoBehaviour
 
     void Start()
     {
-        // Hacemos que el cronÛmetro arranque al lÌmite para que dispare el cambio YA
+        // Hacemos que el cron√≥metro arranque al l√≠mite para que dispare el cambio YA
         cronometro = 0.5f;
 
         // El color inicial real que ve el jugador va a ser el Rojo
@@ -55,7 +62,7 @@ public class MenuColorAnimado : MonoBehaviour
     {
         Color colorViejo = colorColorActualVisual;
 
-        // Ciclo de colores idÈntico
+        // Ciclo de colores id√©ntico
         if (colorActual == ColorEstado.Rojo) { colorActual = ColorEstado.Azul; colorColorActualVisual = colorAzulVisual; }
         else if (colorActual == ColorEstado.Azul) { colorActual = ColorEstado.Amarillo; colorColorActualVisual = colorAmarilloVisual; }
         else if (colorActual == ColorEstado.Amarillo) { colorActual = ColorEstado.Rojo; colorColorActualVisual = colorRojoVisual; }
@@ -76,12 +83,12 @@ public class MenuColorAnimado : MonoBehaviour
         float progreso = 0f;
         materialFondoMenu.SetFloat("_ProgresoTransicion", progreso);
 
-        // Va expandiendo el cÌrculo matem·tico del Shader desde 0 hasta 1
+        // Va expandiendo el c√≠rculo matem√°tico del Shader desde 0 hasta 1
         while (progreso < 1f)
         {
             progreso += Time.deltaTime * velocidadBarrido;
             materialFondoMenu.SetFloat("_ProgresoTransicion", Mathf.Clamp01(progreso));
-            yield return null; // Espera al prÛximo frame
+            yield return null; // Espera al pr√≥ximo frame
         }
     }
 }

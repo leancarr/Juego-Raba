@@ -1,20 +1,27 @@
-﻿using UnityEngine;
+/* 
+ * ==============================================================================
+ * SCRIPT: HabiliidadesJugadores.cs
+ * CATEGORIA: 1. Control del Jugador (Personajes)
+ * DESCRIPCION: El nucleo de las clases/poderes. Aca esta programado el Laser del Profesor, el Muro de Cajas del Mecanico y la Onda Expansiva del Rapero.
+ * ==============================================================================
+ */
+using UnityEngine;
 
 public class HabilidadesJugador : MonoBehaviour
 {
     public enum TipoClase { Profesor, Mecanico, Rapero }
 
-    [Header("Animación")]
+    [Header("AnimaciÃ³n")]
     public Animator anim;
     public Transform visualCenter;
 
     [Header("Controles")]
-    public KeyCode teclaHabilidad = KeyCode.F; // Cambiá esta tecla desde el Inspector
+    public KeyCode teclaHabilidad = KeyCode.F; // CambiÃ¡ esta tecla desde el Inspector
 
-    // --- ESTAS VARIABLES SON PRIVADAS Y DINÁMICAS ---
+    // --- ESTAS VARIABLES SON PRIVADAS Y DINÃMICAS ---
     private int numeroJugador;
 
-    // --- LA FUNCIÓN QUE CONFIGURA EL NÚMERO DE JUGADOR ---
+    // --- LA FUNCIÃ“N QUE CONFIGURA EL NÃšMERO DE JUGADOR ---
     public void ConfigurarHabilidades(int numJugador)
     {
         numeroJugador = numJugador;
@@ -30,16 +37,16 @@ public class HabilidadesJugador : MonoBehaviour
         }
     }
 
-    [Header("Configuración de Clase")]
+    [Header("ConfiguraciÃ³n de Clase")]
     public TipoClase clase;
     public float cooldown = 4f;
     private float tiempoSiguienteUso = 0f;
 
-    [Header("Animación del Poder")]
-    public float duracionAnimEspecial = 3f; // Duración de la animación de tu poder en segundos
+    [Header("AnimaciÃ³n del Poder")]
+    public float duracionAnimEspecial = 3f; // DuraciÃ³n de la animaciÃ³n de tu poder en segundos
     private bool estaCantando = false;
 
-    [Header("Habilidad Mecánico")]
+    [Header("Habilidad MecÃ¡nico")]
     public GameObject prefabBloqueMecanico;
 
     [Header("Habilidad Profesor (Raycast Inteligente)")]
@@ -55,6 +62,8 @@ public class HabilidadesJugador : MonoBehaviour
 
     void Update()
     {
+        if (Time.timeScale == 0f) return; // Juego pausado
+
         if (Input.GetKeyDown(teclaHabilidad))
         {
             Debug.Log($"[RASTREO] Tecla {teclaHabilidad} apretada por Player {numeroJugador}. Clase: {clase}");
@@ -78,7 +87,7 @@ public class HabilidadesJugador : MonoBehaviour
 
     void UsarHabilidad()
     {
-        // --- Activa la animación del poder al mismo tiempo que la habilidad ---
+        // --- Activa la animaciÃ³n del poder al mismo tiempo que la habilidad ---
         if (anim != null && !estaCantando)
         {
             estaCantando = true;
@@ -202,7 +211,7 @@ public class HabilidadesJugador : MonoBehaviour
 
             Debug.DrawLine(origenLaser, puntoFinalLaser, Color.magenta, 1f);
             plataformaObjetivo.SabotearBando();
-            Debug.LogWarning($"[PROFESOR] Sabotaje simétrico y giro automático exitosos. Ángulo Local enviado: {anim.GetFloat("AnguloApuntado")}");
+            Debug.LogWarning($"[PROFESOR] Sabotaje simÃ©trico y giro automÃ¡tico exitosos. Ãngulo Local enviado: {anim.GetFloat("AnguloApuntado")}");
 
             if (efectoVisualLaser != null)
             {
@@ -237,7 +246,7 @@ public class HabilidadesJugador : MonoBehaviour
                 Vector3 fuerzaFinal = new Vector3(direccionX * fuerzaEmpuje, fuerzaEmpuje * 0.4f, 0f);
                 scriptRival.AplicarEmpujeYStun(fuerzaFinal, duracionStunRival);
 
-                Debug.LogWarning($"[RAPERO] ¡Onda expansiva golpeó a {col.name}! Mandado a volar.");
+                Debug.LogWarning($"[RAPERO] Â¡Onda expansiva golpeÃ³ a {col.name}! Mandado a volar.");
             }
         }
     }

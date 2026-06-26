@@ -1,20 +1,38 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using System.Collections;
-using TMPro; 
+using TMPro;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
     public static GameManager instancia;
 
-    [Header("Componentes de UI")]
+    [Header("Componentes de UI Principales")]
     public RectTransform imagenIris;
     public GameObject panelTextoVictoria;
     public GameObject panelEstadisticasFinales;
-    
-    [Header("Textos de Estadísticas Finales")]
-    public TextMeshProUGUI textoGanadorFinal;     
-    public TextMeshProUGUI textoContadorVictorias; 
+
+    [Header("Textos y Marcadores Modulares")]
+    [Tooltip("El título gigante que dice ¡PLAYER X ES EL CAMPEÓN!")]
+    public TMPro.TextMeshProUGUI textoTituloResultado;
+    [Tooltip("El número dentro del cuadradito del Player 1")]
+    public TMPro.TextMeshProUGUI textoPuntajeP1;
+    [Tooltip("El número dentro del cuadradito del Player 2")]
+    public TMPro.TextMeshProUGUI textoPuntajeP2;
+
+    [Header("Base de Datos de Personajes")]
+    public PerfilPersonaje[] personajesDisponibles;
+
+    [Header("Imágenes del Podio UI (Arrastrar desde Canvas)")]
+    public Image ui_MarcoPlayer1;
+    public Image ui_RetratoPlayer1;
+    public Image ui_MarcoPlayer2;
+    public Image ui_RetratoPlayer2;
+
+    [Header("Sprites Globales")]
+    public Sprite spriteMarcoDorado;
+    public Sprite spriteMarcoMadera;
 
     [Header("Progresion de Niveles")]
     [Tooltip("Nombre exacto de la escena del siguiente nivel. Si esta vacio, repetira el nivel actual.")]
@@ -23,6 +41,14 @@ public class GameManager : MonoBehaviour
     [Header("Configuracion del Efecto")]
     public float duracionCierre = 1.5f;
     public float tiempoEsperaPostCierre = 2.0f;
+
+    [System.Serializable]
+    public struct PerfilPersonaje
+    {
+        public string nombrePersonaje;
+        public Sprite spriteTriunfante;
+        public Sprite spriteDerrotado;
+    }
 
     private bool juegoTerminado = false;
     private GameObject personajeGanador;
@@ -53,7 +79,6 @@ public class GameManager : MonoBehaviour
                 Debug.Log($"<color=green>[GM] Punto para Player 2. Total: {DatosTorneo.instancia.victoriasP2}</color>");
             }
 
-            // Guardamos el progreso en disco inmediatamente
             DatosTorneo.instancia.GuardarProgreso();
         }
         else
@@ -141,7 +166,7 @@ public class GameManager : MonoBehaviour
         if (personajeGanador != null)
         {
             target = personajeGanador.transform.Find("HeadTarget");
-            if(target == null) Debug.LogWarning("[GM] No se encontró 'HeadTarget' en el ganador, el Iris cerrará en el centro del objeto.");
+            if (target == null) Debug.LogWarning("[GM] No se encontró 'HeadTarget' en el ganador, el Iris cerrará en el centro del objeto.");
         }
 
         float tiempoPasado = 0f;
@@ -215,42 +240,50 @@ public class GameManager : MonoBehaviour
 
             if (DatosTorneo.instancia != null)
             {
-                string nombreCampeon = "";
-                if (DatosTorneo.instancia.victoriasP1 > DatosTorneo.instancia.victoriasP2)
+                // 1. Inyectamos los números en los cuadraditos, sin importar quién ganó
+                if (textoPuntajeP1 != null) textoPuntajeP1.text = DatosTorneo.instancia.victoriasP1.ToString();
+                if (textoPuntajeP2 != null) textoPuntajeP2.text = DatosTorneo.instancia.victoriasP2.ToString();
+
+                int idP1 = DatosTorneo.instancia.idPersonajeP1;
+                int idP2 = DatosTorneo.instancia.idPersonajeP2;
+
+                if (personajesDisponibles != null && personajesDisponibles.Length > Mathf.Max(idP1, idP2))
                 {
-                    nombreCampeon = "¡PLAYER 1 ES EL CAMPEÓN!";
+                    PerfilPersonaje perfilP1 = personajesDisponibles[idP1];
+                    PerfilPersonaje perfilP2 = personajesDisponibles[idP2];
+
+                    // 2. Evaluamos quién ganó para armar los títulos y los marcos
+                    if (DatosTorneo.instancia.victoriasP1 > DatosTorneo.instancia.victoriasP2)
+                    {
+                        // Gana Player 1
+                        if (textoTituloResultado != null) textoTituloResultado.text = "¡PLAYER 1 TIENE AURA CAMPEONA!";
+
+                        if (ui_MarcoPlayer1 != null) ui_MarcoPlayer1.sprite = spriteMarcoDorado;
+                        if (ui_RetratoPlayer1 != null) ui_RetratoPlayer1.sprite = perfilP1.spriteTriunfante;
+
+                        if (ui_MarcoPlayer2 != null) ui_MarcoPlayer2.sprite = spriteMarcoMadera;
+                        if (ui_RetratoPlayer2 != null) ui_RetratoPlayer2.sprite = perfilP2.spriteDerrotado;
+                    }
+                    else
+                    {
+                        // Gana Player 2
+                        if (textoTituloResultado != null) textoTituloResultado.text = "¡PLAYER 2 TIENE AURA CAMPEONA!";
+
+                        if (ui_MarcoPlayer2 != null) ui_MarcoPlayer2.sprite = spriteMarcoDorado;
+                        if (ui_RetratoPlayer2 != null) ui_RetratoPlayer2.sprite = perfilP2.spriteTriunfante;
+
+                        if (ui_MarcoPlayer1 != null) ui_MarcoPlayer1.sprite = spriteMarcoMadera;
+                        if (ui_RetratoPlayer1 != null) ui_RetratoPlayer1.sprite = perfilP1.spriteDerrotado;
+                    }
                 }
                 else
                 {
-                    nombreCampeon = "¡PLAYER 2 ES EL CAMPEÓN!";
-                }
-
-                Debug.Log($"[GM] Ganador calculated: {nombreCampeon}");
-
-                if (textoGanadorFinal != null)
-                {
-                    textoGanadorFinal.text = nombreCampeon;
-                    Debug.Log("[GM] Texto del Ganador Final inyectado con éxito.");
-                }
-                else
-                {
-                    Debug.LogError("<color=red>[GM] ¡Ojo! El campo 'textoGanadorFinal' está vacío en el Inspector.</color>");
-                }
-
-                if (textoContadorVictorias != null)
-                {
-                    textoContadorVictorias.text = $"Player 1: {DatosTorneo.instancia.victoriasP1}  -  Player 2: {DatosTorneo.instancia.victoriasP2}";
-                    Debug.Log("[GM] Texto del Contador de Victorias inyectado con éxito.");
-                }
-                else
-                {
-                    Debug.LogError("<color=red>[GM] ¡Ojo! El campo 'textoContadorVictorias' está vacío en el Inspector.</color>");
+                    Debug.LogWarning("<color=yellow>[GM] Faltan cargar los personajes en el array 'personajesDisponibles' del Inspector.</color>");
                 }
             }
         }
         else
         {
-            Debug.LogWarning("[GM] 'panelEstadisticasFinales' es NULL en el inspector, cargando 'Escena_Podio' como Plan B...");
             SceneManager.LoadScene("Escena_Podio");
         }
     }

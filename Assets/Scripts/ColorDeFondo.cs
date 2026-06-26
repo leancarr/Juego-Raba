@@ -1,3 +1,10 @@
+Ôªø/* 
+ * ==============================================================================
+ * SCRIPT: ColorDeFondo.cs
+ * CATEGORIA: 3. Camara y Entorno
+ * DESCRIPCION: Script estetico que le da tintes al fondo de tu escena para que no se vea estatico.
+ * ==============================================================================
+ */
 using UnityEngine;
 
 public class ColorDeFondo : MonoBehaviour
@@ -5,10 +12,10 @@ public class ColorDeFondo : MonoBehaviour
     // Definimos los colores posibles del ciclo
     public enum ColorEstado { Rojo, Azul, Amarillo }
 
-    [Header("ConfiguraciÛn del Ciclo")]
+    [Header("Configuraci√≥n del Ciclo")]
     public ColorEstado colorActual = ColorEstado.Rojo;
-    public float tiempoPorColor = 3.0f; // Cu·nto dura cada color (en segundos)
-    public float tiempoMinimoCambiante = 1.0f; // El lÌmite de velocidad en la escalada de dificultad
+    public float tiempoPorColor = 3.0f; // Cu√°nto dura cada color (en segundos)
+    public float tiempoMinimoCambiante = 1.0f; // El l√≠mite de velocidad en la escalada de dificultad
 
     [Header("Colores Visuales (Asignar en el Inspector)")]
     public Color colorRojoVisual = Color.red;
@@ -18,12 +25,12 @@ public class ColorDeFondo : MonoBehaviour
     private Camera camaraPrincipal;
     private float cronometro;
 
-    // Instancia est·tica para que cualquier script (como las plataformas) pueda leer el color actual f·cilmente
+    // Instancia est√°tica para que cualquier script (como las plataformas) pueda leer el color actual f√°cilmente
     public static ColorDeFondo Instancia;
 
     void Awake()
     {
-        // ConfiguraciÛn del Singleton
+        // Configuraci√≥n del Singleton
         if (Instancia == null) { Instancia = this; }
         else { Destroy(gameObject); }
     }
@@ -37,7 +44,7 @@ public class ColorDeFondo : MonoBehaviour
 
     void Update()
     {
-        // El cronÛmetro corre en reversa
+        // El cron√≥metro corre en reversa
         cronometro -= Time.deltaTime;
 
         if (cronometro <= 0)
@@ -61,13 +68,13 @@ public class ColorDeFondo : MonoBehaviour
     {
         if (camaraPrincipal == null) return;
 
-        // Cambiamos el color de fondo "Solid Color" de la c·mara de Unity
+        // Cambiamos el color de fondo "Solid Color" de la c√°mara de Unity
         if (colorActual == ColorEstado.Rojo) camaraPrincipal.backgroundColor = colorRojoVisual;
         else if (colorActual == ColorEstado.Azul) camaraPrincipal.backgroundColor = colorAzulVisual;
         else if (colorActual == ColorEstado.Amarillo) camaraPrincipal.backgroundColor = colorAmarilloVisual;
     }
 
-    // Mec·nica extra: FunciÛn para que la dificultad aumente (achica el tiempo del ciclo)
+    // Mec√°nica extra: Funci√≥n para que la dificultad aumente (achica el tiempo del ciclo)
     public void AcelerarCiclo(float cantidad)
     {
         tiempoPorColor = Mathf.Max(tiempoMinimoCambiante, tiempoPorColor - cantidad);

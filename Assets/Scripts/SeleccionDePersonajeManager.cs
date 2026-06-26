@@ -1,3 +1,10 @@
+ï»¿/* 
+ * ==============================================================================
+ * SCRIPT: SeleccionDePersonajeManager.cs
+ * CATEGORIA: 4. Menues y UI (Interfaz)
+ * DESCRIPCION: Controlador de navegacion puro (apretar boton -> cargar la otra escena).
+ * ==============================================================================
+ */
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI; // Clave para poder controlar los botones
@@ -12,13 +19,13 @@ public class SeleccionPersonajeManager : MonoBehaviour
 
     void Start()
     {
-        // Al empezar la pantalla, el botón Confirmar arranca desactivado
-        // y el botón Cancelar arranca oculto o desactivado
+        // Al empezar la pantalla, el botÃ³n Confirmar arranca desactivado
+        // y el botÃ³n Cancelar arranca oculto o desactivado
         if (botonConfirmar != null) botonConfirmar.interactable = false;
         if (botonCancelar != null) botonCancelar.gameObject.SetActive(false);
     }
 
-    // Se ejecuta al tocar el botón "PRESELECCIONAR"
+    // Se ejecuta al tocar el botÃ³n "PRESELECCIONAR"
     public void SeleccionarMarcus()
     {
         personajeSeleccionado = true;
@@ -29,18 +36,18 @@ public class SeleccionPersonajeManager : MonoBehaviour
         if (botonCancelar != null) botonCancelar.gameObject.SetActive(true);
     }
 
-    // Se ejecuta al tocar el botón "CANCELAR"
+    // Se ejecuta al tocar el botÃ³n "CANCELAR"
     public void CancelarSeleccion()
     {
         personajeSeleccionado = false;
-        Debug.Log("Selección cancelada");
+        Debug.Log("SelecciÃ³n cancelada");
 
         // Desactivamos Confirmar y ocultamos Cancelar
         if (botonConfirmar != null) botonConfirmar.interactable = false;
         if (botonCancelar != null) botonCancelar.gameObject.SetActive(false);
     }
 
-    // Se ejecuta al tocar el botón "CONFIRMAR"
+    // Se ejecuta al tocar el botÃ³n "CONFIRMAR"
     public void BotonListo()
     {
         if (personajeSeleccionado)
