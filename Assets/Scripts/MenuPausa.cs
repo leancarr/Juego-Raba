@@ -11,14 +11,16 @@ using UnityEngine.SceneManagement;
 public class MenuPausa : MonoBehaviour
 {
     [Header("Referencias UI")]
-    public GameObject panelPausa; // El panel semitransparente que contiene todo el menÃº
+    public GameObject fondoOscuro; // El fondo negro semitransparente
+    public GameObject panelPausa; // El panel que contiene los botones
     public GameObject panelOpciones; // El recuadro flotante de configuraciones
 
     private bool juegoPausado = false;
 
     void Start()
     {
-        // Nos aseguramos de que los menÃºes arranquen escondidos y el tiempo corra normal
+        // Nos aseguramos de que los menús arranquen escondidos y el tiempo corra normal
+        if (fondoOscuro != null) fondoOscuro.SetActive(false);
         panelPausa.SetActive(false);
         if (panelOpciones != null) panelOpciones.SetActive(false);
         Time.timeScale = 1f;
@@ -42,6 +44,7 @@ public class MenuPausa : MonoBehaviour
 
     public void Pausar()
     {
+        if (fondoOscuro != null) fondoOscuro.SetActive(true);
         panelPausa.SetActive(true);
         Time.timeScale = 0f; // Congela el tiempo
         juegoPausado = true;
@@ -49,6 +52,7 @@ public class MenuPausa : MonoBehaviour
 
     public void Reanudar()
     {
+        if (fondoOscuro != null) fondoOscuro.SetActive(false);
         panelPausa.SetActive(false);
         if (panelOpciones != null) panelOpciones.SetActive(false);
         Time.timeScale = 1f; // Descongela el tiempo

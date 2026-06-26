@@ -1,4 +1,4 @@
-﻿/* 
+/* 
  * ==============================================================================
  * SCRIPT: AdministradorMusica.cs
  * CATEGORIA: 2. Core y Managers (Gestores Invisibles)
@@ -32,10 +32,22 @@ public class AdministradorMusica : MonoBehaviour
         // Si somos el primero, nos guardamos como la instancia oficial
         instancia = this;
         audioSource = GetComponent<AudioSource>();
-        audioSource.loop = true; // La mÃºsica siempre debe repetirse
+        audioSource.loop = true; // La música siempre debe repetirse
+        Debug.Log("<color=yellow>[AUDIO] AdministradorMusica AWAKE. Instancia oficial creada. AudioSource encontrado: " + (audioSource != null) + "</color>");
 
         // Hacemos que este objeto NO se destruya al cambiar de escena
         DontDestroyOnLoad(gameObject);
+    }
+
+    void Start()
+    {
+        Debug.Log("<color=yellow>[AUDIO] AdministradorMusica START. Escena actual: " + SceneManager.GetActiveScene().name + "</color>");
+        // Forzamos la validación de música para la escena actual al darle Play
+        // (porque sceneLoaded no se dispara para la primera escena que abrimos)
+        if (instancia == this)
+        {
+            ValidarMusicaPorEscena(SceneManager.GetActiveScene().name);
+        }
     }
 
     void OnEnable()
@@ -51,8 +63,13 @@ public class AdministradorMusica : MonoBehaviour
 
     void AlCargarEscena(Scene escena, LoadSceneMode modo)
     {
-        // Revisamos el nombre de la escena para saber quÃ© mÃºsica poner
-        string nombreEscena = escena.name.ToLower();
+        ValidarMusicaPorEscena(escena.name);
+    }
+
+    void ValidarMusicaPorEscena(string nombreOriginal)
+    {
+        string nombreEscena = nombreOriginal.ToLower();
+        Debug.Log("<color=yellow>[AUDIO] Validando música para escena: " + nombreEscena + "</color>");
 
         if (nombreEscena.Contains("menu") || nombreEscena.Contains("seleccion") || nombreEscena.Contains("victoria"))
         {
@@ -62,19 +79,32 @@ public class AdministradorMusica : MonoBehaviour
         {
             CambiarMusica(musicaNiveles);
         }
+        else
+        {
+            Debug.LogWarning("<color=orange>[AUDIO] La escena '" + nombreEscena + "' no tiene 'menu' ni 'nivel' en el nombre. No se cambió la música.</color>");
+        }
     }
 
     void CambiarMusica(AudioClip nuevaMusica)
     {
-        // Si no hay mÃºsica asignada, no hacemos nada
-        if (nuevaMusica == null) return;
+        // Si no hay música asignada, no hacemos nada
+        if (nuevaMusica == null)
+        {
+            Debug.LogError("<color=red>[AUDIO] ¡ERROR! Se intentó cambiar de música pero el AudioClip estaba VACÍO (NULL) en el Inspector.</color>");
+            return;
+        }
 
-        // Si YA estÃ¡ sonando esta misma pista, no la reiniciamos (asÃ­ es fluido entre niveles)
-        if (audioSource.clip == nuevaMusica) return;
+        // Si YA está sonando esta misma pista, no la reiniciamos
+        if (audioSource.clip == nuevaMusica)
+        {
+            Debug.Log("<color=yellow>[AUDIO] La pista " + nuevaMusica.name + " ya está sonando. No se reinicia.</color>");
+            return;
+        }
 
         // Cambiamos y reproducimos
         audioSource.clip = nuevaMusica;
         audioSource.Play();
+        Debug.Log("<color=green>[AUDIO] Reproduciendo exitosamente nueva pista: " + nuevaMusica.name + ". Volumen actual del Listener: " + AudioListener.volume + "</color>");
     }
 }
 

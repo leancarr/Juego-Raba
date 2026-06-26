@@ -1,4 +1,4 @@
-﻿/* 
+/* 
  * ==============================================================================
  * SCRIPT: MovimientoBasico25D.cs
  * CATEGORIA: 1. Control del Jugador (Personajes)
@@ -74,6 +74,13 @@ public class MovimientoBasico25D : MonoBehaviour
 
     void Update()
     {
+        // Si el juego está pausado, congelamos absolutamente todo y borramos el input residual.
+        if (Time.timeScale <= 0.01f) 
+        {
+            inputHorizontal = 0f;
+            return;
+        }
+
         // --- CONTROL DEL TIEMPO DE STUN (Habilidades Fuertes) ---
         if (estaAturdido)
         {
@@ -117,6 +124,9 @@ public class MovimientoBasico25D : MonoBehaviour
 
     void LateUpdate()
     {
+        // Si está pausado, no giramos el personaje aunque se toque una tecla.
+        if (Time.timeScale <= 0.01f) return;
+
         // --- GIRO VISUAL DEL PERSONAJE (flip en el objeto del Animator) ---
         // Usamos anim.transform directamente porque es el padre de todos los huesos.
         // Cambiar la escala X del padre los voltea a todos sin que el Animator lo pise.

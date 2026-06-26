@@ -1,4 +1,4 @@
-﻿/* 
+/* 
  * ==============================================================================
  * SCRIPT: Empuje.cs
  * CATEGORIA: 1. Control del Jugador (Personajes)
@@ -52,6 +52,8 @@ public class AccionEmpuje : MonoBehaviour
 
     void Update()
     {
+        if (Time.timeScale == 0f) return; // Juego pausado
+
         if (Input.GetKeyDown(teclaEmpuje))
         {
             if (Time.time >= tiempoSiguienteEmpuje)

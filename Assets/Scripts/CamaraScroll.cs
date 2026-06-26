@@ -114,8 +114,16 @@ public class CamaraScroll25D : MonoBehaviour
 
     public void SetZonaActiva(ZonaCamara nuevaZona)
     {
-        zonaActiva = nuevaZona;
-        Debug.Log("<color=cyan>[CAMARA] Entrando a nueva zona: " + nuevaZona.gameObject.name + " | SeguirEnY: " + nuevaZona.seguirEnY + "</color>");
+        // Solo cambiamos a la nueva zona si su número de orden es mayor o igual al actual
+        if (zonaActiva == null || nuevaZona.ordenDeZona >= zonaActiva.ordenDeZona)
+        {
+            zonaActiva = nuevaZona;
+            Debug.Log("<color=cyan>[CAMARA] Entrando a nueva zona: " + nuevaZona.gameObject.name + " | SeguirEnY: " + nuevaZona.seguirEnY + " | Orden: " + nuevaZona.ordenDeZona + "</color>");
+        }
+        else
+        {
+            Debug.Log("<color=grey>[CAMARA] Se ignoró la zona " + nuevaZona.gameObject.name + " porque su orden (" + nuevaZona.ordenDeZona + ") es menor a la actual (" + zonaActiva.ordenDeZona + ").</color>");
+        }
     }
 
     public void LimpiarZona(ZonaCamara zonaAEliminar)

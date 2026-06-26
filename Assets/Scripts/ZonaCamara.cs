@@ -1,4 +1,4 @@
-﻿/* 
+/* 
  * ==============================================================================
  * SCRIPT: ZonaCamara.cs
  * CATEGORIA: 3. Camara y Entorno
@@ -10,6 +10,8 @@ using UnityEngine;
 public class ZonaCamara : MonoBehaviour
 {
     [Header("Configuracion de Seguimiento")]
+    [Tooltip("La camara solo cambiara si el orden de la nueva zona es mayor o igual a la actual.")]
+    public int ordenDeZona = 1;
     public bool seguirEnX = true;
     public bool seguirEnY = false;
 

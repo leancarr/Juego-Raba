@@ -1,4 +1,4 @@
-﻿/* 
+/* 
  * ==============================================================================
  * SCRIPT: HabiliidadesJugadores.cs
  * CATEGORIA: 1. Control del Jugador (Personajes)
@@ -62,6 +62,8 @@ public class HabilidadesJugador : MonoBehaviour
 
     void Update()
     {
+        if (Time.timeScale == 0f) return; // Juego pausado
+
         if (Input.GetKeyDown(teclaHabilidad))
         {
             Debug.Log($"[RASTREO] Tecla {teclaHabilidad} apretada por Player {numeroJugador}. Clase: {clase}");

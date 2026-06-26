@@ -1,4 +1,4 @@
-﻿/* 
+/* 
  * ==============================================================================
  * SCRIPT: PlataformasColores.cs
  * CATEGORIA: 3. Camara y Entorno
@@ -65,7 +65,7 @@ public class PlataformasColores : MonoBehaviour
     void DesactivarPlataforma()
     {
         yaEstabaApagada = true;
-        Debug.Log("APAGANDO: " + gameObject.name);
+        // Debug.Log("APAGANDO: " + gameObject.name);
 
         transform.DetachChildren();
 
@@ -80,7 +80,7 @@ public class PlataformasColores : MonoBehaviour
     void ActivarPlataforma()
     {
         yaEstabaApagada = false;
-        Debug.Log("PRENDIENDO: " + gameObject.name);
+        // Debug.Log("PRENDIENDO: " + gameObject.name);
 
         foreach (Collider col in misColliders)
         {
