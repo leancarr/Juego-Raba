@@ -2,22 +2,25 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using System.Collections;
 using TMPro;
-using UnityEngine.UI; // --- NUEVO: Necesario para manipular Componentes Image ---
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
     public static GameManager instancia;
 
-    [Header("Componentes de UI")]
+    [Header("Componentes de UI Principales")]
     public RectTransform imagenIris;
     public GameObject panelTextoVictoria;
     public GameObject panelEstadisticasFinales;
 
-    [Header("Textos de Estadísticas Finales")]
-    public TextMeshProUGUI textoGanadorFinal;
-    public TextMeshProUGUI textoContadorVictorias;
+    [Header("Textos y Marcadores Modulares")]
+    [Tooltip("El título gigante que dice ¡PLAYER X ES EL CAMPEÓN!")]
+    public TMPro.TextMeshProUGUI textoTituloResultado;
+    [Tooltip("El número dentro del cuadradito del Player 1")]
+    public TMPro.TextMeshProUGUI textoPuntajeP1;
+    [Tooltip("El número dentro del cuadradito del Player 2")]
+    public TMPro.TextMeshProUGUI textoPuntajeP2;
 
-    // --- NUEVO: Variables para la Inyección Visual ---
     [Header("Base de Datos de Personajes")]
     public PerfilPersonaje[] personajesDisponibles;
 
@@ -225,20 +228,23 @@ public class GameManager : MonoBehaviour
 
             if (DatosTorneo.instancia != null)
             {
-                // --- NUEVA LÓGICA DE INYECCIÓN DE SPRITES ---
+                // 1. Inyectamos los números en los cuadraditos, sin importar quién ganó
+                if (textoPuntajeP1 != null) textoPuntajeP1.text = DatosTorneo.instancia.victoriasP1.ToString();
+                if (textoPuntajeP2 != null) textoPuntajeP2.text = DatosTorneo.instancia.victoriasP2.ToString();
+
                 int idP1 = DatosTorneo.instancia.idPersonajeP1;
                 int idP2 = DatosTorneo.instancia.idPersonajeP2;
 
-                // Verificamos que los IDs existan en el Array para evitar errores
                 if (personajesDisponibles != null && personajesDisponibles.Length > Mathf.Max(idP1, idP2))
                 {
                     PerfilPersonaje perfilP1 = personajesDisponibles[idP1];
                     PerfilPersonaje perfilP2 = personajesDisponibles[idP2];
 
+                    // 2. Evaluamos quién ganó para armar los títulos y los marcos
                     if (DatosTorneo.instancia.victoriasP1 > DatosTorneo.instancia.victoriasP2)
                     {
                         // Gana Player 1
-                        textoGanadorFinal.text = "¡PLAYER 1 ES EL CAMPEÓN!";
+                        if (textoTituloResultado != null) textoTituloResultado.text = "¡PLAYER 1 ES EL CAMPEÓN!";
 
                         if (ui_MarcoPlayer1 != null) ui_MarcoPlayer1.sprite = spriteMarcoDorado;
                         if (ui_RetratoPlayer1 != null) ui_RetratoPlayer1.sprite = perfilP1.spriteTriunfante;
@@ -249,7 +255,7 @@ public class GameManager : MonoBehaviour
                     else
                     {
                         // Gana Player 2
-                        textoGanadorFinal.text = "¡PLAYER 2 ES EL CAMPEÓN!";
+                        if (textoTituloResultado != null) textoTituloResultado.text = "¡PLAYER 2 ES EL CAMPEÓN!";
 
                         if (ui_MarcoPlayer2 != null) ui_MarcoPlayer2.sprite = spriteMarcoDorado;
                         if (ui_RetratoPlayer2 != null) ui_RetratoPlayer2.sprite = perfilP2.spriteTriunfante;
@@ -261,14 +267,6 @@ public class GameManager : MonoBehaviour
                 else
                 {
                     Debug.LogWarning("<color=yellow>[GM] Faltan cargar los personajes en el array 'personajesDisponibles' del Inspector.</color>");
-                    // Lógica de texto de fallback original
-                    textoGanadorFinal.text = (DatosTorneo.instancia.victoriasP1 > DatosTorneo.instancia.victoriasP2) ? "¡PLAYER 1 ES EL CAMPEÓN!" : "¡PLAYER 2 ES EL CAMPEÓN!";
-                }
-
-                if (textoContadorVictorias != null)
-                {
-                    textoContadorVictorias.text = $"<color=#0088FF>Player 1:</color> {DatosTorneo.instancia.victoriasP1}  -  <color=red>Player 2:</color> {DatosTorneo.instancia.victoriasP2}";
-                    Debug.Log("[GM] Texto del Contador de Victorias inyectado con éxito.");
                 }
             }
         }

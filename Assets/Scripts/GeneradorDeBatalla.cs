@@ -22,6 +22,13 @@ public class GeneradorDeBatalla : MonoBehaviour
         int eleccionP1 = PlayerPrefs.GetInt("EleccionP1", 0);
         int eleccionP2 = PlayerPrefs.GetInt("EleccionP2", 0);
 
+        // Le pasamos el dato al DatosTorneo para que la pantalla final de estadísticas sepa qué caras mostrar.
+        if (DatosTorneo.instancia != null)
+        {
+            DatosTorneo.instancia.idPersonajeP1 = eleccionP1;
+            DatosTorneo.instancia.idPersonajeP2 = eleccionP2;
+        }
+
         // Seguridad: Evitar que el juego explote si olvidaste arrastrar los prefabs
         if (personajesPrefabs.Length == 0)
         {
