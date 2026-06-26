@@ -2785,6 +2785,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6492189069061028290, guid: 0454ec0135baf8247a32fe64205be363, type: 3}
+      propertyPath: m_fontSizeMax
+      value: 110
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -2792,13 +2796,13 @@ PrefabInstance:
   m_SourcePrefab: {fileID: 100100000, guid: 0454ec0135baf8247a32fe64205be363, type: 3}
 --- !u!114 &490315245 stripped
 MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 47427015544078055, guid: 0454ec0135baf8247a32fe64205be363, type: 3}
+  m_CorrespondingSourceObject: {fileID: 4625062652849897, guid: 0454ec0135baf8247a32fe64205be363, type: 3}
   m_PrefabInstance: {fileID: 490315244}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!114 &490315246 stripped
@@ -2817,6 +2821,61 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 1720156153134621107, guid: 0454ec0135baf8247a32fe64205be363, type: 3}
   m_PrefabInstance: {fileID: 490315244}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &490315248 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8622861767985389208, guid: 0454ec0135baf8247a32fe64205be363, type: 3}
+  m_PrefabInstance: {fileID: 490315244}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &490315249 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1231074202259681174, guid: 0454ec0135baf8247a32fe64205be363, type: 3}
+  m_PrefabInstance: {fileID: 490315244}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &490315250 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6433670050956689089, guid: 0454ec0135baf8247a32fe64205be363, type: 3}
+  m_PrefabInstance: {fileID: 490315244}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &490315251 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8231564919922911216, guid: 0454ec0135baf8247a32fe64205be363, type: 3}
+  m_PrefabInstance: {fileID: 490315244}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &490315252 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 9147418556982224961, guid: 0454ec0135baf8247a32fe64205be363, type: 3}
+  m_PrefabInstance: {fileID: 490315244}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &536311978
 GameObject:
   m_ObjectHideFlags: 0
@@ -3449,9 +3508,41 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 201089501}
     - target: {fileID: 457813693799889993, guid: 1ed8305b650304a4d9213ffb63b16ec9, type: 3}
+      propertyPath: textoPuntajeP1
+      value: 
+      objectReference: {fileID: 490315252}
+    - target: {fileID: 457813693799889993, guid: 1ed8305b650304a4d9213ffb63b16ec9, type: 3}
+      propertyPath: textoPuntajeP2
+      value: 
+      objectReference: {fileID: 490315251}
+    - target: {fileID: 457813693799889993, guid: 1ed8305b650304a4d9213ffb63b16ec9, type: 3}
+      propertyPath: ui_MarcoPlayer1
+      value: 
+      objectReference: {fileID: 490315250}
+    - target: {fileID: 457813693799889993, guid: 1ed8305b650304a4d9213ffb63b16ec9, type: 3}
+      propertyPath: ui_MarcoPlayer2
+      value: 
+      objectReference: {fileID: 490315248}
+    - target: {fileID: 457813693799889993, guid: 1ed8305b650304a4d9213ffb63b16ec9, type: 3}
+      propertyPath: spriteMarcoDorado
+      value: 
+      objectReference: {fileID: 1569989732, guid: 3282ac830458aaf4c978bd7d2fa6dc03, type: 3}
+    - target: {fileID: 457813693799889993, guid: 1ed8305b650304a4d9213ffb63b16ec9, type: 3}
+      propertyPath: spriteMarcoMadera
+      value: 
+      objectReference: {fileID: -1943948544, guid: 6f905e8ea1df865449da29d92d112368, type: 3}
+    - target: {fileID: 457813693799889993, guid: 1ed8305b650304a4d9213ffb63b16ec9, type: 3}
       propertyPath: textoGanadorFinal
       value: 
       objectReference: {fileID: 490315246}
+    - target: {fileID: 457813693799889993, guid: 1ed8305b650304a4d9213ffb63b16ec9, type: 3}
+      propertyPath: ui_RetratoPlayer1
+      value: 
+      objectReference: {fileID: 490315249}
+    - target: {fileID: 457813693799889993, guid: 1ed8305b650304a4d9213ffb63b16ec9, type: 3}
+      propertyPath: ui_RetratoPlayer2
+      value: 
+      objectReference: {fileID: 490315245}
     - target: {fileID: 457813693799889993, guid: 1ed8305b650304a4d9213ffb63b16ec9, type: 3}
       propertyPath: panelTextoVictoria
       value: 
@@ -3461,13 +3552,57 @@ PrefabInstance:
       value: Nivel_1_prueba
       objectReference: {fileID: 0}
     - target: {fileID: 457813693799889993, guid: 1ed8305b650304a4d9213ffb63b16ec9, type: 3}
+      propertyPath: textoTituloResultado
+      value: 
+      objectReference: {fileID: 490315246}
+    - target: {fileID: 457813693799889993, guid: 1ed8305b650304a4d9213ffb63b16ec9, type: 3}
       propertyPath: textoContadorVictorias
       value: 
-      objectReference: {fileID: 490315245}
+      objectReference: {fileID: 0}
     - target: {fileID: 457813693799889993, guid: 1ed8305b650304a4d9213ffb63b16ec9, type: 3}
       propertyPath: panelEstadisticasFinales
       value: 
       objectReference: {fileID: 490315247}
+    - target: {fileID: 457813693799889993, guid: 1ed8305b650304a4d9213ffb63b16ec9, type: 3}
+      propertyPath: personajesDisponibles.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 457813693799889993, guid: 1ed8305b650304a4d9213ffb63b16ec9, type: 3}
+      propertyPath: personajesDisponibles.Array.data[0].nombrePersonaje
+      value: Mecanico
+      objectReference: {fileID: 0}
+    - target: {fileID: 457813693799889993, guid: 1ed8305b650304a4d9213ffb63b16ec9, type: 3}
+      propertyPath: personajesDisponibles.Array.data[0].spriteDerrotado
+      value: 
+      objectReference: {fileID: 95239831, guid: c3d30b07a03d6244faa71888cfbdf2b8, type: 3}
+    - target: {fileID: 457813693799889993, guid: 1ed8305b650304a4d9213ffb63b16ec9, type: 3}
+      propertyPath: personajesDisponibles.Array.data[1].nombrePersonaje
+      value: Profesor
+      objectReference: {fileID: 0}
+    - target: {fileID: 457813693799889993, guid: 1ed8305b650304a4d9213ffb63b16ec9, type: 3}
+      propertyPath: personajesDisponibles.Array.data[1].spriteDerrotado
+      value: 
+      objectReference: {fileID: 1012645019, guid: 3a4088d6a63fe284a8f686d9a09e3468, type: 3}
+    - target: {fileID: 457813693799889993, guid: 1ed8305b650304a4d9213ffb63b16ec9, type: 3}
+      propertyPath: personajesDisponibles.Array.data[2].nombrePersonaje
+      value: Raperito
+      objectReference: {fileID: 0}
+    - target: {fileID: 457813693799889993, guid: 1ed8305b650304a4d9213ffb63b16ec9, type: 3}
+      propertyPath: personajesDisponibles.Array.data[2].spriteDerrotado
+      value: 
+      objectReference: {fileID: -1460054596, guid: cc255bd51bd3dee499417baf3f3d0acf, type: 3}
+    - target: {fileID: 457813693799889993, guid: 1ed8305b650304a4d9213ffb63b16ec9, type: 3}
+      propertyPath: personajesDisponibles.Array.data[0].spriteTriunfante
+      value: 
+      objectReference: {fileID: -1616705294, guid: c0e5d5230f451a7499a077f8702f9b0c, type: 3}
+    - target: {fileID: 457813693799889993, guid: 1ed8305b650304a4d9213ffb63b16ec9, type: 3}
+      propertyPath: personajesDisponibles.Array.data[1].spriteTriunfante
+      value: 
+      objectReference: {fileID: 498432724, guid: 6ac9d6cc523fb2149a671a153475612a, type: 3}
+    - target: {fileID: 457813693799889993, guid: 1ed8305b650304a4d9213ffb63b16ec9, type: 3}
+      propertyPath: personajesDisponibles.Array.data[2].spriteTriunfante
+      value: 
+      objectReference: {fileID: -1793513419, guid: 3a78da5d0eddba04b859857d5eb405b2, type: 3}
     - target: {fileID: 3949646759115755631, guid: 1ed8305b650304a4d9213ffb63b16ec9, type: 3}
       propertyPath: puntoInicioP1
       value: 

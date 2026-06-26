@@ -256,7 +256,7 @@ public class GameManager : MonoBehaviour
                     if (DatosTorneo.instancia.victoriasP1 > DatosTorneo.instancia.victoriasP2)
                     {
                         // Gana Player 1
-                        if (textoTituloResultado != null) textoTituloResultado.text = "¡PLAYER 1 ES EL CAMPEÓN!";
+                        if (textoTituloResultado != null) textoTituloResultado.text = "¡PLAYER 1 TIENE AURA CAMPEONA!";
 
                         if (ui_MarcoPlayer1 != null) ui_MarcoPlayer1.sprite = spriteMarcoDorado;
                         if (ui_RetratoPlayer1 != null) ui_RetratoPlayer1.sprite = perfilP1.spriteTriunfante;
@@ -267,7 +267,7 @@ public class GameManager : MonoBehaviour
                     else
                     {
                         // Gana Player 2
-                        if (textoTituloResultado != null) textoTituloResultado.text = "¡PLAYER 2 ES EL CAMPEÓN!";
+                        if (textoTituloResultado != null) textoTituloResultado.text = "¡PLAYER 2 TIENE AURA CAMPEONA!";
 
                         if (ui_MarcoPlayer2 != null) ui_MarcoPlayer2.sprite = spriteMarcoDorado;
                         if (ui_RetratoPlayer2 != null) ui_RetratoPlayer2.sprite = perfilP2.spriteTriunfante;
