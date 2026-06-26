@@ -3,7 +3,7 @@
 public class AccionEmpuje : MonoBehaviour
 {
     // --- CONTROLES DIN�MICOS (Asignados por el Generador) ---
-    private KeyCode teclaEmpuje;
+    public KeyCode teclaEmpuje;
 
     [Header("F�sicas del Empuje")]
     public float fuerzaEmpujeBase = 12f;

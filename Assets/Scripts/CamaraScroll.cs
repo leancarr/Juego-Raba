@@ -2,24 +2,26 @@ using UnityEngine;
 
 public class CamaraScroll25D : MonoBehaviour
 {
-    [Header("ConfiguraciÛn de Seguimiento")]
-    public float suavizado = 5f;       // QuÈ tan suave acompaÒa la c·mara al jugador (Lerp)
-    public float desvÌoX = 2f;         // Para tirar la c·mara un poquito hacia adelante y ver lo que viene
+    [Header("Configuraci√≥n de Seguimiento")]
+    public float suavizado = 5f;       // Qu√© tan suave acompa√±a la c√°mara al jugador (Lerp)
+    public float desv√≠oX = 2f;         // Para tirar la c√°mara un poquito hacia adelante y ver lo que viene
 
-    [Header("LÌmites del Escenario")]
-    public bool usarLimites = false;   // Por si quieren que la c·mara no pase de cierto punto
+    [Header("L√≠mites del Escenario")]
+    public bool usarLimites = false;   // Por si quieren que la c√°mara no pase de cierto punto
     public float limiteIzquierdo = 0f;
     public float limiteDerecho = 100f;
 
     private float alturaFijaY;
     private float profundidadFijaZ;
 
-    // Variable para congelar por completo la posiciÛn de la c·mara
+    // Variable para congelar por completo la posici√≥n de la c√°mara
     private bool partidaTerminada = false;
+
+    private ZonaCamara zonaActiva = null;
 
     void Start()
     {
-        // Guardamos la posiciÛn inicial de la c·mara en Y y Z para mantenerlas fijas congeladas
+        // Guardamos la posici√≥n inicial de la c√°mara en Y y Z para mantenerlas fijas congeladas
         alturaFijaY = transform.position.y;
         profundidadFijaZ = transform.position.z;
     }
@@ -27,8 +29,8 @@ public class CamaraScroll25D : MonoBehaviour
     void LateUpdate()
     {
         // --- EL CAMBIO CLAVE ---
-        // Si la partida terminÛ, la c·mara se queda COMPLETAMENTE CONGELADA donde est·.
-        // No se mueve ni un milÌmetro, ignorando a todos los jugadores.
+        // Si la partida termin√≥, la c√°mara se queda COMPLETAMENTE CONGELADA donde est√°.
+        // No se mueve ni un mil√≠metro, ignorando a todos los jugadores.
         if (partidaTerminada) return;
 
         // 1. Buscar a todos los objetos con el Tag "Player" en la escena
@@ -37,38 +39,86 @@ public class CamaraScroll25D : MonoBehaviour
         // Si no hay jugadores en la escena, no hace nada
         if (jugadores.Length == 0) return;
 
-        // 2. Encontrar cu·l es el jugador que va ganando (el que tiene el X m·s alto)
+        // 2. Encontrar cu√°l es el jugador que va ganando (el que tiene el X m√°s alto o mejor puntaje de progreso)
         GameObject jugadorMasAdelantado = jugadores[0];
-        float mayorX = jugadores[0].transform.position.x;
+        float mejorPuntaje = ObtenerPuntajeProgreso(jugadores[0]);
 
         for (int i = 1; i < jugadores.Length; i++)
         {
-            if (jugadores[i].transform.position.x > mayorX)
+            float puntaje = ObtenerPuntajeProgreso(jugadores[i]);
+            if (puntaje > mejorPuntaje)
             {
-                mayorX = jugadores[i].transform.position.x;
+                mejorPuntaje = puntaje;
                 jugadorMasAdelantado = jugadores[i];
             }
         }
 
-        // 3. Calcular la posiciÛn de destino (Solo modificamos la X)
-        float destinoX = jugadorMasAdelantado.transform.position.x + desvÌoX;
+        // 3. Calcular la posici√≥n de destino
+        float desvioActualX = (zonaActiva != null) ? zonaActiva.desvioX : desv√≠oX;
+        float destinoX = jugadorMasAdelantado.transform.position.x + desvioActualX;
 
-        // Si activaron los lÌmites, restringimos la X para que no se salga del mapa
-        if (usarLimites)
+        // Si activaron los l√≠mites, restringimos la X para que no se salga del mapa
+        if (zonaActiva != null && zonaActiva.usarLimitesX)
+        {
+            destinoX = Mathf.Clamp(destinoX, zonaActiva.limiteIzquierdo, zonaActiva.limiteDerecho);
+        }
+        else if (usarLimites)
         {
             destinoX = Mathf.Clamp(destinoX, limiteIzquierdo, limiteDerecho);
         }
 
-        // 4. Crear el vector de posiciÛn final respetando la altura y profundidad inicial de la c·mara
-        Vector3 posicionObjetivo = new Vector3(destinoX, alturaFijaY, profundidadFijaZ);
+        float destinoY = alturaFijaY;
+        if (zonaActiva != null && zonaActiva.seguirEnY)
+        {
+            destinoY = jugadorMasAdelantado.transform.position.y + zonaActiva.desvioY;
+            if (zonaActiva.usarLimitesY)
+            {
+                destinoY = Mathf.Clamp(destinoY, zonaActiva.limiteInferior, zonaActiva.limiteSuperior);
+            }
+        }
 
-        // 5. Mover la c·mara de forma fluida usando Lerp
-        transform.position = Vector3.Lerp(transform.position, posicionObjetivo, suavizado * Time.deltaTime);
+        // 4. Crear el vector de posici√≥n final respetando la altura y profundidad inicial de la c√°mara o siguiendo en Y
+        Vector3 posicionObjetivo = new Vector3(
+            (zonaActiva != null && !zonaActiva.seguirEnX) ? transform.position.x : destinoX,
+            destinoY,
+            profundidadFijaZ
+        );
+
+        // 5. Mover la c√°mara de forma fluida usando Lerp
+        float suavizadoActual = (zonaActiva != null && zonaActiva.suavizadoOverride > 0f) ? zonaActiva.suavizadoOverride : suavizado;
+        transform.position = Vector3.Lerp(transform.position, posicionObjetivo, suavizadoActual * Time.deltaTime);
     }
 
-    // El GameManager seguir· llamando a esta funciÛn, pero ahora solo congelar· el movimiento
+    // El GameManager seguir√° llamando a esta funci√≥n, pero ahora solo congelar√° el movimiento
     public void EnfocarGanador(GameObject ganador)
     {
         partidaTerminada = true;
+    }
+
+    public void SetZonaActiva(ZonaCamara nuevaZona)
+    {
+        zonaActiva = nuevaZona;
+        Debug.Log("<color=cyan>[CAMARA] Entrando a nueva zona: " + nuevaZona.gameObject.name + " | SeguirEnY: " + nuevaZona.seguirEnY + "</color>");
+    }
+
+    public void LimpiarZona(ZonaCamara zonaAEliminar)
+    {
+        if (zonaActiva == zonaAEliminar)
+        {
+            zonaActiva = null;
+        }
+    }
+
+    private float ObtenerPuntajeProgreso(GameObject jugador)
+    {
+        if (zonaActiva != null && zonaActiva.seguirEnY)
+        {
+            // En descenso diagonal (desvioY < 0), el progreso es x - y
+            if (zonaActiva.desvioY < 0f)
+            {
+                return jugador.transform.position.x - jugador.transform.position.y;
+            }
+        }
+        return jugador.transform.position.x;
     }
 }

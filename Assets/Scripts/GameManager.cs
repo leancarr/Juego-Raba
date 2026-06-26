@@ -16,6 +16,10 @@ public class GameManager : MonoBehaviour
     public TextMeshProUGUI textoGanadorFinal;     
     public TextMeshProUGUI textoContadorVictorias; 
 
+    [Header("Progresion de Niveles")]
+    [Tooltip("Nombre exacto de la escena del siguiente nivel. Si esta vacio, repetira el nivel actual.")]
+    public string nombreSiguienteNivel = "";
+
     [Header("Configuracion del Efecto")]
     public float duracionCierre = 1.5f;
     public float tiempoEsperaPostCierre = 2.0f;
@@ -178,8 +182,16 @@ public class GameManager : MonoBehaviour
             }
             else
             {
-                Debug.Log("<color=yellow>[GM] Nadie llegó al límite todavía. Recargando escena para la siguiente ronda...</color>");
-                SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+                if (!string.IsNullOrEmpty(nombreSiguienteNivel))
+                {
+                    Debug.Log($"<color=yellow>[GM] Cargando siguiente nivel: {nombreSiguienteNivel}...</color>");
+                    SceneManager.LoadScene(nombreSiguienteNivel);
+                }
+                else
+                {
+                    Debug.Log("<color=yellow>[GM] No se definio siguiente nivel. Recargando escena actual...</color>");
+                    SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+                }
             }
         }
         else

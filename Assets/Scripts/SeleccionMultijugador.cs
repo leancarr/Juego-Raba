@@ -110,6 +110,9 @@ public class SeleccionMultijugador : MonoBehaviour
 
     void ConfirmarP1()
     {
+        PlayerPrefs.SetInt("EleccionP1", indiceP1);
+        PlayerPrefs.Save();
+
         if (transformListoP1 != null && posiciones.Length > 0)
         {
             Vector3 posicionFinal = posiciones[indiceP1].position + offsetListo;
@@ -122,13 +125,14 @@ public class SeleccionMultijugador : MonoBehaviour
 
             transformListoP1.position = posicionFinal;
             transformListoP1.gameObject.SetActive(true);
-
-            PlayerPrefs.SetInt("EleccionP1", indiceP1);
         }
     }
 
     void ConfirmarP2()
     {
+        PlayerPrefs.SetInt("EleccionP2", indiceP2);
+        PlayerPrefs.Save();
+
         if (transformListoP2 != null && posiciones.Length > 0)
         {
             Vector3 posicionFinal = posiciones[indiceP2].position + offsetListo;
@@ -140,8 +144,6 @@ public class SeleccionMultijugador : MonoBehaviour
 
             transformListoP2.position = posicionFinal;
             transformListoP2.gameObject.SetActive(true);
-
-            PlayerPrefs.SetInt("EleccionP2", indiceP2);
         }
     }
 
