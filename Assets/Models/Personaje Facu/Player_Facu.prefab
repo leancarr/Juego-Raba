@@ -133,7 +133,6 @@ MonoBehaviour:
   factorVelocidadEmpuje: 2
   radioDeGolpe: 1.8
   cooldownEmpuje: 3
-  pelvis: {fileID: 3422282445368128970}
 --- !u!114 &3717365616720571777
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -146,7 +145,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c1f7af5476734c44ca38569f4e0d9055, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  anim: {fileID: 0}
+  anim: {fileID: 5866666021909216657, guid: 87af62874016b5c40b377cc88c3ecdcb, type: 3}
   visualCenter: {fileID: 0}
   teclaHabilidad: 102
   clase: 1
@@ -526,10 +525,5 @@ PrefabInstance:
 --- !u!4 &503236314999192644 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 87af62874016b5c40b377cc88c3ecdcb, type: 3}
-  m_PrefabInstance: {fileID: 103973935697566639}
-  m_PrefabAsset: {fileID: 0}
---- !u!4 &3422282445368128970 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 3318871995220749925, guid: 87af62874016b5c40b377cc88c3ecdcb, type: 3}
   m_PrefabInstance: {fileID: 103973935697566639}
   m_PrefabAsset: {fileID: 0}

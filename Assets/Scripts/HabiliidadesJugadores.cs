@@ -87,12 +87,30 @@ public class HabilidadesJugador : MonoBehaviour
 
     void UsarHabilidad()
     {
-        // --- Activa la animaciÃ³n del poder al mismo tiempo que la habilidad ---
+        Debug.Log($"Usando hab. {clase}. anim asignado? {anim != null}. ¿Qué objeto lo tiene? {(anim != null ? anim.gameObject.name : "Nadie")}");
+
+        // --- Activa la animación del poder al mismo tiempo que la habilidad ---
         if (anim != null && !estaCantando)
         {
-            estaCantando = true;
-            anim.SetTrigger("CantarTrigger");
+            estaCantando = true; // Actúa como bloqueo para no spamear la habilidad
+            
+            // Disparar el Trigger correcto según la clase
+            if (clase == TipoClase.Rapero) 
+            {
+                anim.SetTrigger("CantarTrigger");
+            }
+            else if (clase == TipoClase.Mecanico) 
+            {
+                Debug.Log("¡Enviando Trigger MecanicoPushTrigger al Animator!");
+                anim.SetTrigger("MecanicoPushTrigger"); // <--- Nuevo Trigger para el Mecánico
+            }
+            // (El Profesor ya maneja su propio "PulsoTrigger" dentro de HabilidadProfesor)
+
             Invoke("TerminarAnimEspecial", duracionAnimEspecial);
+        }
+        else if (anim == null)
+        {
+            Debug.LogError("El Animator (anim) no está asignado en el script, aunque la pared sí aparece.");
         }
 
         switch (clase)

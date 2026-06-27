@@ -48,6 +48,11 @@ public class MenuPausa : MonoBehaviour
         panelPausa.SetActive(true);
         Time.timeScale = 0f; // Congela el tiempo
         juegoPausado = true;
+
+        if (AdministradorMusica.instancia != null)
+        {
+            AdministradorMusica.instancia.PausarMusica();
+        }
     }
 
     public void Reanudar()
@@ -57,12 +62,23 @@ public class MenuPausa : MonoBehaviour
         if (panelOpciones != null) panelOpciones.SetActive(false);
         Time.timeScale = 1f; // Descongela el tiempo
         juegoPausado = false;
+
+        if (AdministradorMusica.instancia != null)
+        {
+            AdministradorMusica.instancia.ReanudarMusica();
+        }
     }
 
     public void ReiniciarPartida()
     {
         // Resetea el contador de victorias a 0 y recarga el nivel desde cero
         Time.timeScale = 1f;
+
+        if (AdministradorMusica.instancia != null)
+        {
+            AdministradorMusica.instancia.ReanudarMusica();
+        }
+
         if (DatosTorneo.instancia != null)
         {
             DatosTorneo.instancia.ResetearTorneo();
@@ -74,6 +90,12 @@ public class MenuPausa : MonoBehaviour
     {
         // Descongelamos y volvemos al menÃº
         Time.timeScale = 1f;
+
+        if (AdministradorMusica.instancia != null)
+        {
+            AdministradorMusica.instancia.ReanudarMusica();
+        }
+
         SceneManager.LoadScene("MenuPrincipal");
     }
 

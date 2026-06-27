@@ -106,5 +106,21 @@ public class AdministradorMusica : MonoBehaviour
         audioSource.Play();
         Debug.Log("<color=green>[AUDIO] Reproduciendo exitosamente nueva pista: " + nuevaMusica.name + ". Volumen actual del Listener: " + AudioListener.volume + "</color>");
     }
+
+    public void PausarMusica()
+    {
+        if (audioSource != null)
+        {
+            audioSource.Pause();
+        }
+    }
+
+    public void ReanudarMusica()
+    {
+        if (audioSource != null)
+        {
+            audioSource.UnPause();
+        }
+    }
 }
 
