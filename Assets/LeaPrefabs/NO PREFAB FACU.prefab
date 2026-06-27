@@ -19,7 +19,7 @@ GameObject:
   - component: {fileID: 1437177482864087332}
   - component: {fileID: 7483676593700853230}
   m_Layer: 6
-  m_Name: Player 2(Facu)
+  m_Name: NO PREFAB FACU
   m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

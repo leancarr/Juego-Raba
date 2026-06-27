@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 5417015496174532505}
   - component: {fileID: 3157902441564831378}
   - component: {fileID: 3717365616720571777}
+  - component: {fileID: -2016642408149730026}
   m_Layer: 6
   m_Name: Player_Facu
   m_TagString: Player
@@ -161,6 +162,20 @@ MonoBehaviour:
   fuerzaEmpuje: 12
   duracionStunRival: 0.5
   visualOndaRapero: {fileID: 0}
+--- !u!114 &-2016642408149730026
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6713968483049301198}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 38e4dcb17d5d92942b7c8cea787d1f94, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  puntoRespawn: {fileID: 0}
+  posicionEjeY: -50
 --- !u!1 &7124609464206186032
 GameObject:
   m_ObjectHideFlags: 0

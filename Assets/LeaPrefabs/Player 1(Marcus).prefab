@@ -309,10 +309,13 @@ MonoBehaviour:
   teclaDerecha: 100
   teclaSalto: 119
   teclaCaida: 115
-  velocidad: 7
-  fuerzaSalto: 7
-  fuerzaCaidaRapida: 10
+  velocidad: 11
+  fuerzaSalto: 10
+  fuerzaCaidaRapida: 8
   centroVisual: {fileID: 1902828203970302933}
+  usarRotacionParaVoltear: 0
+  rotacionMirandoDerecha: 90
+  rotacionMirandoIzquierda: -90
   capaSuelo:
     serializedVersion: 2
     m_Bits: 8
@@ -355,8 +358,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   teclaEmpuje: 101
-  fuerzaEmpujeBase: 12
-  factorVelocidadEmpuje: 2
+  fuerzaEmpujeBase: 9
+  factorVelocidadEmpuje: 1
   radioDeGolpe: 1.8
   cooldownEmpuje: 3
 --- !u!114 &6923900695599914770
@@ -380,7 +383,7 @@ BoxCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4570582427202859343}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: 1169c25bf6e1880448687ba722e2191b, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0

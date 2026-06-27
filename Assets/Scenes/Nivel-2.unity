@@ -1588,9 +1588,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   suavizado: 5
   "desv\xC3oX": 2
-  usarLimites: 0
-  limiteIzquierdo: 0
-  limiteDerecho: 100
+  usarLimites: 1
+  limiteIzquierdo: -23.34
+  limiteDerecho: 1000
   pisoSeguroY: -20
 --- !u!1 &334987519
 GameObject:
@@ -3680,7 +3680,7 @@ PrefabInstance:
     - target: {fileID: 3949646759115755631, guid: 1ed8305b650304a4d9213ffb63b16ec9, type: 3}
       propertyPath: 'personajesPrefabs.Array.data[0]'
       value: 
-      objectReference: {fileID: 6713968483049301198, guid: 6995f7e8d329e5748bf3ebf4d25615e4, type: 3}
+      objectReference: {fileID: 6762810838912516230, guid: e753970d3fe931c488ab5b511350292c, type: 3}
     - target: {fileID: 3949646759115755631, guid: 1ed8305b650304a4d9213ffb63b16ec9, type: 3}
       propertyPath: 'personajesPrefabs.Array.data[1]'
       value: 
@@ -4325,7 +4325,7 @@ Transform:
   m_GameObject: {fileID: 1007865876}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 45.565506, y: 1.68, z: 0.5}
+  m_LocalPosition: {x: -34.19, y: 1.68, z: 0.5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -5757,7 +5757,7 @@ Transform:
   m_GameObject: {fileID: 1486804242}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 51.1, y: 1.68, z: 0.5}
+  m_LocalPosition: {x: -33.72, y: 1.68, z: 0.5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -7703,6 +7703,9 @@ MonoBehaviour:
   fuerzaSalto: 7
   fuerzaCaidaRapida: 10
   centroVisual: {fileID: 0}
+  usarRotacionParaVoltear: 0
+  rotacionMirandoDerecha: 90
+  rotacionMirandoIzquierda: -90
   capaSuelo:
     serializedVersion: 2
     m_Bits: 8
@@ -7726,7 +7729,6 @@ MonoBehaviour:
   factorVelocidadEmpuje: 4
   radioDeGolpe: 1.5
   cooldownEmpuje: 3
-  pelvis: {fileID: 0}
 --- !u!65 &2039438362
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -8344,6 +8346,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sliderVolumen: {fileID: 6661176326489403545}
+  iconoMute: {fileID: 0}
+  spriteVolumenActivado: {fileID: 0}
+  spriteVolumenMutado: {fileID: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
